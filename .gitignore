@@ -1,0 +1,6 @@
+Makefile*
+*.user
+*.pdb
+*.lib
+release
+debug
