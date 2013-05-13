@@ -1,6 +1,6 @@
 /*
  *
- *    SynthesisInterface.cpp
+ *    VocoderInterface.cpp
  *                                    (c) HAL@shurabaP
  *                                        2013/05/13
  *
@@ -10,5 +10,5 @@
  *
  */
 
-#include "SynthesisInterface.h"
+#include "VocoderInterface.h"
 

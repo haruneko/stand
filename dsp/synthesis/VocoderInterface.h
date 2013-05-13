@@ -1,6 +1,6 @@
 /*
  *
- *    SynthesisInterface.h
+ *    VocoderInterface.h
  *                                    (c) HAL@shurabaP
  *                                        2013/05/13
  *
@@ -10,14 +10,14 @@
  *
  */
 
-#ifndef SYNTHESISINTERFACE_H
-#define SYNTHESISINTERFACE_H
+#ifndef VOCODERINTERFACE_H
+#define VOCODERINTERFACE_H
 
 /*!
  *  @brief  ボコーダーの枠組みで合成を行うためのインターフェース
  *  @author HAL@shurabaP
  */
-class SynthesisInterface
+class VocoderInterface
 {
 public:
     /*!
@@ -32,6 +32,11 @@ public:
      *  @param[in]  residual    該当フレームにおける残差波形，もしくは非周期性指標などへのポインタ．
      */
     virtual void synthesize(double *dst, int frameLength, const double *spectrum, const double *residual) = 0;
+
+    /*!
+     *  @brief  無声フレームの長さを返します．
+     */
+    virtual double msecForUnvoicedFrame() const = 0;
 };
 
-#endif // SYNTHESISINTERFACE_H
+#endif // VOCODERINTERFACE_H
