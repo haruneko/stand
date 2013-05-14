@@ -6,7 +6,6 @@ SUBDIRS += \
             Stand.pro \
             test\dsp\seem\test_PlatinumSeem.pro \
             test\dsp\seem\test_StarSeem.pro \
-            test\dsp\ffem\test_DioFfem.pro
+            test\dsp\ffem\test_DioFfem.pro \
+            app/WorldImageGenerator
 
-TestPlatinumSeem.depneds = Stand.pro
-TestStarSeem.depends = Stand.pro

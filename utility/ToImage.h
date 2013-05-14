@@ -60,15 +60,6 @@ public:
     static QImage fromSpecgram(const Specgram *specgram, ScaleType scale = LogScale, const SpecgramColorPalette * palette = 0);
 
     /*!
-     *  @brief 励起信号スペクトルをビジュアライズした画像を生成します。
-     *  @param[in] residual         励起信号スペクトル。音声分析合成系 WORLD により与えられるものをそのまま使用して下さい。
-     *  @param[in] frameLength      励起信号のフレーム長です。
-     *  @param[in] frequencyLength  励起信号スペクトルの周波数長です。
-     *  @attention メソッド内部で NULL チェックは行われません。
-     */
-    static QImage fromExcitation(double **residual, int frameLength, int frequencyLength);
-
-    /*!
      *  @brief 波形データから画像に変換します。
      *  @param[in] wave         波形データの配列を与えます。
      *  @param[in] length       波形データの配列長を表します。
@@ -78,7 +69,7 @@ public:
      *  @param[in] bgColor      背景色です。デフォルトは白です。
      *  @attention メソッド内部で NULL チェックは行われません。
      */
-    static QImage fromWaveform(double *wave, int length, int width, int height, uint lineColor = 0xff000000, uint bgColor = 0xffffffff);
+    static QImage fromWaveform(const double *wave, int length, int width, int height, uint lineColor = 0xff000000, uint bgColor = 0xffffffff);
 
 public:
     /*!

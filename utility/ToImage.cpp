@@ -160,7 +160,7 @@ QImage ToImage::fromSpecgram(const Specgram *specgram, ScaleType scale, const Sp
     return fromSpecgram(specgram->data(), specgram->frameLength(), specgram->frequencyLength(), maxValue, 12.0, scale, palette);
 }
 
-QImage ToImage::fromWaveform(double *wave, int length, int width, int height, uint lineColor, uint bgColor)
+QImage ToImage::fromWaveform(const double *wave, int length, int width, int height, uint lineColor, uint bgColor)
 {
     if(!wave || length <= 0 || width <= 0 || height <= 0)
     {
