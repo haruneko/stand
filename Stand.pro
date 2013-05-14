@@ -46,7 +46,9 @@ SOURCES +=\
     dsp/ffem/DioFfem.cpp \
     dsp/seem/PlatinumSeem.cpp \
     dsp/world/ResidualExtractor.cpp \
-    dsp/AudioBuffer.cpp
+    dsp/AudioBuffer.cpp \
+    dsp/synthesis/VocoderRenderer.cpp \
+    dsp/synthesis/VocoderInterface.cpp
 
 HEADERS  += \
     utility/ToImage.h \
@@ -83,5 +85,7 @@ HEADERS  += \
     dsp/world/ResidualExtractor.h \
     io/audio/AudioBufferWriter.h \
     io/audio/AudioBufferReader.h \
-    dsp/AudioBuffer.h
+    dsp/AudioBuffer.h \
+    dsp/synthesis/VocoderRenderer.h \
+    dsp/synthesis/VocoderInterface.h
 
