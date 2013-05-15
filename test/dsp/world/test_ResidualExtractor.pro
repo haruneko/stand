@@ -22,4 +22,3 @@ TEMPLATE = app
 
 
 SOURCES += test_ResidualExtractor.cpp
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
