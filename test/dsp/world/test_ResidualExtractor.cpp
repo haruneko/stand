@@ -13,6 +13,7 @@
 #include <QtCore/QString>
 #include <QtTest/QtTest>
 
+#include "dsp/Specgram.h"
 #include "dsp/world/fft.h"
 #include "dsp/world/ResidualExtractor.h"
 #include "dsp/world/platinum.h"
@@ -36,7 +37,10 @@ private Q_SLOTS:
     void checkPulseFFTTest();
 
     //! @brief WORLD 内部関数を用いた動作確認
-    void checkWithPlatinum();
+    void convertToComplexWithPatinumTest();
+
+    //! @brief 励起信号スペクトル列から信号列が得られるか動作確認
+    void extractTest();
 };
 
 ResidualExtractorTest::ResidualExtractorTest()
@@ -117,7 +121,7 @@ void ResidualExtractorTest::checkPulseFFTTest()
     delete[] fft_out;
 }
 
-void ResidualExtractorTest::checkWithPlatinum()
+void ResidualExtractorTest::convertToComplexWithPatinumTest()
 {
     // 変数準備するよ！
     double *wave = new double[FFT_LENGTH];
@@ -172,6 +176,59 @@ void ResidualExtractorTest::checkWithPlatinum()
     delete[] pulseSpectrum;
     delete[] waveSpectrum;
     delete[] wave;
+}
+
+void ResidualExtractorTest::extractTest()
+{
+    const int timeLength = 1000;
+    Specgram residual(timeLength, FFT_LENGTH);
+    Specgram wave(timeLength, FFT_LENGTH);
+
+    double *fft_in = new double[FFT_LENGTH];
+    fft_complex *fft_out = new fft_complex[FFT_LENGTH / 2 + 1];
+    double *oneresidual = new double[FFT_LENGTH];
+    fft_plan p = fft_plan_dft_r2c_1d(FFT_LENGTH, fft_in, fft_out, FFT_FORWARD);
+
+    for(int i = 0; i < FFT_LENGTH; i++)
+    {
+        fft_in[i] = rand() / (double)RAND_MAX;
+    }
+    fft_execute(p);
+
+    oneresidual[0] = fft_out[0][0];
+    for(int i = 1; i < FFT_LENGTH / 2; i++)
+    {
+        oneresidual[i*2-1] = fft_out[i][0];
+        oneresidual[i*2] = fft_out[i][1];
+    }
+    oneresidual[FFT_LENGTH - 1] = fft_out[FFT_LENGTH / 2][0];
+
+    // residual 埋める！
+    for(int t = 0; t < timeLength; t++)
+    {
+        for(int f = 0; f < FFT_LENGTH; f++)
+        {
+            residual[t][f] = oneresidual[f];
+        }
+    }
+
+    // wave に展開
+    ResidualExtractor::extract(&wave, &residual);
+
+    // 最後に比較
+    for(int t = 0; t < timeLength; t++)
+    {
+        for(int f = 0; f < FFT_LENGTH; f++)
+        {
+            // FFT を順→逆で通すと FFTSG の場合値が FFTLength　倍される。
+            QCOMPARE(wave.value(t, f), fft_in[f] * FFT_LENGTH);
+        }
+    }
+
+    fft_destroy_plan(p);
+    delete[] fft_in;
+    delete[] fft_out;
+    delete[] oneresidual;
 }
 
 QTEST_APPLESS_MAIN(ResidualExtractorTest)
