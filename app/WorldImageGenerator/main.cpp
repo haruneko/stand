@@ -35,21 +35,14 @@ void analyze(AudioBuffer &buffer, QString path, double msFramePeriod)
     Specgram residual;      // 励起信号スペクトル列
     Specgram waves;         // 励起信号波形列
 
-    double *wave = new double[buffer.length()];
-    for(int i = 0; i < buffer.length(); i++)
-    {
-        wave[i] = buffer.data()[0][i];
-    }
     // 推定するよ！
     std::cout << "Estimating F0 contour" << std::endl;
-    DioFfem().estimate(&f0, wave, buffer.length(), buffer.format().sampleRate(), msFramePeriod);
+    DioFfem().estimate(&f0, buffer.data(0), buffer.length(), buffer.format().sampleRate(), msFramePeriod);
     std::cout << "Estimating Spectrogram" << std::endl;
-    StarSeem(&f0).estimate(&specgram, wave, buffer.length(), 0, buffer.format().sampleRate(), msFramePeriod);
+    StarSeem(&f0).estimate(&specgram, buffer.data(0), buffer.length(), 0, buffer.format().sampleRate(), msFramePeriod);
     std::cout << "Estimating Residual waveforms" << std::endl;
-    PlatinumSeem(&f0, &specgram).estimate(&residual, wave, buffer.length(), 0, buffer.format().sampleRate(), msFramePeriod);
+    PlatinumSeem(&f0, &specgram).estimate(&residual, buffer.data(0), buffer.length(), 0, buffer.format().sampleRate(), msFramePeriod);
     ResidualExtractor().extract(&waves, &residual);
-
-    delete[] wave;
 
     // 書きだすよ！
     ToImage::fromWaveform(f0.data(), f0.size(), f0.size(), 1024).save(path + ".dio.png");
