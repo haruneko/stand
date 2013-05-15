@@ -32,7 +32,8 @@ void analyze(AudioBuffer &buffer, QString path, double msFramePeriod)
 {
     Envelope f0;            // 基本周波数列
     Specgram specgram;      // パワースペクトル列
-    Specgram residual;      // 励起信号波形列
+    Specgram residual;      // 励起信号スペクトル列
+    Specgram waves;         // 励起信号波形列
 
     double *wave = new double[buffer.length()];
     for(int i = 0; i < buffer.length(); i++)
@@ -46,14 +47,14 @@ void analyze(AudioBuffer &buffer, QString path, double msFramePeriod)
     StarSeem(&f0).estimate(&specgram, wave, buffer.length(), 0, buffer.format().sampleRate(), msFramePeriod);
     std::cout << "Estimating Residual waveforms" << std::endl;
     PlatinumSeem(&f0, &specgram).estimate(&residual, wave, buffer.length(), 0, buffer.format().sampleRate(), msFramePeriod);
-    ResidualExtractor().extract(&residual, &residual);
+    ResidualExtractor().extract(&waves, &residual);
 
     delete[] wave;
 
     // 書きだすよ！
     ToImage::fromWaveform(f0.data(), f0.size(), f0.size(), 1024).save(path + ".dio.png");
     ToImage::fromSpecgram(&specgram).save(path + ".star.png");
-    ToImage::fromSpecgram(&residual, ToImage::LinearScale).save(path + ".platinum.png");
+    ToImage::fromSpecgram(&waves, ToImage::LinearScale).save(path + ".platinum.png");
 }
 
 int main(int argc, char *argv[])
