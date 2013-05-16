@@ -55,6 +55,7 @@ void VocoderRenderer::_render(AudioBuffer *dst,
     int fftLength = specgram->fftLength();
 
     double ms = msBegin;
+    double msForUnvoicedFrame = vocoder->msForUnvoicedFrame();
     while(ms < msEnd)
     {
         int index = fs * ms / 1000.0;
@@ -64,7 +65,7 @@ void VocoderRenderer::_render(AudioBuffer *dst,
         vocoder->synthesize(buffer + index, fftLength, s, r);
 
         // f0 == 0 のときは無声音として扱う.
-        ms += (f0 != 0) ? 1000.0 / f0 : vocoder->msecForUnvoicedFrame();
+        ms += (f0 != 0) ? 1000.0 / f0 : msForUnvoicedFrame;
     }
 }
 

@@ -10,30 +10,30 @@
 // Structs on FFT
 //-----------------------------------------------------------------------------
 // Forward FFT in the real sequence
-typedef struct {
+struct ForwardRealFFT{
   int fft_size;
   double *waveform;
   fft_complex *spectrum;
   fft_plan forward_fft;
-} ForwardRealFFT;
+};
 
 // Inverse FFT in the real sequence
-typedef struct {
+struct  InverseRealFFT{
   int fft_size;
   double *waveform;
   fft_complex *spectrum;
   fft_plan inverse_fft;
-} InverseRealFFT;
+};
 
 // Minimum phase analysis from logarithmic power spectrum
-typedef struct {
+struct MinimumPhaseAnalysis{
   int fft_size;
   double *log_spectrum;
   fft_complex *minimum_phase_spectrum;
   fft_complex *cepstrum;
   fft_plan inverse_fft;
   fft_plan forward_fft;
-} MinimumPhaseAnalysis;
+};
 
 //-----------------------------------------------------------------------------
 // GetSuitableFFTSize() calculates the suitable FFT size.

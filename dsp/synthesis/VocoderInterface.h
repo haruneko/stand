@@ -36,7 +36,7 @@ public:
     /*!
      *  @brief  無声フレームの長さを返します．
      */
-    virtual double msecForUnvoicedFrame() const = 0;
+    virtual double msForUnvoicedFrame() const = 0;
 };
 
 #endif // VOCODERINTERFACE_H

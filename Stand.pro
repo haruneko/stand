@@ -51,7 +51,8 @@ SOURCES +=\
     dsp/synthesis/VocoderInterface.cpp \
     utility/ExcitationColorPalette.cpp \
     dsp/synthesis/PitchGeneratorInterface.cpp \
-    dsp/synthesis/SpectrumGeneratorInterface.cpp
+    dsp/synthesis/SpectrumGeneratorInterface.cpp \
+    dsp/synthesis/WorldSynthesis.cpp
 
 HEADERS  += \
     utility/ToImage.h \
@@ -93,5 +94,6 @@ HEADERS  += \
     dsp/synthesis/VocoderInterface.h \
     utility/ExcitationColorPalette.h \
     dsp/synthesis/PitchGeneratorInterface.h \
-    dsp/synthesis/SpectrumGeneratorInterface.h
+    dsp/synthesis/SpectrumGeneratorInterface.h \
+    dsp/synthesis/WorldSynthesis.h
 
