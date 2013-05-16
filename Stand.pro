@@ -49,7 +49,9 @@ SOURCES +=\
     dsp/AudioBuffer.cpp \
     dsp/synthesis/VocoderRenderer.cpp \
     dsp/synthesis/VocoderInterface.cpp \
-    utility/ExcitationColorPalette.cpp
+    utility/ExcitationColorPalette.cpp \
+    dsp/synthesis/PitchGeneratorInterface.cpp \
+    dsp/synthesis/SpectrumGeneratorInterface.cpp
 
 HEADERS  += \
     utility/ToImage.h \
@@ -89,5 +91,7 @@ HEADERS  += \
     dsp/AudioBuffer.h \
     dsp/synthesis/VocoderRenderer.h \
     dsp/synthesis/VocoderInterface.h \
-    utility/ExcitationColorPalette.h
+    utility/ExcitationColorPalette.h \
+    dsp/synthesis/PitchGeneratorInterface.h \
+    dsp/synthesis/SpectrumGeneratorInterface.h
 

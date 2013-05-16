@@ -14,9 +14,9 @@
 #define VOCODERRENDERER_H
 
 class AudioBuffer;
-class Envelope;
-class Specgram;
 class VocoderInterface;
+class PitchGeneratorInterface;
+class SpectrumGeneratorInterface;
 
 /*!
  *  @brief  Vocoder を用いて音声を合成するクラスです．
@@ -29,17 +29,32 @@ public:
      *  @brief  AudioBuffer に波形を合成します．
      *  @param[out] dst 合成した波形を保持するバッファ．
      *  @param[in]  samplingFrequency 合成する波形の標本化周波数．
-     *  @param[in]  f0  合成波形の基本周波数列．
-     *  @param[in]  specgram    合成波形のスペクトログラム．
-     *  @param[in]  residual    残差波形や非周期性指標など．
-     *  @param[in]  msFramePeriod バッファ群の 1 フレーム辺りの長さ
+     *  @param[in]  msBegin     合成開始時刻.
+     *  @param[in]  msEnd       合成時間.
      *  @param[in]  vocoder     合成に用いる Vocoder．
+     *  @param[in]  pitch       F0 生成器
+     *  @param[in]  specgram    スペクトル生成器
+     *  @param[in]  residual    非周期性指標/励起信号生成器
      *  @return 合成成否．
      */
-    virtual bool render(AudioBuffer *dst, int samplingFrequency, const Envelope *f0, const Specgram *specgram, const Specgram *residual, double msFramePeriod, VocoderInterface *vocoder);
+    virtual bool render(AudioBuffer *dst,
+                        int samplingFrequency,
+                        double msBegin,
+                        double msEnd,
+                        VocoderInterface *vocoder,
+                        PitchGeneratorInterface *pitch,
+                        SpectrumGeneratorInterface *specgram,
+                        SpectrumGeneratorInterface *residual);
 
 private:
     void _prepareBuffer(AudioBuffer *dst, int samplingFrequency, double msLength);
+    void _render(AudioBuffer *dst,
+                double msBegin,
+                double msEnd,
+                VocoderInterface *vocoder,
+                PitchGeneratorInterface *pitch,
+                SpectrumGeneratorInterface *specgram,
+                SpectrumGeneratorInterface *residual);
 };
 
 #endif // VOCODERRENDERER_H
