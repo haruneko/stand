@@ -13,10 +13,12 @@
 #include <QAudioFormat>
 
 #include "../AudioBuffer.h"
-#include "../Envelope.h"
-#include "../Specgram.h"
+
+#include "../world/matlabfunctions.h"
 
 #include "VocoderInterface.h"
+#include "PitchGeneratorInterface.h"
+#include "SpectrumGeneratorInterface.h"
 
 #include "VocoderRenderer.h"
 
@@ -42,22 +44,63 @@ void VocoderRenderer::_prepareBuffer(AudioBuffer *dst, int samplingFrequency, do
 
 }
 
-bool VocoderRenderer::render(AudioBuffer *dst, int samplingFrequency, const Envelope *f0, const Specgram *specgram, const Specgram *residual, double msFramePeriod, VocoderInterface *vocoder)
+void VocoderRenderer::_render(AudioBuffer *dst,
+                                double msBegin,
+                                double msEnd,
+                                int fftLength,
+                                VocoderInterface *vocoder,
+                                PitchGeneratorInterface *pitch,
+                                SpectrumGeneratorInterface *specgram,
+                                SpectrumGeneratorInterface *residual)
 {
-    if(!dst || !f0 || specgram || !residual || !vocoder)
+    int fs = dst->format().sampleRate();
+    double *buffer = dst->data()[0];
+
+    double ms = msBegin;
+    double msForUnvoicedFrame = vocoder->msForUnvoicedFrame();
+    while(ms < msEnd)
+    {
+        int index = matlab_round(fs * ms / 1000.0);
+        double f0 = pitch->generate(ms);
+        const double *s = specgram->generate(ms);
+        const double *r = residual->generate(ms);
+        // 長さを丸めておく
+        int length = (index + fftLength < dst->length()) ? fftLength : (dst->length() - index);
+        vocoder->synthesize(buffer + index, length, fftLength, s, r);
+
+        // f0 == 0 のときは無声音として扱う.
+        ms += (f0 != 0) ? 1000.0 / f0 : msForUnvoicedFrame;
+    }
+}
+
+bool VocoderRenderer::render(AudioBuffer *dst,
+                             int samplingFrequency,
+                             double msBegin,
+                             double msEnd,
+                             int fftLength,
+                             VocoderInterface *vocoder,
+                             PitchGeneratorInterface *pitch,
+                             SpectrumGeneratorInterface *specgram, SpectrumGeneratorInterface *residual)
+{
+    if(!dst || !pitch || !specgram || !residual || !vocoder)
     {
         qDebug("VocoderRenderer::render(); // invalid args.");
         return false;
     }
-    if(f0->size() != specgram->frameLength() || specgram->frameLength() != residual->frameLength())
+
+    msEnd = qMin(pitch->msTimeLength(), qMin(specgram->msTimeLength(), qMin(residual->msTimeLength(), msEnd)));
+
+    // 合成区間が存在しない.
+    if(msEnd < msBegin)
     {
-        qDebug("VocoderRenderer::render(); // invalid sized parameters");
+        qDebug("VocoderRenderer::render(); // invalid output range; %e ms to %e ms", msBegin, msEnd);
         return false;
     }
 
-    _prepareBuffer(dst, samplingFrequency, specgram->frameLength() * msFramePeriod);
+    _prepareBuffer(dst, samplingFrequency, msEnd - msBegin);
 
     // TODO: render wave.
+    _render(dst, msBegin, msEnd, fftLength, vocoder, pitch, specgram, residual);
 
     return true;
 }
