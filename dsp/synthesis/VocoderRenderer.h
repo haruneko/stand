@@ -31,6 +31,7 @@ public:
      *  @param[in]  samplingFrequency 合成する波形の標本化周波数．
      *  @param[in]  msBegin     合成開始時刻.
      *  @param[in]  msEnd       合成時間.
+     *  @param[in]  fftLength   1 フレーム辺りの長さ．
      *  @param[in]  vocoder     合成に用いる Vocoder．
      *  @param[in]  pitch       F0 生成器
      *  @param[in]  specgram    スペクトル生成器
@@ -41,6 +42,7 @@ public:
                         int samplingFrequency,
                         double msBegin,
                         double msEnd,
+                        int fftLength,
                         VocoderInterface *vocoder,
                         PitchGeneratorInterface *pitch,
                         SpectrumGeneratorInterface *specgram,
@@ -51,10 +53,10 @@ private:
     void _render(AudioBuffer *dst,
                 double msBegin,
                 double msEnd,
+                int fftLength,
                 VocoderInterface *vocoder,
                 PitchGeneratorInterface *pitch,
-                SpectrumGeneratorInterface *specgram,
-                SpectrumGeneratorInterface *residual);
+                SpectrumGeneratorInterface *specgram, SpectrumGeneratorInterface *residual);
 };
 
 #endif // VOCODERRENDERER_H

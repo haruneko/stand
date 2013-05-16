@@ -23,7 +23,6 @@ WorldSynthesis::WorldSynthesis(int fftLength)
     fftLength = 0;
     _minimumPhase = NULL;
     _spectrum = NULL;
-    _residual = NULL;
     _impulse = NULL;
     _plan = NULL;
     _setFftLength(fftLength);
@@ -45,7 +44,6 @@ void WorldSynthesis::_setFftLength(int fftLength)
     _minimumPhase = new MinimumPhaseAnalysis;
     InitializeMinimumPhaseAnalysis(fftLength, _minimumPhase);
     _spectrum = new fft_complex[fftLength / 2 + 1];
-    _residual = new fft_complex[fftLength / 2 + 1];
     _impulse = new double[fftLength];
     _plan = new fft_plan;
     *_plan = fft_plan_dft_c2r_1d(fftLength, _spectrum, _impulse, FFT_BACKWARD);
@@ -59,7 +57,6 @@ void WorldSynthesis::_destroy()
     }
     delete _minimumPhase;
     delete[] _spectrum;
-    delete[] _residual;
     delete[] _impulse;
 
     if(_plan)
@@ -69,7 +66,6 @@ void WorldSynthesis::_destroy()
     }
     _fftLength = 0;
     _spectrum = NULL;
-    _residual = NULL;
     _impulse = NULL;
 }
 
@@ -78,16 +74,16 @@ double WorldSynthesis::msForUnvoicedFrame() const
     return 1000.0 / world::kDefaultF0;
 }
 
-void WorldSynthesis::synthesize(double *dst, int frameLength, const double *spectrum, const double *residual)
+void WorldSynthesis::synthesize(double *dst, int length, int fftLength, const double *spectrum, const double *residual)
 {
     // 長さが違うときはバッファ再生成
-    if(frameLength != _fftLength)
+    if(fftLength!= _fftLength)
     {
-        _setFftLength(frameLength);
+        _setFftLength(fftLength);
     }
 
     // エルミート対称なので半分でよろしい.
-    int lastIndex = _fftLength / 2;
+    int lastIndex = fftLength / 2;
     // パワースペクトル→最小位相応答スペクトル
     for (int i = 0; i <= lastIndex; i++)
     {
@@ -95,26 +91,23 @@ void WorldSynthesis::synthesize(double *dst, int frameLength, const double *spec
     }
     GetMinimumPhaseSpectrum(_minimumPhase);
 
-    // WORLD 形式励起信号スペクトル→励起信号スペクトル
-    ResidualExtractor::convertToComplex(_residual, residual, frameLength);
-
     // 最小位相応答と励起信号を畳み込みする.
     fft_complex *minimum = _minimumPhase->minimum_phase_spectrum;
-    _spectrum[0][0] = minimum[0][0] * _residual[0][0] - minimum[0][1] * _residual[0][1];
+    _spectrum[0][0] = minimum[0][0] * residual[0];
     _spectrum[0][1] = 0.0;
-    for(int i = 0; i < lastIndex; i++)
+    for(int i = 1; i < lastIndex; i++)
     {
-        _spectrum[i][0] = minimum[i][0] * _residual[i][0] - minimum[i][1] * _residual[i][1];
-        _spectrum[i][1] = minimum[i][1] * _residual[i][0] + minimum[i][1] * _residual[i][0];
+        _spectrum[i][0] = minimum[i][0] * residual[i*2-1] - minimum[i][1] * residual[i*2];
+        _spectrum[i][1] = minimum[i][1] * residual[i*2-1] + minimum[i][0] * residual[i*2];
     }
-    _spectrum[lastIndex][0] = minimum[lastIndex][0] * _residual[lastIndex][0] - minimum[lastIndex][1] * _residual[lastIndex][1];
+    _spectrum[lastIndex][0] = minimum[lastIndex][0] * residual[fftLength - 1];
     _spectrum[lastIndex][1] = 0.0;
 
     // 逆 FFT したら
     fft_execute(*_plan);
 
     // バッファに足しこんで終了.
-    for(int i = 0; i < _fftLength * 3 / 4; i++) // ループ回数は本家に合わせた.
+    for(int i = 0; i < _fftLength * 3 / 4 && i < length; i++) // ループ回数は本家に合わせた.
     {
         dst[i] += _impulse[i] / _fftLength; // FFT の補正項はここ.
     }

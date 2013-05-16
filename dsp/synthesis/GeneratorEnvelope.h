@@ -20,7 +20,7 @@
  *  @brief  Envelope クラスを用いた PitchGeneratorInterface の実装です．
  *          外部から与えられた Envelope クラス，または自分自身を用いてデータを生成します．
  */
-class GeneratorEnvelope : public Envelope, PitchGeneratorInterface
+class GeneratorEnvelope : public Envelope, public PitchGeneratorInterface
 {
 public:
     /*!

@@ -22,7 +22,7 @@
  *          Specgram クラスを継承し， generate メソッドでは
  *          Specgram の内容を
  */
-class GeneratorSpecgram : public Specgram, SpectrumGeneratorInterface
+class GeneratorSpecgram : public Specgram, public SpectrumGeneratorInterface
 {
 public:
     /*!
@@ -45,6 +45,12 @@ public:
     Specgram *specgram();
 
     /*!
+     *  @brief  現在保持しているフレーム長を返します．
+     *  @return 現在のフレーム長
+     */
+    double msFramePeriod() const;
+
+    /*!
      *  @Override
      */
     const double *generate(double ms) const;
@@ -54,7 +60,10 @@ public:
      */
     double msTimeLength() const;
 
-    double msFramePeriod() const;
+    /*!
+     *  @Override
+     */
+    int fftLength() const;
 
 private:
     double _msFramePeriod;

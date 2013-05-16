@@ -33,7 +33,7 @@ public:
     /*!
      *  @Override
      */
-    void synthesize(double *dst, int frameLength, const double *spectrum, const double *residual);
+    void synthesize(double *dst, int length, int fftLength, const double *spectrum, const double *residual);
 
     /*!
      *  @Override
@@ -46,7 +46,6 @@ private:
     int _fftLength;
     fft_plan *_plan;
     MinimumPhaseAnalysis *_minimumPhase; //! @brief 最小位相用
-    fft_complex *_residual;             //! @brief 励起信号展開用
     fft_complex *_spectrum;             //! @brief インパルスのスペクトル
     double *_impulse;                   //! @brief 実際の波形
 };

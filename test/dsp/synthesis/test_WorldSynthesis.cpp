@@ -72,7 +72,7 @@ void WorldSynthesisTest::checkPulse()
 
     WorldSynthesis synth(fftLength);
 
-    synth.synthesize(dst, fftLength, spectrum, residual);
+    synth.synthesize(dst, fftLength, fftLength, spectrum, residual);
 
     // 一つ目だけは値が入る．
     QCOMPARE(dst[0], 1.0);

@@ -14,6 +14,8 @@
 
 #include "../AudioBuffer.h"
 
+#include "../world/matlabfunctions.h"
+
 #include "VocoderInterface.h"
 #include "PitchGeneratorInterface.h"
 #include "SpectrumGeneratorInterface.h"
@@ -45,6 +47,7 @@ void VocoderRenderer::_prepareBuffer(AudioBuffer *dst, int samplingFrequency, do
 void VocoderRenderer::_render(AudioBuffer *dst,
                                 double msBegin,
                                 double msEnd,
+                                int fftLength,
                                 VocoderInterface *vocoder,
                                 PitchGeneratorInterface *pitch,
                                 SpectrumGeneratorInterface *specgram,
@@ -52,17 +55,18 @@ void VocoderRenderer::_render(AudioBuffer *dst,
 {
     int fs = dst->format().sampleRate();
     double *buffer = dst->data()[0];
-    int fftLength = specgram->fftLength();
 
     double ms = msBegin;
     double msForUnvoicedFrame = vocoder->msForUnvoicedFrame();
     while(ms < msEnd)
     {
-        int index = fs * ms / 1000.0;
+        int index = matlab_round(fs * ms / 1000.0);
         double f0 = pitch->generate(ms);
         const double *s = specgram->generate(ms);
         const double *r = residual->generate(ms);
-        vocoder->synthesize(buffer + index, fftLength, s, r);
+        // 長さを丸めておく
+        int length = (index + fftLength < dst->length()) ? fftLength : (dst->length() - index);
+        vocoder->synthesize(buffer + index, length, fftLength, s, r);
 
         // f0 == 0 のときは無声音として扱う.
         ms += (f0 != 0) ? 1000.0 / f0 : msForUnvoicedFrame;
@@ -73,18 +77,14 @@ bool VocoderRenderer::render(AudioBuffer *dst,
                              int samplingFrequency,
                              double msBegin,
                              double msEnd,
+                             int fftLength,
                              VocoderInterface *vocoder,
                              PitchGeneratorInterface *pitch,
                              SpectrumGeneratorInterface *specgram, SpectrumGeneratorInterface *residual)
 {
-    if(!dst || !pitch || specgram || !residual || !vocoder)
+    if(!dst || !pitch || !specgram || !residual || !vocoder)
     {
         qDebug("VocoderRenderer::render(); // invalid args.");
-        return false;
-    }
-    if(specgram->fftLength() != residual->fftLength())
-    {
-        qDebug("VocoderRenderer::render(); // invalid fft size for spectrum and residual");
         return false;
     }
 
@@ -100,7 +100,7 @@ bool VocoderRenderer::render(AudioBuffer *dst,
     _prepareBuffer(dst, samplingFrequency, msEnd - msBegin);
 
     // TODO: render wave.
-    _render(dst, msBegin, msEnd, vocoder, pitch, specgram, residual);
+    _render(dst, msBegin, msEnd, fftLength, vocoder, pitch, specgram, residual);
 
     return true;
 }

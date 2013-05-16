@@ -10,6 +10,7 @@
  *
  */
 
+#include "../world/matlabfunctions.h"
 #include "GeneratorSpecgram.h"
 
 GeneratorSpecgram::GeneratorSpecgram(Specgram *specgram, double msFramePeriod) :
@@ -39,7 +40,7 @@ Specgram *GeneratorSpecgram::specgram()
 const double *GeneratorSpecgram::generate(double ms) const
 {
     // 最近傍近似
-    int index = (0.5 + ms / _msFramePeriod);
+    int index = matlab_round(ms / _msFramePeriod);
     return _specgram->data()[index];
 }
 
@@ -51,4 +52,9 @@ double GeneratorSpecgram::msTimeLength() const
 double GeneratorSpecgram::msFramePeriod() const
 {
     return _msFramePeriod;
+}
+
+int GeneratorSpecgram::fftLength() const
+{
+    return frequencyLength();
 }
