@@ -59,6 +59,8 @@ public:
      */
     static QImage fromSpecgram(const Specgram *specgram, ScaleType scale = LogScale, const SpecgramColorPalette * palette = 0);
 
+    static QImage fromResidual(const Specgram *residual, const SpecgramColorPalette *palette = 0);
+
     /*!
      *  @brief 波形データから画像に変換します。
      *  @param[in] wave         波形データの配列を与えます。

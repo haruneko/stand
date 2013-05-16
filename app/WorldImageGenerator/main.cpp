@@ -16,6 +16,7 @@
 #include "dsp/Envelope.h"
 #include "dsp/Specgram.h"
 
+#include "dsp/seem/SimpleSeem.h"
 #include "dsp/ffem/DioFfem.h"
 #include "dsp/seem/StarSeem.h"
 #include "dsp/seem/PlatinumSeem.h"
@@ -31,11 +32,14 @@
 void analyze(AudioBuffer &buffer, QString path, double msFramePeriod)
 {
     Envelope f0;            // 基本周波数列
+    Specgram stft;
     Specgram specgram;      // パワースペクトル列
     Specgram residual;      // 励起信号スペクトル列
     Specgram waves;         // 励起信号波形列
 
     // 推定するよ！
+    std::cout << "Calcualting STFT spectrogram" << std::endl;
+    SimpleSeem().estimate(&stft, buffer.data(0), buffer.length(), 2048, buffer.format().sampleRate(), msFramePeriod);
     std::cout << "Estimating F0 contour" << std::endl;
     DioFfem().estimate(&f0, buffer.data(0), buffer.length(), buffer.format().sampleRate(), msFramePeriod);
     std::cout << "Estimating Spectrogram" << std::endl;
@@ -45,6 +49,7 @@ void analyze(AudioBuffer &buffer, QString path, double msFramePeriod)
     ResidualExtractor().extract(&waves, &residual);
 
     // 書きだすよ！
+    ToImage::fromSpecgram(&stft).save(path + ".stft.png");
     ToImage::fromWaveform(f0.data(), f0.size(), f0.size(), 1024).save(path + ".dio.png");
     ToImage::fromSpecgram(&specgram).save(path + ".star.png");
     ToImage::fromSpecgram(&waves, ToImage::LinearScale).save(path + ".platinum.png");

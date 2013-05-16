@@ -14,6 +14,7 @@
 #include <iostream>
 #include "../dsp/Specgram.h"
 #include "SpecgramColorPalette.h"
+#include "ExcitationColorPalette.h"
 
 #include "ToImage.h"
 
@@ -36,10 +37,11 @@ public:
 
     uint bgColor() const
     {
-        return 0;
+        return 0xff000000;
     }
 };
-const static DefaultColorPalette defaultColorPalette;
+const static DefaultColorPalette defaultLogColorPalette;
+const static ExcitationColorPalette defaultLinearColorPalette;
 }
 
 void ToImage::_drawLine(QImage &dst, QPoint p1, QPoint p2, uint pixelValue)
@@ -58,6 +60,10 @@ void ToImage::_drawLine(QImage &dst, QPoint p1, QPoint p2, uint pixelValue)
         for(int x = p1.x(); x <= p2.x(); x++)
         {
             int y = p1.y() + (p2.y() - p1.y()) * (x - p1.x()) / dx;
+            if(x < 0 || dst.width() <= x || y < 0 || dst.height() <= y)
+            {
+                continue;
+            }
             dst.setPixel(x, y, pixelValue);
         }
     }
@@ -73,6 +79,10 @@ void ToImage::_drawLine(QImage &dst, QPoint p1, QPoint p2, uint pixelValue)
         for(int y = p1.y(); y <= p2.y(); y++)
         {
             int x = p1.x() + (p2.x() - p1.x()) * (y - p1.y()) / dy;
+            if(x < 0 || dst.width() <= x || y < 0 || dst.height() <= y)
+            {
+                continue;
+            }
             dst.setPixel(x, y, pixelValue);
         }
     }
@@ -106,7 +116,7 @@ QImage ToImage::fromSpecgram(const double *const *specgram,
     // パレットが指定されていないとき，デフォルトを使用する
     if(!palette)
     {
-        palette = &defaultColorPalette;
+        palette = &defaultLogColorPalette;
     }
 
     if(maxValue == -DBL_MAX && type == LogScale)
@@ -187,5 +197,47 @@ QImage ToImage::fromWaveform(const double *wave, int length, int width, int heig
         previous = current;
     }
 
+    return ret;
+}
+
+QImage ToImage::fromResidual(const Specgram *residual, const SpecgramColorPalette *palette)
+{
+    if(!residual || !residual->isValid())
+    {
+        return QImage();
+    }
+    if(!palette)
+    {
+        palette = &defaultLinearColorPalette;
+    }
+    double maxValue = -DBL_MAX;
+    double minValue = DBL_MAX;
+    for(int t = 0; t < residual->frameLength(); t++)
+    {
+        for(int f = 0; f < residual->frequencyLength(); f++)
+        {
+            minValue = qMin(minValue, residual->value(t, f));
+            maxValue = qMax(maxValue, residual->value(t, f));
+        }
+    }
+
+    int range = 512;
+
+    QImage ret(QSize(residual->frequencyLength(), residual->frameLength() + range), QImage::Format_ARGB32);
+    ret.fill(palette->bgColor());
+
+    double diff = maxValue - minValue;
+    for(int index = 0; index < residual->frameLength(); index++)
+    {
+        double prev = range / 2 + index - range / 2 * (residual->value(index, 0) - minValue) / diff;
+        for(int tau = 1; tau < residual->frequencyLength(); tau++)
+        {
+            double val = (residual->value(index, tau) - minValue) / diff;
+            uint c = palette->color(val - 0.5, 0.5, - 0.5);
+            double current = range / 2 + index - range / 2 * val;
+            _drawLine(ret, QPoint(tau - 1, prev), QPoint(tau, current), c);
+            prev = current;
+        }
+    }
     return ret;
 }

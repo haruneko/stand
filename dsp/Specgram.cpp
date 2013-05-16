@@ -83,3 +83,8 @@ int Specgram::frequencyLength() const
 {
     return _frequencyLength;
 }
+
+bool Specgram::isValid() const
+{
+    return (_data && _data[0] && _frameLength >0 && _frequencyLength > 0);
+}

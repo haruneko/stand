@@ -48,7 +48,8 @@ SOURCES +=\
     dsp/world/ResidualExtractor.cpp \
     dsp/AudioBuffer.cpp \
     dsp/synthesis/VocoderRenderer.cpp \
-    dsp/synthesis/VocoderInterface.cpp
+    dsp/synthesis/VocoderInterface.cpp \
+    utility/ExcitationColorPalette.cpp
 
 HEADERS  += \
     utility/ToImage.h \
@@ -87,5 +88,6 @@ HEADERS  += \
     io/audio/AudioBufferReader.h \
     dsp/AudioBuffer.h \
     dsp/synthesis/VocoderRenderer.h \
-    dsp/synthesis/VocoderInterface.h
+    dsp/synthesis/VocoderInterface.h \
+    utility/ExcitationColorPalette.h
 
