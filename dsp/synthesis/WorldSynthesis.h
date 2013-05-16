@@ -44,7 +44,7 @@ private:
     void _destroy();
     void _setFftLength(int fftLength);
     int _fftLength;
-    fft_plan _plan;
+    fft_plan *_plan;
     MinimumPhaseAnalysis *_minimumPhase; //! @brief 最小位相用
     fft_complex *_residual;             //! @brief 励起信号展開用
     fft_complex *_spectrum;             //! @brief インパルスのスペクトル

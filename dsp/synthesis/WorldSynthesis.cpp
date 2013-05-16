@@ -25,6 +25,7 @@ WorldSynthesis::WorldSynthesis(int fftLength)
     _spectrum = NULL;
     _residual = NULL;
     _impulse = NULL;
+    _plan = NULL;
     _setFftLength(fftLength);
 }
 
@@ -46,7 +47,8 @@ void WorldSynthesis::_setFftLength(int fftLength)
     _spectrum = new fft_complex[fftLength / 2 + 1];
     _residual = new fft_complex[fftLength / 2 + 1];
     _impulse = new double[fftLength];
-    fft_plan_dft_c2r_1d(fftLength, _spectrum, _impulse, FFT_BACKWARD);
+    _plan = new fft_plan;
+    *_plan = fft_plan_dft_c2r_1d(fftLength, _spectrum, _impulse, FFT_BACKWARD);
 }
 
 void WorldSynthesis::_destroy()
@@ -60,7 +62,11 @@ void WorldSynthesis::_destroy()
     delete[] _residual;
     delete[] _impulse;
 
-    fft_destroy_plan(_plan);
+    if(_plan)
+    {
+        fft_destroy_plan(*_plan);
+        _plan = NULL;
+    }
     _fftLength = 0;
     _spectrum = NULL;
     _residual = NULL;
@@ -105,7 +111,7 @@ void WorldSynthesis::synthesize(double *dst, int frameLength, const double *spec
     _spectrum[lastIndex][1] = 0.0;
 
     // 逆 FFT したら
-    fft_execute(_plan);
+    fft_execute(*_plan);
 
     // バッファに足しこんで終了.
     for(int i = 0; i < _fftLength * 3 / 4; i++) // ループ回数は本家に合わせた.
