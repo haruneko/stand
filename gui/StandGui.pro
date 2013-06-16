@@ -14,11 +14,11 @@ DESTDIR = ../lib/
 TEMPLATE = lib
 CONFIG += staticlib
 
-INCLUDEPATH += libvsq
-
 HEADERS += \
-    views/AbstractSequenceView.h
+    views/AbstractSequenceView.h \
+    views/AbstractControllerView.h
 
 SOURCES += \
-    views/AbstractSequenceView.cpp
+    views/AbstractSequenceView.cpp \
+    views/AbstractControllerView.cpp
 
