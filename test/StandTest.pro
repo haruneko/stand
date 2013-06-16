@@ -8,5 +8,5 @@ SUBDIRS += \
         dsp\ffem\test_DioFfem.pro \
         dsp\world\test_ResidualExtractor.pro
 
-Release:PRE_TARGETDEPS = ../../stand.lib
-Debug:PRE_TARGETDEPS = ../../standd.lib
+Release:PRE_TARGETDEPS = ../lib/stand.lib
+Debug:PRE_TARGETDEPS = ../lib/standd.lib

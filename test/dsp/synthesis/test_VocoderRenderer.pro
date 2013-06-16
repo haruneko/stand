@@ -1,10 +1,12 @@
 QT       += multimedia testlib
 
-Release:LIBS += ../../../stand.lib
-Release:PRE_TARGETDEPS = ../../../stand.lib
-Debug:LIBS += ../../../standd.lib
-Debug:PRE_TARGETDEPS = ../../../standd.lib
-INCLUDEPATH += ../../../
+INCLUDEPATH += ../../../core/
+DEPENDPATH += ../../../lib/
+
+Release:LIBS += ../../../lib/stand.lib
+Release:PRE_TARGETDEPS = ../../../lib/stand.lib
+Debug:LIBS += ../../../lib/standd.lib
+Debug:PRE_TARGETDEPS = ../../../lib/standd.lib
 
 TARGET = test_VocoderRenderer
 CONFIG   += console
