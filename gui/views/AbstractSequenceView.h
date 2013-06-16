@@ -23,11 +23,17 @@ class Sequence;
 /**
  *  @brief シーケンスを表示する基底クラス．
  */
-class AbstractSequenceView : public QObject
+class AbstractSequenceView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QWidget *parent);
+    explicit AbstractSequenceView(
+            int trackId,
+            int beatWidth,
+            int noteHeight,
+            const vsq::Sequence *sequence,
+            QWidget *parent
+            );
 
     int beatWidth() const
     {
@@ -57,13 +63,8 @@ public:
         return _sequence;
     }
 
-    /**
-     *  @brief 書き込み対象となる親 Widget を返します．
-     */
-    QWidget *parentWidget()
-    {
-        return _parent;
-    }
+protected:
+    virtual void paintEvent(QPaintEvent *e);
 
 signals:
     
@@ -74,11 +75,6 @@ public slots:
      *  @param [in] tickEnd 終了 tick
      */
     virtual void dataChanged(int tickBegin, int tickEnd);
-
-    /**
-     *  @brief 表示すべきトラックが変更された際に通知を受け取るスロットです．
-     */
-    virtual void trackChanged(int id);
 
     /**
      *  @brief 該当する領域を描画します．
@@ -92,10 +88,15 @@ public slots:
      *  @param [in] rect 描画すべき矩形．
      *  @param [in/out] painter 描画対象から得た QPainter クラスへのポインタ．
      */
-    virtual void paint(const QRect &rect, QPainter *painter);
+    virtual void paint(const QRect &rect, QPainter *painter) = 0;
 
-    virtual void beatWidthChanged(int w);
-    virtual void noteHeightChanged(int h);
+    /**
+     *  @brief 表示すべきトラックが変更された際に通知を受け取るスロットです．
+     */
+    void trackChanged(int id);
+
+    void beatWidthChanged(int w);
+    void noteHeightChanged(int h);
 private:
     int _trackId;
     int _beatWidth;

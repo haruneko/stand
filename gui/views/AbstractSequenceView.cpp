@@ -10,10 +10,15 @@
  *
  */
 
+#include <QPaintEvent>
+#include <QPainter>
+
+#include <Sequence.hpp>
+
 #include "AbstractSequenceView.h"
 
 AbstractSequenceView::AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QWidget *parent) :
-    QObject(parent)
+    QWidget(parent)
 {
     _trackId = trackId;
     _beatWidth = beatWidth;
@@ -28,12 +33,25 @@ void AbstractSequenceView::dataChanged(int /*tickBegin*/, int /*tickEnd*/)
 
 void AbstractSequenceView::beatWidthChanged(int w)
 {
-    _beatWidth = w;
+    _beatWidth = qMax(0, w);
+    update();
 }
 
 void AbstractSequenceView::noteHeightChanged(int h)
 {
-    _noteHeight = h;
+    _noteHeight = qMax(0, h);
+    update();
+}
+
+void AbstractSequenceView::trackChanged(int id)
+{
+    // 範囲外の場合何もしない．
+    if(id < 0 || _sequence->tracks()->size() <= id)
+    {
+        return;
+    }
+    _trackId = id;
+    update();
 }
 
 void AbstractSequenceView::paint(const QRegion &region, QPainter *painter)
@@ -43,4 +61,9 @@ void AbstractSequenceView::paint(const QRegion &region, QPainter *painter)
     {
         paint(r, painter);
     }
+}
+
+void AbstractSequenceView::paintEvent(QPaintEvent *e)
+{
+    paint(e->region(), &(QPainter(this)));
 }
