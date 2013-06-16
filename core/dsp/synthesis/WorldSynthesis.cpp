@@ -11,6 +11,7 @@
  */
 
 #include <iostream>
+#include <cmath>
 
 #include "../world/ResidualExtractor.h"
 #include "../world/constant_numbers.h"

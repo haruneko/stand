@@ -10,6 +10,8 @@
  *
  */
 
+#include <float.h>
+
 #include "ExcitationColorPalette.h"
 
 uint ExcitationColorPalette::bgColor() const
