@@ -88,13 +88,23 @@ void ControlCurveView::paint(const QRect &rect, QPainter *painter)
     QPen old(painter->pen());
     painter->setPen(_color);
 
-    int beginIndex;
+    int currentIndex;
     vsq::tick_t begin = tickAt(rect.left());
-    _control->getValueAt(begin, &beginIndex);
+    _control->getValueAt(begin, &currentIndex);
+    int maximum = _control->getMaximum();
+    int minimum = _control->getMinimum();
+    vsq::BP current = _control->get(currentIndex);
 
     for(int x = rect.left(); x <= rect.right(); x++)
     {
-        int y = 0;
+        vsq::tick_t currentTick = tickAt(x);
+        // 現在 tick が次のキークロックより大きい場合はインデックスを進める．
+        if(_control->getKeyClock(currentIndex) < currentTick)
+        {
+            currentIndex++;
+            current = _control->get(currentIndex);
+        }
+        int y = height() * (1.0 - (current.value - minimum) / (double)maximum);
         painter->drawLine(x, y, x, height());
     }
     painter->setPen(old);
