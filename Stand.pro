@@ -4,6 +4,7 @@ CONFIG += ordered
 
 SUBDIRS += \
             core/StandCore.pro \
+            gui/StandGui.pro \
             app/StandApps.pro \
             test/StandTest.pro
 
