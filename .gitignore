@@ -4,4 +4,6 @@ Makefile*
 *.lib
 release
 debug
-/test/data
+/lib/*
+/test/data/*
+/gui/libvsq/*

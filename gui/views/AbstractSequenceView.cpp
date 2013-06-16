@@ -12,12 +12,13 @@
 
 #include "AbstractSequenceView.h"
 
-AbstractSequenceView::AbstractSequenceView(int trackId, int beatWidth, int noteHeight, QWidget *parent) :
+AbstractSequenceView::AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QWidget *parent) :
     QWidget(parent)
 {
     _trackId = trackId;
     _beatWidth = beatWidth;
     _noteHeight = noteHeight;
+    _sequence = sequence;
 }
 
 void AbstractSequenceView::dataChanged(int /*tickBegin*/, int /*tickEnd*/)

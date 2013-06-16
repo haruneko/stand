@@ -15,6 +15,11 @@
 
 #include <QWidget>
 
+namespace vsq
+{
+class Sequence;
+}
+
 /**
  *  @brief シーケンスを表示する基底クラス．
  */
@@ -22,7 +27,7 @@ class AbstractSequenceView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AbstractSequenceView(int trackId, int beatWidth, int noteHeight, QWidget *parent = 0);
+    explicit AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QWidget *parent = 0);
 
     int beatWidth() const
     {
@@ -41,6 +46,17 @@ public:
     {
         return _trackId;
     }
+
+    void setSequence(const vsq::Sequence *sequence)
+    {
+        _sequence = sequence;
+    }
+
+    const vsq::Sequence *sequence() const
+    {
+        return _sequence;
+    }
+
 signals:
     
 public slots:
@@ -62,6 +78,8 @@ private:
     int _trackId;
     int _beatWidth;
     int _noteHeight;
+
+    const vsq::Sequence *_sequence;
 };
 
 #endif // ABSTRACTSEQUENCEVIEW_H
