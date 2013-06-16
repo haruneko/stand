@@ -14,19 +14,37 @@
 
 #include "AbstractControlView.h"
 
-AbstractControlView::AbstractControlView(
-        int trackId,
-        int beatWidth,
-        int noteHeight,
-        const vsq::Sequence *sequence,
-        QWidget *parent
-        ) : AbstractSequenceView(trackId, beatWidth, noteHeight, sequence, parent)
+AbstractControlView::AbstractControlView(int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent ) :
+    AbstractSequenceView(sequence, trackId, parent)
 {
+    _beatWidth = beatWidth;
 }
 
 void AbstractControlView::dataChanged(int tickBegin, int tickEnd)
 {
-    int posBegin = beatWidth() * tickBegin / sequence()->getTickPerQuarter();
-    int posEnd = beatWidth() * tickEnd / sequence()->getTickPerQuarter();
-    update(posBegin, 0, posEnd + 1, height());
+    update(xAt(tickBegin), 0, xAt(tickEnd) + 1, height());
+}
+
+vsq::tick_t AbstractControlView::tickAt(int x) const
+{
+    vsq::tick_t ret = x * sequence()->getTickPerQuarter() / _beatWidth;
+    return ret;
+}
+
+int AbstractControlView::xAt(vsq::tick_t tick) const
+{
+    int ret = tick * _beatWidth / sequence()->getTickPerQuarter();
+    return ret;
+}
+
+void AbstractControlView::beatWidthChanged(int w)
+{
+    _beatWidth = qMax(0, w);
+    int width = w * sequence()->getTotalClocks();
+    setMinimumWidth(width);
+    update();
+}
+
+void AbstractControlView::noteHeightChanged(int /* h */)
+{
 }

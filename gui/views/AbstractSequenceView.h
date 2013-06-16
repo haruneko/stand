@@ -27,23 +27,13 @@ class AbstractSequenceView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit AbstractSequenceView(
-            int trackId,
-            int beatWidth,
-            int noteHeight,
-            const vsq::Sequence *sequence,
-            QWidget *parent
-            );
-
-    int beatWidth() const
-    {
-        return _beatWidth;
-    }
-
-    int noteHegiht() const
-    {
-        return _noteHeight;
-    }
+    /**
+     *  @brief 与えられた値で初期化します．
+     *  @param [in] sequence 表示すべきシーケンス．
+     *  @param [in] trackId 表示すべきトラック番号．
+     *  @param [in] parent 親 Widget ．
+     */
+    explicit AbstractSequenceView(const vsq::Sequence *sequence, int trackId, QWidget *parent);
 
     /**
      *  @brief 今現在表示しているトラック番号を返します．
@@ -53,11 +43,20 @@ public:
         return _trackId;
     }
 
+    /**
+     *  @brief  表示すべきシーケンスを変更します．
+     *          与えられたシーケンスは view クラス内では変更できません．
+     *  @param [in] sequence 変更後のシーケンス．
+     */
     void setSequence(const vsq::Sequence *sequence)
     {
         _sequence = sequence;
+        update();
     }
 
+    /**
+     *  @brief  現在表示しているシーケンスへのポインタを返します．
+     */
     const vsq::Sequence *sequence() const
     {
         return _sequence;
@@ -93,17 +92,22 @@ public slots:
     /**
      *  @brief 表示すべきトラックが変更された際に通知を受け取るスロットです．
      */
-    void trackChanged(int id);
+    virtual void trackChanged(int id);
 
-    void beatWidthChanged(int w);
-    void noteHeightChanged(int h);
+    /**
+     *  @brief 四分音符の幅が変更された際に通知を受け取るスロットです．
+     */
+    virtual void beatWidthChanged(int w) = 0;
+
+    /**
+     *  @brief 音符の高さが変更された際に通知を受け取るスロットです．
+     */
+    virtual void noteHeightChanged(int h) = 0;
 private:
-    int _trackId;
-    int _beatWidth;
-    int _noteHeight;
+    const vsq::Sequence *_sequence; //! @brief 現在表示しているシーケンス
+    int _trackId;                   //! @brief 現在表示しているトラック番号
 
-    const vsq::Sequence *_sequence;
-    QWidget *_parent;
+    QWidget *_parent;               //! @brief 親Widget
 };
 
 #endif // ABSTRACTSEQUENCEVIEW_H

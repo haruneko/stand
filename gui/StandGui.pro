@@ -16,9 +16,11 @@ CONFIG += staticlib
 
 HEADERS += \
     views/AbstractSequenceView.h \
-    views/AbstractControlView.h
+    views/AbstractControlView.h \
+    views/ControlCurveView.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
-    views/AbstractControlView.cpp
+    views/AbstractControlView.cpp \
+    views/ControlCurveView.cpp
 
