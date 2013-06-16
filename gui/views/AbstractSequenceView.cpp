@@ -12,8 +12,8 @@
 
 #include "AbstractSequenceView.h"
 
-AbstractSequenceView::AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QWidget *parent) :
-    QWidget(parent)
+AbstractSequenceView::AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QObject *parent) :
+    QObject(parent)
 {
     _trackId = trackId;
     _beatWidth = beatWidth;

@@ -6,13 +6,15 @@
 
 QT       += core gui multimedia
 
-Release:TARGET = standGui
-Debug:TARGET = standGuid
+Release:TARGET = StandGui
+Debug:TARGET = StandGuid
 
 DESTDIR = ../lib/
 
 TEMPLATE = lib
 CONFIG += staticlib
+
+INCLUDEPATH += libvsq
 
 HEADERS += \
     views/AbstractSequenceView.h

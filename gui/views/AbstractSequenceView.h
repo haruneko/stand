@@ -13,7 +13,7 @@
 #ifndef ABSTRACTSEQUENCEVIEW_H
 #define ABSTRACTSEQUENCEVIEW_H
 
-#include <QWidget>
+#include <QObject>
 
 namespace vsq
 {
@@ -23,11 +23,11 @@ class Sequence;
 /**
  *  @brief シーケンスを表示する基底クラス．
  */
-class AbstractSequenceView : public QWidget
+class AbstractSequenceView : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QWidget *parent = 0);
+    explicit AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QObject *parent = 0);
 
     int beatWidth() const
     {

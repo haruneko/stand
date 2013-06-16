@@ -6,8 +6,8 @@
 
 QT       += core gui multimedia
 
-Release:TARGET = stand
-Debug:TARGET = standd
+Release:TARGET = Stand
+Debug:TARGET = Standd
 
 DESTDIR = ../lib/
 
