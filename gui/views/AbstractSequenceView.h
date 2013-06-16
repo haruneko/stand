@@ -13,7 +13,7 @@
 #ifndef ABSTRACTSEQUENCEVIEW_H
 #define ABSTRACTSEQUENCEVIEW_H
 
-#include <QObject>
+#include <QWidget>
 
 namespace vsq
 {
@@ -27,7 +27,7 @@ class AbstractSequenceView : public QObject
 {
     Q_OBJECT
 public:
-    explicit AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QObject *parent = 0);
+    explicit AbstractSequenceView(int trackId, int beatWidth, int noteHeight, const vsq::Sequence *sequence, QWidget *parent);
 
     int beatWidth() const
     {
@@ -57,6 +57,14 @@ public:
         return _sequence;
     }
 
+    /**
+     *  @brief 書き込み対象となる親 Widget を返します．
+     */
+    QWidget *parentWidget()
+    {
+        return _parent;
+    }
+
 signals:
     
 public slots:
@@ -72,6 +80,20 @@ public slots:
      */
     virtual void trackChanged(int id);
 
+    /**
+     *  @brief 該当する領域を描画します．
+     *  @param [in] region 描画すべき領域．
+     *  @param [in/out] painter 描画対象から得た QPainter クラスへのポインタ．
+     */
+    void paint(const QRegion &region, QPainter *painter);
+
+    /**
+     *  @brief 該当する矩形を描画します．
+     *  @param [in] rect 描画すべき矩形．
+     *  @param [in/out] painter 描画対象から得た QPainter クラスへのポインタ．
+     */
+    virtual void paint(const QRect &rect, QPainter *painter);
+
     virtual void beatWidthChanged(int w);
     virtual void noteHeightChanged(int h);
 private:
@@ -80,6 +102,7 @@ private:
     int _noteHeight;
 
     const vsq::Sequence *_sequence;
+    QWidget *_parent;
 };
 
 #endif // ABSTRACTSEQUENCEVIEW_H
