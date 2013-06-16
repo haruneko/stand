@@ -46,6 +46,14 @@ public:
      *  @brief 該当する tick 時刻での x 座標を返します．
      */
     int xAt(vsq::tick_t tick) const;
+
+    /**
+     *  @brief 現在の一拍分の横幅を返します．
+     */
+    int beatWidth() const
+    {
+        return _beatWidth;
+    }
 public slots:
     // @Override
     void dataChanged(int tickBegin, int tickEnd);
