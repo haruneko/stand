@@ -20,7 +20,8 @@ HEADERS += \
     views/ControlCurveView.h \
     views/ControlGridView.h \
     views/AbstractGridView.h \
-    utility/Utility.h
+    utility/Utility.h \
+    views/PianoPainter.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -28,5 +29,6 @@ SOURCES += \
     views/ControlCurveView.cpp \
     views/ControlGridView.cpp \
     views/AbstractGridView.cpp \
-    utility/Utility.cpp
+    utility/Utility.cpp \
+    views/PianoPainter.cpp
 
