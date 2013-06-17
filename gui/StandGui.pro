@@ -18,11 +18,19 @@ HEADERS += \
     views/AbstractSequenceView.h \
     views/AbstractControlView.h \
     views/ControlCurveView.h \
-    views/ControlGridView.h
+    views/ControlGridView.h \
+    views/AbstractGridView.h \
+    utility/Utility.h \
+    views/PianoPainter.h \
+    views/NoteView.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
     views/AbstractControlView.cpp \
     views/ControlCurveView.cpp \
-    views/ControlGridView.cpp
+    views/ControlGridView.cpp \
+    views/AbstractGridView.cpp \
+    utility/Utility.cpp \
+    views/PianoPainter.cpp \
+    views/NoteView.cpp
 
