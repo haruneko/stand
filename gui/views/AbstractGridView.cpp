@@ -53,6 +53,10 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
     vsq::tick_t endTick = tickAt(rect.right() + 1);
 
     vsq::MeasureLineIterator it(&(sequence()->timesigList), assistStep);
+    if(!it.hasNext())
+    {
+        return;
+    }
     vsq::MeasureLine ml = it.next();
     for(; ml.tick < beginTick && it.hasNext(); ml = it.next());
     for(; ml.tick < endTick && it.hasNext(); ml = it.next())

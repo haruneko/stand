@@ -17,8 +17,8 @@
 NoteView::NoteView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent) :
     AbstractGridView(divCount, beatWidth, sequence, trackId, parent),
     low(0, 32, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64)),
-    middle(33, 72, QColor(192, 192, 192), QColor(128, 128, 192), QColor(64, 64, 64)),
-    high(73, 128, QColor(255, 255, 255), QColor(128, 128, 128), QColor(64, 64, 64))
+    middle(33, 72, QColor(255, 255, 255), QColor(224, 224, 255), QColor(64, 64, 64)),
+    high(73, 128, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64))
 {
     _noteHeight = 0;
     setNoteHeight(noteHeight);
@@ -127,5 +127,5 @@ void NoteView::_drawOneNote(const vsq::Event *event, QPainter *painter)
     painter->fillRect(x, y, w, _noteHeight, noteColor);
     painter->drawRect(x, y, w, _noteHeight);
     painter->setPen(noteTextColor);
-    painter->drawText(x + 1, y + 1, w - 2, _noteHeight - 2, Qt::AlignLeft, QString(text.data()),&(QRect(x + 1, y + 1, w - 2, _noteHeight - 2)));
+    painter->drawText(x + 1, y + 1, w - 2, _noteHeight - 2, Qt::AlignLeft, tr(text.data()), &(QRect(x + 1, y + 1, w - 2, _noteHeight - 2)));
 }
