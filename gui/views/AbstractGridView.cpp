@@ -38,6 +38,11 @@ void AbstractGridView::setDivCount(int divCount)
     }
 }
 
+void AbstractGridView::divCountChanged(int divCount)
+{
+    setDivCount(divCount);
+}
+
 void AbstractGridView::paint(const QRect &rect, QPainter *painter)
 {
     QPen old(painter->pen());

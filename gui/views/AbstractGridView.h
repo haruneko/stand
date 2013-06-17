@@ -54,6 +54,7 @@ public:
 public slots:
     // @Override
     void paint(const QRect &rect, QPainter *painter);
+    virtual void divCountChanged(int divCount);
 protected:
     /**
      *  @brief  補助線を描画します．

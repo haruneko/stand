@@ -16,11 +16,13 @@
 #include "../utility/Utility.h"
 #include "PianoPainter.h"
 
-PianoPainter::PianoPainter(const QColor &w, const QColor &b, const QColor &l)
+PianoPainter::PianoPainter(int minNote, int maxNote, const QColor &whiteKeyColor, const QColor &blackKeyColor, const QColor &lineColor)
 {
-    whiteKeyColor = w;
-    blackKeyColor = b;
-    lineColor = l;
+    this->minNote = minNote;
+    this->maxNote = maxNote;
+    this->whiteKeyColor = whiteKeyColor;
+    this->blackKeyColor = blackKeyColor;
+    this->lineColor = lineColor;
 }
 
 void PianoPainter::paint(int noteHeight, const QRect &rect, QPainter *painter)
@@ -28,6 +30,8 @@ void PianoPainter::paint(int noteHeight, const QRect &rect, QPainter *painter)
     QPen old(painter->pen());
     int beginNote = 127 - rect.top() / noteHeight;
     int endNote = 127 - rect.bottom() / noteHeight - 1;
+    beginNote = qMin(beginNote, maxNote);
+    endNote = qMax(endNote, minNote);
 
     painter->setPen(lineColor);
     for(int note = beginNote; note >= endNote; note--)

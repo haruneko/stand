@@ -28,6 +28,8 @@ public:
      *  @brief 初期値で初期化する．
      */
     PianoPainter(
+            int minNote,
+            int maxNote,
             const QColor &whiteKeyColor = Qt::white,
             const QColor &blackKeyColor = Qt::darkGray,
             const QColor &lineColor = Qt::black
@@ -40,10 +42,11 @@ public:
      */
     void paint(int noteHeight, const QRect &rect, QPainter *painter);
 
-    QColor whiteKeyColor;  //! @brief 白鍵の色
-    QColor blackKeyColor;  //! @brief 黒鍵の色
-    QColor lineColor;      //! @brief 線の色
-    
+    QColor whiteKeyColor;   //! @brief 白鍵の色
+    QColor blackKeyColor;   //! @brief 黒鍵の色
+    QColor lineColor;       //! @brief 線の色
+    int minNote;
+    int maxNote;
 };
 
 #endif // PIANOPAINTER_H

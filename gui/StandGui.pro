@@ -21,7 +21,8 @@ HEADERS += \
     views/ControlGridView.h \
     views/AbstractGridView.h \
     utility/Utility.h \
-    views/PianoPainter.h
+    views/PianoPainter.h \
+    views/NoteView.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -30,5 +31,6 @@ SOURCES += \
     views/ControlGridView.cpp \
     views/AbstractGridView.cpp \
     utility/Utility.cpp \
-    views/PianoPainter.cpp
+    views/PianoPainter.cpp \
+    views/NoteView.cpp
 
