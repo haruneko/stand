@@ -62,10 +62,14 @@ protected:
      */
     virtual void drawAssistLine(vsq::tick_t tick, QPainter *painter) = 0;
     /**
-     *  @brief  主線を描画します．
+     *  @brief  小節線を描画します．
      *  @param [in] tick 描画 tick 位置
      */
     virtual void drawBarLine(vsq::tick_t tick, QPainter *painter) = 0;
+    /**
+     *  @brief  拍の開始線を描画します．
+     */
+    virtual void drawBeatLine(vsq::tick_t tick, QPainter *painter) = 0;
     /**
      *  @brief  グリッド線の描画前に呼び出されます．
      */

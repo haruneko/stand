@@ -37,6 +37,7 @@ public:
     void setNoteHeight(int noteHeight);
 
     QColor barLineColor;        //! @brief 小節線の描画色
+    QColor beatLineColor;       //! @brief 拍ごとの線の描画色
     QColor assistLineColor;     //! @brief 補助線の描画色
 
     QColor noteColor;           //! @brief 音符の描画色
@@ -64,6 +65,8 @@ protected:
     virtual void paintBefore(const QRect &rect, QPainter *painter);
     // @Override
     virtual void drawBarLine(vsq::tick_t tick, QPainter *painter);
+    // @Override
+    virtual void drawBeatLine(vsq::tick_t tick, QPainter *painter);
     // @Override
     virtual void drawAssistLine(vsq::tick_t tick, QPainter *painter);
     // @Override

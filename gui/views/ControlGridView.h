@@ -38,6 +38,8 @@ protected:
     // @Override
     void drawBarLine(vsq::tick_t tick, QPainter *painter);
     // @Override
+    void drawBeatLine(vsq::tick_t tick, QPainter *painter);
+    // @Override
     void paintAfter(const QRect &rect, QPainter *painter);
 };
 

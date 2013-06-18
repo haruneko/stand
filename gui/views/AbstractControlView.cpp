@@ -41,7 +41,7 @@ void AbstractControlView::beatWidthChanged(int w)
 {
     _beatWidth = qMax(0, w);
     int width = w * sequence()->getTotalClocks();
-    setMinimumWidth(width);
+    setFixedWidth(width);
     update();
 }
 
