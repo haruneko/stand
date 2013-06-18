@@ -39,11 +39,13 @@ public:
 
     /**
      *  @brief 該当する x 座標での tick 時刻を返します．
+     *          このメソッドは premeasure を考慮した値を返します．
      */
     vsq::tick_t tickAt(int x) const;
 
     /**
-     *  @brief 該当する tick 時刻での x 座標を返します．
+     *  @brief  該当する tick 時刻での x 座標を返します．
+     *          このメソッドは premeasure を考慮した値を返します．
      */
     int xAt(vsq::tick_t tick) const;
 

@@ -10,7 +10,9 @@
  *
  */
 
+#include <QLabel>
 #include <QPainter>
+#include <QPalette>
 
 #include "NoteView.h"
 
@@ -22,10 +24,27 @@ NoteView::NoteView(int divCount, int noteHeight, int beatWidth, const vsq::Seque
 {
     _noteHeight = 0;
     setNoteHeight(noteHeight);
-    barLineColor = Qt::black;
-    assistLineColor = Qt::darkGray;
+
+    barLineColor = QColor(64, 64, 96);
+    assistLineColor = QColor(144, 144, 192);
+
     noteColor = QColor(192, 192, 255);
-    noteBorderColor = QColor(64, 64, 128);
+    noteInvalidColor = QColor(255, 192, 192);
+    noteSelectedColor = QColor(128, 128, 255);
+    noteTextColor = QColor(0, 0, 0);
+
+    _reset();
+}
+
+NoteView::~NoteView()
+{
+    _destroy();
+}
+
+void NoteView::_destroy()
+{
+    qDeleteAll(_noteLabels);
+    _noteLabels.clear();
 }
 
 int NoteView::yAt(int note)
@@ -39,7 +58,17 @@ void NoteView::setNoteHeight(int noteHeight)
     {
         return;
     }
+
+    // 音符の高さ変更．
+    foreach(QLabel *label, _noteLabels)
+    {
+        QPoint p(label->pos());
+        long y = p.y() * noteHeight / _noteHeight;
+        label->setGeometry(p.x(), y, label->width(), noteHeight);
+    }
     _noteHeight = noteHeight;
+
+    // 自身の高さ変更．
     setFixedHeight(noteHeight * 128);
     update();
 }
@@ -49,17 +78,79 @@ void NoteView::noteHeightChanged(int h)
     setNoteHeight(h);
 }
 
+void NoteView::beatWidthChanged(int w)
+{
+    // 音符の長さ変更．
+    if(w != beatWidth())
+    {
+        foreach(QLabel *label, _noteLabels)
+        {
+            QPoint p(label->pos());
+            long x = p.x() * w / beatWidth();
+            label->setGeometry(x, p.x(), w, label->height());
+        }
+    }
+    AbstractGridView::beatWidthChanged(w);
+}
+
+void NoteView::sequenceChanged()
+{
+    _reset();
+}
+
+void NoteView::_reset()
+{
+    _destroy();
+    const vsq::Track *track = sequence()->track(trackId());
+    if(!track)
+    {
+        return;
+    }
+    vsq::EventListIndexIterator it = track->getIndexIterator(vsq::EventListIndexIteratorKind::NOTE);
+    while(it.hasNext())
+    {
+        int index = it.next();
+        const vsq::Event *e = track->events()->get(index);
+        _noteLabels.append(_labelFromEvent(e));
+    }
+    setMinimumWidth(xAt(sequence()->getTotalClocks()));
+}
+
+QLabel *NoteView::_labelFromEvent(const vsq::Event *e)
+{
+    // ラベルの表示文章計算
+    const vsq::Lyric &lyric = e->lyricHandle.getLyricAt(0);
+    std::string text = lyric.phrase + " [" + lyric.getPhoneticSymbol() + "]";
+    QString qtext(tr(text.data()));
+
+    QLabel *l = new QLabel(qtext, this);
+    int x = xAt(e->clock);
+    int w = xAt(e->clock + e->getLength()) - x;
+    int y = yAt(e->note);
+    l->setGeometry(x, y, w, _noteHeight);
+    l->setFrameStyle(QFrame::Box);
+    l->setLineWidth(1);
+
+    QFont font(l->font());
+    font.setPixelSize(_noteHeight - 2);
+
+    QPalette palette = l->palette();
+    palette.setColor(QPalette::Text, noteTextColor);
+    palette.setColor(QPalette::Background, noteColor);
+    l->setPalette(palette);
+
+    l->setWordWrap(true);
+    l->show();
+
+    return l;
+}
+
 void NoteView::paintBefore(const QRect &rect, QPainter *painter)
 {
     // ピアノロールの部分を書く
     high.paint(_noteHeight, rect, painter);
     middle.paint(_noteHeight, rect, painter);
     low.paint(_noteHeight, rect, painter);
-}
-
-void NoteView::paintAfter(const QRect &rect, QPainter *painter)
-{
-    _drawNotes(rect, painter);
 }
 
 void NoteView::drawAssistLine(vsq::tick_t tick, QPainter *painter)
@@ -76,56 +167,3 @@ void NoteView::drawBarLine(vsq::tick_t tick, QPainter *painter)
     painter->drawLine(x, 0, x, height());
 }
 
-void NoteView::_drawNotes(const QRect &rect, QPainter *painter)
-{
-    const vsq::Track *track = sequence()->track(trackId());
-    if(!track)
-    {
-        return;
-    }
-
-    vsq::EventListIndexIterator it = track->getIndexIterator(vsq::EventListIndexIteratorKind::NOTE);
-    if(!it.hasNext())
-    {
-        return;
-    }
-
-    vsq::tick_t begin = tickAt(rect.left());
-    vsq::tick_t end = tickAt(rect.right());
-    QFont old(painter->font());
-    QFont font(old);
-    font.setPixelSize(_noteHeight - 2);
-    painter->setFont(font);
-    for(int index = it.next(); it.hasNext(); index = it.next())
-    {
-        const vsq::Event *event = track->events()->get(index);
-        vsq::tick_t eventEnd = event->clock + event->getLength();
-        // 範囲外（前方）
-        if(begin < eventEnd)
-        {
-            continue;
-        }
-        // 範囲外（後方）
-        if(end < event->clock)
-        {
-            break;
-        }
-        _drawOneNote(event, painter);
-    }
-    painter->setFont(old);
-}
-
-void NoteView::_drawOneNote(const vsq::Event *event, QPainter *painter)
-{
-    int x = xAt(event->clock);
-    int y = yAt(event->note);
-    int w = xAt(event->getLength());
-
-    const vsq::Lyric lyric = event->lyricHandle.getLyricAt(0);
-    std::string text = lyric.phrase + " [" + lyric.getPhoneticSymbol() + "]";
-    painter->setPen(noteBorderColor);
-    painter->fillRect(x, y, w, _noteHeight, noteColor);
-    painter->drawRect(x, y, w, _noteHeight);
-    painter->setPen(noteTextColor);
-    painter->drawText(x + 1, y + 1, w - 2, _noteHeight - 2, Qt::AlignLeft, tr(text.data()), &(QRect(x + 1, y + 1, w - 2, _noteHeight - 2)));
-}

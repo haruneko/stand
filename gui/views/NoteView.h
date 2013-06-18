@@ -13,6 +13,7 @@
 #ifndef NOTEVIEW_H
 #define NOTEVIEW_H
 
+#include <QLabel>
 #include "AbstractGridView.h"
 
 #include "PianoPainter.h"
@@ -23,31 +24,26 @@
 class NoteView : public AbstractGridView
 {
 public:
-    NoteView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent = 0);
+    explicit NoteView(
+            int divCount,
+            int noteHeight,
+            int beatWidth,
+            const vsq::Sequence *sequence,
+            int trackId,
+            QWidget *parent = 0
+            );
+
+    virtual ~NoteView();
     void setNoteHeight(int noteHeight);
 
-    /**
-     *  @brief 小節線の描画色．
-     */
-    QColor barLineColor;
+    QColor barLineColor;        //! @brief 小節線の描画色
+    QColor assistLineColor;     //! @brief 補助線の描画色
 
-    /**
-     *  @brief 補助線の描画色．
-     */
-    QColor assistLineColor;
+    QColor noteColor;           //! @brief 音符の描画色
+    QColor noteTextColor;       //! @brief 音符のテキスト描画色
+    QColor noteInvalidColor;    //! @brief 音符の情報が不適切な際の描画色
+    QColor noteSelectedColor;   //! @brief 音符の選択時の描画色
 
-    /**
-     *  @brief 音符の色
-     */
-    QColor noteColor;
-    /**
-     *  @brief 音符の境界線色
-     */
-    QColor noteBorderColor;
-    /**
-     *  @brief 音符の歌詞の色
-     */
-    QColor noteTextColor;
     /**
      *  @brief ノート番号に対応する y 座標を返します．ビュー上での位置はピアノロール上で上辺に対応します．
      */
@@ -59,29 +55,29 @@ public:
     }
 public slots:
     // @Override
+    virtual void beatWidthChanged(int w);
+    // @Override
     virtual void noteHeightChanged(int h);
 
 protected:
     // @Override
     virtual void paintBefore(const QRect &rect, QPainter *painter);
     // @Override
-    virtual void paintAfter(const QRect &rect, QPainter *painter);
-    // @Override
     virtual void drawBarLine(vsq::tick_t tick, QPainter *painter);
     // @Override
     virtual void drawAssistLine(vsq::tick_t tick, QPainter *painter);
+    // @Override
+    virtual void sequenceChanged();
 private:
-    /**
-     *  @brief シーケンス上の音符を描画します．
-     *  @todo 選択した状態で色を変える．
-     */
-    void _drawNotes(const QRect &rect, QPainter *painter);
-    void _drawOneNote(const vsq::Event *event, QPainter *painter);
+    void _destroy();
+    void _reset();
+    QLabel *_labelFromEvent(const vsq::Event *e);
 
     int _noteHeight;
     PianoPainter high;
     PianoPainter middle;
     PianoPainter low;
+    QList<QLabel *> _noteLabels;
 };
 
 #endif // NOTEVIEW_H
