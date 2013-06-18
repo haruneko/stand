@@ -58,7 +58,21 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
         return;
     }
     vsq::MeasureLine ml = it.next();
-    for(; ml.tick < beginTick && it.hasNext(); ml = it.next());
+
+    vsq::tick_t current = beginTick / assistStep * assistStep;
+    while(current < ml.tick)
+    {
+        if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        {
+            drawBarLine(current, painter);
+        }
+        else
+        {
+            drawAssistLine(current, painter);
+        }
+        current += assistStep;
+    }
+
     for(; ml.tick < endTick && it.hasNext(); ml = it.next())
     {
         // 小節線
@@ -71,6 +85,19 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
         {
             drawAssistLine(ml.tick, painter);
         }
+    }
+
+    while(current < endTick)
+    {
+        if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        {
+            drawBarLine(current, painter);
+        }
+        else
+        {
+            drawAssistLine(current, painter);
+        }
+        current += assistStep;
     }
 
     paintAfter(rect, painter);

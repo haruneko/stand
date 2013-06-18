@@ -51,6 +51,7 @@ public:
     void setSequence(const vsq::Sequence *sequence)
     {
         _sequence = sequence;
+        sequenceChanged();
         update();
     }
 
@@ -63,7 +64,14 @@ public:
     }
 
 protected:
+    // @Override
     virtual void paintEvent(QPaintEvent *e);
+
+    /**
+     *  @brief  シーケンスが変更された時に呼び出されます．
+     *          このメソッドをオーバーライドすることでシーケンス変更時の処理が記述できます．
+     */
+    virtual void sequenceChanged(){ }
 
 signals:
     

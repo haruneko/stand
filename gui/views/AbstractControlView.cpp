@@ -17,7 +17,7 @@
 AbstractControlView::AbstractControlView(int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent ) :
     AbstractSequenceView(sequence, trackId, parent)
 {
-    _beatWidth = beatWidth;
+    beatWidthChanged(beatWidth);
 }
 
 void AbstractControlView::dataChanged(int tickBegin, int tickEnd)
@@ -27,13 +27,13 @@ void AbstractControlView::dataChanged(int tickBegin, int tickEnd)
 
 vsq::tick_t AbstractControlView::tickAt(int x) const
 {
-    vsq::tick_t ret = x * sequence()->getTickPerQuarter() / _beatWidth;
+    vsq::tick_t ret = x * sequence()->getTickPerQuarter() / _beatWidth - sequence()->getPreMeasureClocks();
     return ret;
 }
 
 int AbstractControlView::xAt(vsq::tick_t tick) const
 {
-    int ret = tick * _beatWidth / sequence()->getTickPerQuarter();
+    int ret = (sequence()->getPreMeasureClocks() + tick) * _beatWidth / sequence()->getTickPerQuarter();
     return ret;
 }
 
