@@ -25,8 +25,9 @@ NoteView::NoteView(int divCount, int noteHeight, int beatWidth, const vsq::Seque
     _noteHeight = 0;
     setNoteHeight(noteHeight);
 
-    barLineColor = QColor(64, 64, 96);
-    assistLineColor = QColor(144, 144, 192);
+    barLineColor = QColor(128, 128, 192);
+    beatLineColor = QColor(160, 160, 255);
+    assistLineColor = QColor(176, 176, 176);
 
     noteColor = QColor(192, 192, 255);
     noteInvalidColor = QColor(255, 192, 192);
@@ -155,9 +156,9 @@ void NoteView::paintBefore(const QRect &rect, QPainter *painter)
 
 void NoteView::drawAssistLine(vsq::tick_t tick, QPainter *painter)
 {
-    int x = xAt(tick);
+    /*int x = xAt(tick);
     painter->setPen(assistLineColor);
-    painter->drawLine(x, 0, x, height());
+    painter->drawLine(x, 0, x, height());*/
 }
 
 void NoteView::drawBarLine(vsq::tick_t tick, QPainter *painter)
@@ -167,3 +168,9 @@ void NoteView::drawBarLine(vsq::tick_t tick, QPainter *painter)
     painter->drawLine(x, 0, x, height());
 }
 
+void NoteView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
+{
+    int x = xAt(tick);
+    painter->setPen(beatLineColor);
+    painter->drawLine(x, 0, x, height());
+}

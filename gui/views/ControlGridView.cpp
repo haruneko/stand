@@ -40,13 +40,24 @@ void ControlGridView::drawBarLine(vsq::tick_t tick, QPainter *painter)
     painter->drawLine(x, 0, x, height());
 }
 
-void ControlGridView::drawAssistLine(vsq::tick_t tick, QPainter *painter)
+void ControlGridView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
 {
-    QColor weakColor(color().red(), color().green(), color().blue(), color().alpha() / 2);
+    QColor weakColor(color().red(), color().green(), color().blue(), color().alpha() * 3 /4);
     int x = xAt(tick);
     painter->setPen(weakColor);
     int h = height();
     painter->drawLine(x, 0, x, h / 8);
     painter->drawLine(x, h * 3 / 8, x, h * 5 / 8);
     painter->drawLine(x, h * 7 / 8, x, h);
+}
+
+void ControlGridView::drawAssistLine(vsq::tick_t tick, QPainter *painter)
+{
+    QColor weakColor(color().red(), color().green(), color().blue(), color().alpha() / 2);
+    int x = xAt(tick);
+    painter->setPen(weakColor);
+    int h = height();
+    painter->drawLine(x, 0, x, h / 16);
+    painter->drawLine(x, h * 7 / 16, x, h * 9 / 16);
+    painter->drawLine(x, h * 15 / 16, x, h);
 }

@@ -62,9 +62,13 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
     vsq::tick_t current = beginTick / assistStep * assistStep;
     while(current < ml.tick)
     {
-        if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        if(current % (sequence()->getTickPerQuarter() * ml.numerator * 4 / ml.denominator) == 0)
         {
             drawBarLine(current, painter);
+        }
+        else if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        {
+            drawBeatLine(current, painter);
         }
         else
         {
@@ -81,6 +85,10 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
             drawBarLine(ml.tick, painter);
         }
         // 補助線
+        else if(ml.tick * ml.numerator / ml.denominator == 0)
+        {
+            drawBeatLine(ml.tick, painter);
+        }
         else
         {
             drawAssistLine(ml.tick, painter);
@@ -89,9 +97,13 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
 
     while(current < endTick)
     {
-        if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        if(current % (sequence()->getTickPerQuarter() * ml.numerator * 4 / ml.denominator) == 0)
         {
             drawBarLine(current, painter);
+        }
+        else if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        {
+            drawBeatLine(current, painter);
         }
         else
         {
