@@ -56,6 +56,8 @@ public:
     }
 public slots:
     // @Override
+    virtual void trackChanged(int id);
+    // @Override
     virtual void beatWidthChanged(int w);
     // @Override
     virtual void noteHeightChanged(int h);
@@ -80,7 +82,7 @@ private:
     PianoPainter high;
     PianoPainter middle;
     PianoPainter low;
-    QList<QLabel *> _noteLabels;
+    QVector<QList<QLabel *> > _noteLabels;
 };
 
 #endif // NOTEVIEW_H

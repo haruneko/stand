@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'SequenceWindow.ui'
 **
-** Created: Tue Jun 18 23:36:44 2013
+** Created: Sat Jun 22 15:17:52 2013
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
