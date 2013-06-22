@@ -5,5 +5,5 @@ SUBDIRS += \
     SimpleSpecgram \
     SimpleSequenceView
 
-Release:PRE_TARGETDEPS = ../lib/stand.lib
-Debug:PRE_TARGETDEPS = ../lib/standd.lib
+Release:PRE_TARGETDEPS += ../lib/stand.lib
+Debug:PRE_TARGETDEPS += ../lib/standd.lib
