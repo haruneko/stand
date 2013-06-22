@@ -12,6 +12,7 @@
 
 #include "views/NoteView.h"
 #include "views/ControlGridView.h"
+#include "views/BeatView.h"
 
 #include "SequenceWindow.h"
 #include "ui_SequenceWindow.h"
@@ -27,10 +28,9 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     sequence->updateTotalClocks();
     sequence->track(0)->events()->add(e);
 
-    ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, sequence, this));
-
-    ControlGridView *c = new ControlGridView(4, 40, sequence, this);
-    ui->Control->setWidget(c);
+    ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, sequence, ui->Pianoroll));
+    ui->Control->setWidget(new ControlGridView(4, 40, sequence, ui->Control));
+    ui->Beat->setWidget(new BeatView(4, 16, 40, sequence, ui->Beat));
 }
 
 SequenceWindow::~SequenceWindow()

@@ -83,7 +83,7 @@ private:
     PianoPainter high;
     PianoPainter middle;
     PianoPainter low;
-    QVector<QList<QLabel *> > _noteLabels;
+    QVector<QHash<int, QLabel *> > _noteLabels;
 };
 
 #endif // NOTEVIEW_H

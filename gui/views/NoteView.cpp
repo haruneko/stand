@@ -10,6 +10,7 @@
  *
  */
 
+#include <QHash>
 #include <QLabel>
 #include <QPainter>
 #include <QPalette>
@@ -118,14 +119,14 @@ void NoteView::_reset()
     _noteLabels.resize(sequence()->tracks()->size());
     for(int i = 0; i < sequence()->tracks()->size(); i++)
     {
-        QList<QLabel *> &labels = _noteLabels[i];
+        QHash<int, QLabel *> &labels = _noteLabels[i];
         const vsq::Track *track = sequence()->track(i);
         vsq::EventListIndexIterator it = track->getIndexIterator(vsq::EventListIndexIteratorKind::NOTE);
         while(it.hasNext())
         {
             int index = it.next();
             const vsq::Event *e = track->events()->get(index);
-            labels.append(_labelFromEvent(e));
+            labels[e->id] = _labelFromEvent(e);
         }
     }
     setMinimumWidth(xAt(sequence()->getTotalClocks()));

@@ -53,6 +53,7 @@ void AbstractGridView::beatWidthChanged(int w)
         return;
     }
     _beatWidth = w;
+    setFixedWidth(xAt(sequence()->getTotalClocks()));
     update();
 }
 
