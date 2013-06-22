@@ -16,7 +16,7 @@
 #include "AbstractGridView.h"
 
 /**
- *  @brief コントロールカーブを表示する際のグリッドを描画します．
+ *  @brief コントロールカーブの上に補助線を描画するクラス．
  */
 class ControlGridView : public AbstractGridView
 {
@@ -25,13 +25,15 @@ public:
     /**
      *  @brief 与えられた値で初期化します．
      *  @param [in] divCount 四分音符を何回分割するか．
-     *  @param [in] trackId 表示すべきトラック番号．
      *  @param [in] beatWidth 一拍分の横幅．
      *  @param [in] sequence 表示すべきシーケンス．
      *  @param [in] parent 親 Widget ．
      */
-    explicit ControlGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent);
+    explicit ControlGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
 
+public slots:
+    // @Override
+    virtual void noteHeightChanged(int /*h*/){ }
 protected:
     // @Override
     void drawAssistLine(vsq::tick_t tick, QPainter *painter);

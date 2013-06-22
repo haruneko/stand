@@ -16,12 +16,13 @@
 
 #include "NoteView.h"
 
-NoteView::NoteView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent) :
-    AbstractGridView(divCount, beatWidth, sequence, trackId, parent),
+NoteView::NoteView(int trackId, int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
+    AbstractGridView(divCount, beatWidth, sequence, parent),
     low(0, 32, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64)),
     middle(33, 72, QColor(255, 255, 255), QColor(224, 224, 255), QColor(64, 64, 64)),
     high(73, 128, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64))
 {
+    _trackId = trackId;
     _noteHeight = 0;
     setNoteHeight(noteHeight);
 
@@ -161,9 +162,9 @@ QLabel *NoteView::_labelFromEvent(const vsq::Event *e)
 
 void NoteView::trackChanged(int id)
 {
-    int old = trackId();
+    int old = _trackId;
     AbstractSequenceView::trackChanged(id);
-    if(old == trackId())
+    if(old == _trackId)
     {
         return;
     }

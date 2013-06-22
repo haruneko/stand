@@ -13,7 +13,7 @@
 #ifndef CONTROLCURVEVIEW_H
 #define CONTROLCURVEVIEW_H
 
-#include "AbstractControlView.h"
+#include "AbstractGridView.h"
 
 namespace vsq
 {
@@ -23,25 +23,31 @@ class BPList;
 /**
  *  @brief コントロールカーブを表示するクラスです．
  */
-class ControlCurveView : public AbstractControlView
+class ControlCurveView : public AbstractGridView
 {
     Q_OBJECT
 public:
     /**
      *  @brief 与えられた値で初期化します．
      *  @param [in] controlName 表示すべきコントロールカーブの名称．
-     *  @param [in] trackId 表示すべきトラック番号．
+     *  @param [in] divCount 補助線の間隔．
      *  @param [in] beatWidth 一拍分の横幅．
      *  @param [in] sequence 表示すべきシーケンス．
      *  @param [in] parent 親 Widget ．
      */
     explicit ControlCurveView(
+            int trackId,
             const std::string &controlName,
+            int divCount,
             int beatWidth,
             const vsq::Sequence *sequence,
-            int trackId,
             QWidget *parent
             );
+
+    /** @brief このコントロールの背景色 */
+    QColor backgroundColor;
+    /** @brief このコントロールの描画色 */
+    QColor color;
 
     /**
      *  @brief  描画すべきコントロールカーブの名前を指定します．
@@ -49,15 +55,6 @@ public:
      */
     void setControlName(const std::string &controlName);
 
-    /**
-     *  @brief 背景色を設定します．
-     */
-    void setBgColor(const QColor &bgColor);
-
-    /**
-     *  @brief 表示色を設定します．
-     */
-    void setColor(const QColor &color);
 protected:
     // @Override
     void paintEvent(QPaintEvent *e);
@@ -72,8 +69,7 @@ private:
     std::string _controlName;       //! @brief 現在保持しているコントロールカーブの名前
     const vsq::BPList *_control;    //! @brief 現在保持しているコントロールカーブ
 
-    QColor _bgColor;                //! @brief 現在の背景色
-    QColor _color;                  //! @brief 現在の表示色
+    int _trackId;                   //! @brief 表示しているトラック番号
 };
 
 #endif // CONTROLCURVEVIEW_H

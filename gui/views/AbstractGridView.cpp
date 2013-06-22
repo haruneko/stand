@@ -16,16 +16,12 @@
 
 #include "AbstractGridView.h"
 
-AbstractGridView::AbstractGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent) :
-    AbstractControlView(beatWidth, sequence, trackId, parent)
+AbstractGridView::AbstractGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
+    AbstractSequenceView(sequence, parent)
 {
+    _beatWidth = beatWidth;
     setDivCount(divCount);
-}
-
-void AbstractGridView::setColor(const QColor &color)
-{
-    _color = color;
-    update();
+    gridLineColor = QColor(128, 192, 255);
 }
 
 void AbstractGridView::setDivCount(int divCount)
@@ -36,6 +32,28 @@ void AbstractGridView::setDivCount(int divCount)
     {
         update();
     }
+}
+
+vsq::tick_t AbstractGridView::tickAt(int x) const
+{
+    vsq::tick_t ret = x * sequence()->getTickPerQuarter() / _beatWidth - sequence()->getPreMeasureClocks();
+    return ret;
+}
+
+int AbstractGridView::xAt(vsq::tick_t tick) const
+{
+    int ret = (sequence()->getPreMeasureClocks() + tick) * _beatWidth / sequence()->getTickPerQuarter();
+    return ret;
+}
+
+void AbstractGridView::beatWidthChanged(int w)
+{
+    if(_beatWidth == w)
+    {
+        return;
+    }
+    _beatWidth = w;
+    update();
 }
 
 void AbstractGridView::divCountChanged(int divCount)

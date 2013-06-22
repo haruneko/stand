@@ -13,37 +13,25 @@
 #ifndef ABSTRACTGRIDVIEW_H
 #define ABSTRACTGRIDVIEW_H
 
-#include "AbstractControlView.h"
+#include "AbstractSequenceView.h"
 
 /**
  *  @brief グリッド表示のあるクラスの基底クラスです．
  */
-class AbstractGridView : public AbstractControlView
+class AbstractGridView : public AbstractSequenceView
 {
 public:
     /**
      *  @brief 与えられた値で初期化します．
      *  @param [in] divCount 四分音符を何回分割するか．
-     *  @param [in] trackId 表示すべきトラック番号．
      *  @param [in] beatWidth 一拍分の横幅．
      *  @param [in] sequence 表示すべきシーケンス．
      *  @param [in] parent 親 Widget ．
      */
-    explicit AbstractGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent);
+    explicit AbstractGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
 
-    /**
-     *  @brief  グリッドの描画色を設定します．
-     *  @param [in] color 表示色．
-     */
-    void setColor(const QColor &color);
-
-    /**
-     *  @brief  現在のグリッドの描画色を返します．
-     */
-    const QColor &color() const
-    {
-        return _color;
-    }
+    /** グリッド線の色 */
+    QColor gridLineColor;
 
     /**
      *  @brief  グリッドの細かさを指定します．
@@ -51,9 +39,35 @@ public:
      */
     void setDivCount(int divCount);
 
+    /**
+     *  @brief 該当する x 座標での tick 時刻を返します．
+     *          このメソッドは premeasure を考慮した値を返します．
+     */
+    vsq::tick_t tickAt(int x) const;
+
+    /**
+     *  @brief  該当する tick 時刻での x 座標を返します．
+     *          このメソッドは premeasure を考慮した値を返します．
+     */
+    int xAt(vsq::tick_t tick) const;
+
+    /**
+     *  @brief 現在の一拍分の横幅を返します．
+     */
+    int beatWidth() const
+    {
+        return _beatWidth;
+    }
 public slots:
     // @Override
     void paint(const QRect &rect, QPainter *painter);
+    // @Override
+    virtual void beatWidthChanged(int w);
+
+    /**
+     *  @brief 補助線の分割数への変更通知を受け取ります．
+     *  @param [in] divCount 四分音符の分割数．
+     */
     virtual void divCountChanged(int divCount);
 protected:
     /**
@@ -81,7 +95,7 @@ protected:
 
 private:
     int _divCount;      //! @brief 四分音符を何回分割するか．
-    QColor _color;      //! @brief 表示色
+    int _beatWidth;     //! @brief 一拍分の横幅
 };
 
 #endif // ABSTRACTGRIDVIEW_H

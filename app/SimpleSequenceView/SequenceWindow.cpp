@@ -27,10 +27,9 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     sequence->updateTotalClocks();
     sequence->track(0)->events()->add(e);
 
-    ui->Pianoroll->setWidget(new NoteView(4, 16, 40, sequence, 0, this));
+    ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, sequence, this));
 
-    ControlGridView *c = new ControlGridView(4, 40, sequence, 0, this);
-    c->setColor(QColor(128, 192, 255));
+    ControlGridView *c = new ControlGridView(4, 40, sequence, this);
     ui->Control->setWidget(c);
 }
 

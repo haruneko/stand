@@ -15,46 +15,30 @@
 
 #include <BPList.hpp>
 #include <Track.hpp>
-#include <Sequence.hpp>
 #include "ControlCurveView.h"
 
-ControlCurveView::ControlCurveView(
-        const std::string &controlName,
-        int beatWidth,
-        const vsq::Sequence *sequence,
-        int trackId,
-        QWidget *parent
-        ) : AbstractControlView(beatWidth, sequence, trackId, parent)
+ControlCurveView::ControlCurveView(int trackId, const string &controlName, int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent)
+    : AbstractGridView(divCount, beatWidth, sequence, parent)
 {
     _controlName = controlName;
-    _bgColor = Qt::black;
-    _color = Qt::white;
+    backgroundColor = Qt::black;
+    color = Qt::white;
     _control = NULL;
+    _trackId = trackId;
     if(sequence && (0 <= trackId && trackId < sequence->tracks()->size()))
     {
         _control = sequence->track(trackId)->curve(controlName);
     }
 }
 
-void ControlCurveView::setColor(const QColor &color)
-{
-    _color = color;
-}
-
-void ControlCurveView::setBgColor(const QColor &bgColor)
-{
-    _bgColor = bgColor;
-}
-
 void ControlCurveView::trackChanged(int id)
 {
-    int old = trackId();
-    AbstractControlView::trackChanged(id);
-    if(old != trackId())
+    if(id != _trackId)
     {
         _control = sequence()->track(id)->curve(_controlName);
         update();
     }
+    _trackId = id;
 }
 
 void ControlCurveView::setControlName(const std::string &curveName)
@@ -63,7 +47,7 @@ void ControlCurveView::setControlName(const std::string &curveName)
     {
         return;
     }
-    _control = sequence()->track(trackId())->curve(curveName);
+    _control = sequence()->track(_trackId)->curve(curveName);
     update();
 }
 
@@ -73,7 +57,7 @@ void ControlCurveView::paintEvent(QPaintEvent *e)
     QRegion region(e->region());
     foreach(const QRect &r, region.rects())
     {
-        p.fillRect(r, _bgColor);
+        p.fillRect(r, backgroundColor);
         paint(r, &p);
     }
 }
@@ -97,12 +81,12 @@ void ControlCurveView::paint(const QRect &rect, QPainter *painter)
     {
         int nextX = xAt(_control->getKeyClock(currentIndex + 1));
         int y = height() * (1.0 - (current.value - minimum) / (double)maximum);
-        painter->fillRect(x, y, nextX - x + 1, height() - y + 1, _color);
+        painter->fillRect(x, y, nextX - x + 1, height() - y + 1, color);
         x = nextX;
     }
     if(x <= rect.right())
     {
         int y = height() * (1.0 - (current.value - minimum) / (double)maximum);
-        painter->fillRect(x, y, rect.right() - x + 1, height() - y + 1, _color);
+        painter->fillRect(x, y, rect.right() - x + 1, height() - y + 1, color);
     }
 }

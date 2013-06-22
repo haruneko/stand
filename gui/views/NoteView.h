@@ -25,11 +25,11 @@ class NoteView : public AbstractGridView
 {
 public:
     explicit NoteView(
+            int trackId,
             int divCount,
             int noteHeight,
             int beatWidth,
             const vsq::Sequence *sequence,
-            int trackId,
             QWidget *parent = 0
             );
 
@@ -79,6 +79,7 @@ private:
     QLabel *_labelFromEvent(const vsq::Event *e);
 
     int _noteHeight;
+    int _trackId;
     PianoPainter high;
     PianoPainter middle;
     PianoPainter low;
