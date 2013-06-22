@@ -53,3 +53,7 @@ void AbstractSequenceView::paintEvent(QPaintEvent *e)
 {
     paint(e->region(), &(QPainter(this)));
 }
+
+void AbstractSequenceView::selectionChanged(const Selection &/*current*/, const Selection &/*previous*/)
+{
+}

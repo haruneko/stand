@@ -19,6 +19,7 @@ namespace vsq
 {
 class Sequence;
 }
+class Selection;
 
 /**
  *  @brief シーケンスを表示する基底クラス．
@@ -101,6 +102,13 @@ public slots:
      *  @brief 表示すべきトラックが変更された際に通知を受け取るスロットです．
      */
     virtual void trackChanged(int id);
+
+    /**
+     *  @brief 選択範囲が変更された際に通知を受け取るスロットです．
+     *  @param[in] current 更新された現在の選択範囲
+     *  @param[in] previous 更新される前の選択範囲
+     */
+    virtual void selectionChanged(const Selection &current, const Selection &previous);
 
     /**
      *  @brief 四分音符の幅が変更された際に通知を受け取るスロットです．
