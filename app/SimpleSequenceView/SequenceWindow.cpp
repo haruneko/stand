@@ -18,6 +18,7 @@
 #include "views/BeatView.h"
 #include "views/TempoView.h"
 #include "views/SingerView.h"
+#include "views/TrackSelectionView.h"
 
 #include "SequenceWindow.h"
 #include "ui_SequenceWindow.h"
@@ -47,6 +48,7 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     ui->Beat->setWidget(new BeatView(4, 16, 40, sequence, ui->Beat));
     ui->Tempo->setWidget(new TempoView(4, 16, 40, sequence, ui->Beat));
     ui->Singer->setWidget(new SingerView(0, 4, 16, 40, sequence, ui->Beat));
+    ui->centralWidget->layout()->addWidget(new TrackSelectionView(16, sequence, this));
 
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Control->horizontalScrollBar(), SLOT(setValue(int)));
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Beat->horizontalScrollBar(), SLOT(setValue(int)));
