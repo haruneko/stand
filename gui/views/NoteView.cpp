@@ -10,18 +10,20 @@
  *
  */
 
+#include <QHash>
 #include <QLabel>
 #include <QPainter>
 #include <QPalette>
 
 #include "NoteView.h"
 
-NoteView::NoteView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent) :
-    AbstractGridView(divCount, beatWidth, sequence, trackId, parent),
+NoteView::NoteView(int trackId, int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
+    AbstractGridView(divCount, beatWidth, sequence, parent),
     low(0, 32, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64)),
     middle(33, 72, QColor(255, 255, 255), QColor(224, 224, 255), QColor(64, 64, 64)),
     high(73, 128, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64))
 {
+    _trackId = trackId;
     _noteHeight = 0;
     setNoteHeight(noteHeight);
 
@@ -44,7 +46,10 @@ NoteView::~NoteView()
 
 void NoteView::_destroy()
 {
-    qDeleteAll(_noteLabels);
+    for(int i = 0; i < _noteLabels.size(); i++)
+    {
+        qDeleteAll(_noteLabels[i]);
+    }
     _noteLabels.clear();
 }
 
@@ -61,11 +66,14 @@ void NoteView::setNoteHeight(int noteHeight)
     }
 
     // 音符の高さ変更．
-    foreach(QLabel *label, _noteLabels)
+    for(int i = 0; i < _noteLabels.size(); i++)
     {
-        QPoint p(label->pos());
-        long y = p.y() * noteHeight / _noteHeight;
-        label->setGeometry(p.x(), y, label->width(), noteHeight);
+        foreach(QLabel *label, _noteLabels[i])
+        {
+            QPoint p(label->pos());
+            long y = p.y() * noteHeight / _noteHeight;
+            label->setGeometry(p.x(), y, label->width(), noteHeight);
+        }
     }
     _noteHeight = noteHeight;
 
@@ -81,10 +89,15 @@ void NoteView::noteHeightChanged(int h)
 
 void NoteView::beatWidthChanged(int w)
 {
-    // 音符の長さ変更．
-    if(w != beatWidth())
+    if(w == beatWidth())
     {
-        foreach(QLabel *label, _noteLabels)
+        return;
+    }
+
+    // 音符の長さ変更．
+    for(int i = 0; i < _noteLabels.size(); i++)
+    {
+        foreach(QLabel *label, _noteLabels[i])
         {
             QPoint p(label->pos());
             long x = p.x() * w / beatWidth();
@@ -102,17 +115,19 @@ void NoteView::sequenceChanged()
 void NoteView::_reset()
 {
     _destroy();
-    const vsq::Track *track = sequence()->track(trackId());
-    if(!track)
+
+    _noteLabels.resize(sequence()->tracks()->size());
+    for(int i = 0; i < sequence()->tracks()->size(); i++)
     {
-        return;
-    }
-    vsq::EventListIndexIterator it = track->getIndexIterator(vsq::EventListIndexIteratorKind::NOTE);
-    while(it.hasNext())
-    {
-        int index = it.next();
-        const vsq::Event *e = track->events()->get(index);
-        _noteLabels.append(_labelFromEvent(e));
+        QHash<int, QLabel *> &labels = _noteLabels[i];
+        const vsq::Track *track = sequence()->track(i);
+        vsq::EventListIndexIterator it = track->getIndexIterator(vsq::EventListIndexIteratorKind::NOTE);
+        while(it.hasNext())
+        {
+            int index = it.next();
+            const vsq::Event *e = track->events()->get(index);
+            labels[e->id] = _labelFromEvent(e);
+        }
     }
     setMinimumWidth(xAt(sequence()->getTotalClocks()));
 }
@@ -136,14 +151,33 @@ QLabel *NoteView::_labelFromEvent(const vsq::Event *e)
     font.setPixelSize(_noteHeight - 2);
 
     QPalette palette = l->palette();
-    palette.setColor(QPalette::Text, noteTextColor);
-    palette.setColor(QPalette::Background, noteColor);
+    palette.setColor(l->foregroundRole(), noteTextColor);
+    palette.setColor(l->backgroundRole(), noteColor);
     l->setPalette(palette);
 
+    l->setAutoFillBackground(true);
+
     l->setWordWrap(true);
-    l->show();
 
     return l;
+}
+
+void NoteView::trackChanged(int id)
+{
+    int old = _trackId;
+    AbstractSequenceView::trackChanged(id);
+    if(old == _trackId)
+    {
+        return;
+    }
+    foreach(QLabel *label, _noteLabels[old])
+    {
+        label->hide();
+    }
+    foreach(QLabel *label, _noteLabels[id])
+    {
+        label->hide();
+    }
 }
 
 void NoteView::paintBefore(const QRect &rect, QPainter *painter)
@@ -152,6 +186,12 @@ void NoteView::paintBefore(const QRect &rect, QPainter *painter)
     high.paint(_noteHeight, rect, painter);
     middle.paint(_noteHeight, rect, painter);
     low.paint(_noteHeight, rect, painter);
+}
+
+void NoteView::paintAfter(const QRect &/*rect*/, QPainter *painter)
+{
+    // 手抜きだけどプリメジャー部
+    painter->fillRect(0, 0, xAt(0), height(), QColor(0, 0, 0, 128));
 }
 
 void NoteView::drawAssistLine(vsq::tick_t tick, QPainter *painter)

@@ -13,9 +13,9 @@ INCLUDEPATH += ../../gui/
 DEPENDPATH += ../../lib/
 
 Release:LIBS += ../../lib/StandGui.lib
-Release:PRE_TARGETDEPS = ../../lib/StandGui.lib
+Release:PRE_TARGETDEPS += ../../lib/StandGui.lib
 Debug:LIBS += ../../lib/StandGuid.lib
-Debug:PRE_TARGETDEPS = ../../lib/StandGuid.lib
+Debug:PRE_TARGETDEPS += ../../lib/StandGuid.lib
 
 SOURCES += main.cpp\
         SequenceWindow.cpp

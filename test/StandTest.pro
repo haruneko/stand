@@ -9,7 +9,7 @@ SUBDIRS += \
         dsp\world\test_ResidualExtractor.pro \
     utility/test_Utility
 
-Release:PRE_TARGETDEPS = ../lib/Stand.lib
-Debug:PRE_TARGETDEPS = ../lib/Standd.lib
-Release:PRE_TARGETDEPS = ../lib/StandGui.lib
-Debug:PRE_TARGETDEPS = ../lib/StandGuid.lib
+Release:PRE_TARGETDEPS += ../lib/Stand.lib
+Debug:PRE_TARGETDEPS += ../lib/Standd.lib
+Release:PRE_TARGETDEPS += ../lib/StandGui.lib
+Debug:PRE_TARGETDEPS += ../lib/StandGuid.lib

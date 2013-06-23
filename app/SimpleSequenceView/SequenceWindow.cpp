@@ -10,8 +10,14 @@
  *
  */
 
+#include <QScrollBar>
+#include <QSlider>
+
 #include "views/NoteView.h"
 #include "views/ControlGridView.h"
+#include "views/BeatView.h"
+#include "views/TempoView.h"
+#include "views/SingerView.h"
 
 #include "SequenceWindow.h"
 #include "ui_SequenceWindow.h"
@@ -27,11 +33,25 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     sequence->updateTotalClocks();
     sequence->track(0)->events()->add(e);
 
-    ui->Pianoroll->setWidget(new NoteView(4, 16, 40, sequence, 0, this));
+    ui->Pianoroll->horizontalScrollBar()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->Pianoroll->verticalScrollBar()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QSlider *h = new QSlider(Qt::Horizontal, ui->Pianoroll);
+    h->setMaximumWidth(80);
+    QSlider *v = new QSlider(Qt::Vertical, ui->Pianoroll);
+    v->setMaximumHeight(80);
+    ui->Pianoroll->addScrollBarWidget(h, Qt::AlignRight);
+    ui->Pianoroll->addScrollBarWidget(v, Qt::AlignBottom);
 
-    ControlGridView *c = new ControlGridView(4, 40, sequence, 0, this);
-    c->setColor(QColor(128, 192, 255));
-    ui->Control->setWidget(c);
+    ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, sequence, ui->Pianoroll));
+    ui->Control->setWidget(new ControlGridView(4, 40, sequence, ui->Control));
+    ui->Beat->setWidget(new BeatView(4, 16, 40, sequence, ui->Beat));
+    ui->Tempo->setWidget(new TempoView(4, 16, 40, sequence, ui->Beat));
+    ui->Singer->setWidget(new SingerView(0, 4, 16, 40, sequence, ui->Beat));
+
+    connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Control->horizontalScrollBar(), SLOT(setValue(int)));
+    connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Beat->horizontalScrollBar(), SLOT(setValue(int)));
+    connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Tempo->horizontalScrollBar(), SLOT(setValue(int)));
+    connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Singer->horizontalScrollBar(), SLOT(setValue(int)));
 }
 
 SequenceWindow::~SequenceWindow()

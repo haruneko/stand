@@ -16,18 +16,18 @@
 
 #include "ControlGridView.h"
 
-ControlGridView::ControlGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, int trackId, QWidget *parent) :
-    AbstractGridView(divCount, beatWidth, sequence, trackId, parent)
+ControlGridView::ControlGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
+    AbstractGridView(divCount, beatWidth, sequence, parent)
 {
 }
 
 void ControlGridView::paintAfter(const QRect &rect, QPainter *painter)
 {
     // 真ん中の横線
-    painter->setPen(color());
+    painter->setPen(gridLineColor);
     painter->drawLine(rect.left(), height() / 2, rect.right() + 1, height() / 2);
     // 1/4, 3/4 の横線
-    QColor weakColor(color().red(), color().green(), color().blue(), color().alpha() / 2);
+    QColor weakColor(gridLineColor.red(), gridLineColor.green(), gridLineColor.blue(), gridLineColor.alpha() / 2);
     painter->setPen(weakColor);
     painter->drawLine(rect.left(), height() / 4, rect.right() + 1, height() / 4);
     painter->drawLine(rect.left(), height() * 3 / 4, rect.right() + 1, height() * 3 / 4);
@@ -36,13 +36,13 @@ void ControlGridView::paintAfter(const QRect &rect, QPainter *painter)
 void ControlGridView::drawBarLine(vsq::tick_t tick, QPainter *painter)
 {
     int x = xAt(tick);
-    painter->setPen(color());
+    painter->setPen(gridLineColor);
     painter->drawLine(x, 0, x, height());
 }
 
 void ControlGridView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
 {
-    QColor weakColor(color().red(), color().green(), color().blue(), color().alpha() * 3 /4);
+    QColor weakColor(gridLineColor.red(), gridLineColor.green(), gridLineColor.blue(), gridLineColor.alpha() * 3 /4);
     int x = xAt(tick);
     painter->setPen(weakColor);
     int h = height();
@@ -53,7 +53,7 @@ void ControlGridView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
 
 void ControlGridView::drawAssistLine(vsq::tick_t tick, QPainter *painter)
 {
-    QColor weakColor(color().red(), color().green(), color().blue(), color().alpha() / 2);
+    QColor weakColor(gridLineColor.red(), gridLineColor.green(), gridLineColor.blue(), gridLineColor.alpha() / 2);
     int x = xAt(tick);
     painter->setPen(weakColor);
     int h = height();

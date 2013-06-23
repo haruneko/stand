@@ -25,11 +25,11 @@ class NoteView : public AbstractGridView
 {
 public:
     explicit NoteView(
+            int trackId,
             int divCount,
             int noteHeight,
             int beatWidth,
             const vsq::Sequence *sequence,
-            int trackId,
             QWidget *parent = 0
             );
 
@@ -56,6 +56,8 @@ public:
     }
 public slots:
     // @Override
+    virtual void trackChanged(int id);
+    // @Override
     virtual void beatWidthChanged(int w);
     // @Override
     virtual void noteHeightChanged(int h);
@@ -63,6 +65,8 @@ public slots:
 protected:
     // @Override
     virtual void paintBefore(const QRect &rect, QPainter *painter);
+    // @Override
+    virtual void paintAfter(const QRect &rect, QPainter *painter);
     // @Override
     virtual void drawBarLine(vsq::tick_t tick, QPainter *painter);
     // @Override
@@ -77,10 +81,11 @@ private:
     QLabel *_labelFromEvent(const vsq::Event *e);
 
     int _noteHeight;
+    int _trackId;
     PianoPainter high;
     PianoPainter middle;
     PianoPainter low;
-    QList<QLabel *> _noteLabels;
+    QVector<QHash<int, QLabel *> > _noteLabels;
 };
 
 #endif // NOTEVIEW_H

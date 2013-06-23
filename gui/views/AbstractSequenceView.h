@@ -14,11 +14,13 @@
 #define ABSTRACTSEQUENCEVIEW_H
 
 #include <QWidget>
+#include <Sequence.hpp>
 
 namespace vsq
 {
 class Sequence;
 }
+class Selection;
 
 /**
  *  @brief シーケンスを表示する基底クラス．
@@ -30,18 +32,9 @@ public:
     /**
      *  @brief 与えられた値で初期化します．
      *  @param [in] sequence 表示すべきシーケンス．
-     *  @param [in] trackId 表示すべきトラック番号．
      *  @param [in] parent 親 Widget ．
      */
-    explicit AbstractSequenceView(const vsq::Sequence *sequence, int trackId, QWidget *parent);
-
-    /**
-     *  @brief 今現在表示しているトラック番号を返します．
-     */
-    int trackId() const
-    {
-        return _trackId;
-    }
+    explicit AbstractSequenceView(const vsq::Sequence *sequence, QWidget *parent);
 
     /**
      *  @brief  表示すべきシーケンスを変更します．
@@ -103,6 +96,13 @@ public slots:
     virtual void trackChanged(int id);
 
     /**
+     *  @brief 選択範囲が変更された際に通知を受け取るスロットです．
+     *  @param[in] current 更新された現在の選択範囲
+     *  @param[in] previous 更新される前の選択範囲
+     */
+    virtual void selectionChanged(const Selection &current, const Selection &previous);
+
+    /**
      *  @brief 四分音符の幅が変更された際に通知を受け取るスロットです．
      */
     virtual void beatWidthChanged(int w) = 0;
@@ -113,7 +113,6 @@ public slots:
     virtual void noteHeightChanged(int h) = 0;
 private:
     const vsq::Sequence *_sequence; //! @brief 現在表示しているシーケンス
-    int _trackId;                   //! @brief 現在表示しているトラック番号
 
     QWidget *_parent;               //! @brief 親Widget
 };

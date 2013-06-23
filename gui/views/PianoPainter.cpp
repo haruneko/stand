@@ -39,7 +39,7 @@ void PianoPainter::paint(int noteHeight, const QRect &rect, QPainter *painter)
         const QColor &c = IsBlackKey(note) ? blackKeyColor : whiteKeyColor;
         int y = (127 - note) * noteHeight;
         painter->fillRect(rect.left(), y, rect.width(), noteHeight, c);
-        painter->drawLine(rect.left(), y, rect.right(), y);
+        painter->drawLine(rect.left(), y, rect.right() + 1, y);
     }
 
     painter->setPen(old);
