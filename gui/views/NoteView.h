@@ -66,6 +66,8 @@ protected:
     // @Override
     virtual void paintBefore(const QRect &rect, QPainter *painter);
     // @Override
+    virtual void paintAfter(const QRect &rect, QPainter *painter);
+    // @Override
     virtual void drawBarLine(vsq::tick_t tick, QPainter *painter);
     // @Override
     virtual void drawBeatLine(vsq::tick_t tick, QPainter *painter);

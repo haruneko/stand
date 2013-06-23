@@ -1,8 +1,8 @@
 /*
  *
- *    BeatView.h
+ *    TempoView.h
  *                                    (c) HAL@shurabaP
- *                                        2013/06/22
+ *                                        2013/06/23
  *
  * These files are distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,26 +10,22 @@
  *
  */
 
-#ifndef BEATVIEW_H
-#define BEATVIEW_H
+#ifndef TEMPOVIEW_H
+#define TEMPOVIEW_H
 
 #include "AbstractLabelView.h"
 
-class QLabel;
-
 /**
- *  @brief 拍子情報を表示するクラス．
+ *  @brief テンポを表示するクラス．
  */
-class BeatView : public AbstractLabelView
+class TempoView : public AbstractLabelView
 {
-    Q_OBJECT
 public:
-    explicit BeatView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
+    explicit TempoView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
 
 protected:
     // @Override
     virtual void setLabels();
-private:
 };
 
-#endif // BEATVIEW_H
+#endif // TEMPOVIEW_H

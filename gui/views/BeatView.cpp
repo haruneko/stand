@@ -10,52 +10,24 @@
  *
  */
 
+#include <QLabel>
 #include <QPainter>
 
 #include "BeatView.h"
 
 BeatView::BeatView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractGridView(divCount, beatWidth, sequence, parent),
-    barLineColor(128, 192, 255),
-    fontColor(128, 192, 255),
-    backgroundColor(64, 64, 64)
+    AbstractLabelView(divCount, noteHeight, beatWidth, sequence, parent)
 {
-    _noteHeight = noteHeight;
+    reset();
 }
 
-void BeatView::noteHeightChanged(int h)
+void BeatView::setLabels()
 {
-    if(_noteHeight == h)
+    const vsq::TimesigList &timesigs = sequence()->timesigList;
+    for(int i = 0; i < timesigs.size(); i++)
     {
-        return;
+        const vsq::Timesig &t = timesigs.get(i);
+        QString text = QString::number(t.numerator) + "/" + QString::number(t.denominator);
+        registerLabel(text, t.getClock());
     }
-    _noteHeight = h;
-    setFixedHeight(h);
-    update();
 }
-
-void BeatView::paintBefore(const QRect &rect, QPainter *painter)
-{
-    painter->fillRect(rect, backgroundColor);
-    painter->setPen(barLineColor);
-    painter->drawLine(rect.left(), height(), rect.right(), height());
-}
-
-void BeatView::drawBarLine(vsq::tick_t tick, QPainter *painter)
-{
-    int x = xAt(tick);
-    painter->drawLine(x, 0 , x, height());
-}
-
-void BeatView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
-{
-    int x = xAt(tick);
-    painter->drawLine(x, height() / 2, x, height());
-}
-
-void BeatView::drawAssistLine(vsq::tick_t tick, QPainter *painter)
-{
-    int x = xAt(tick);
-    painter->drawLine(x, height() * 3 / 4, x, height());
-}
-

@@ -151,12 +151,13 @@ QLabel *NoteView::_labelFromEvent(const vsq::Event *e)
     font.setPixelSize(_noteHeight - 2);
 
     QPalette palette = l->palette();
-    palette.setColor(QPalette::Text, noteTextColor);
-    palette.setColor(QPalette::Background, noteColor);
+    palette.setColor(l->foregroundRole(), noteTextColor);
+    palette.setColor(l->backgroundRole(), noteColor);
     l->setPalette(palette);
 
+    l->setAutoFillBackground(true);
+
     l->setWordWrap(true);
-    l->hide();
 
     return l;
 }
@@ -185,6 +186,12 @@ void NoteView::paintBefore(const QRect &rect, QPainter *painter)
     high.paint(_noteHeight, rect, painter);
     middle.paint(_noteHeight, rect, painter);
     low.paint(_noteHeight, rect, painter);
+}
+
+void NoteView::paintAfter(const QRect &/*rect*/, QPainter *painter)
+{
+    // 手抜きだけどプリメジャー部
+    painter->fillRect(0, 0, xAt(0), height(), QColor(0, 0, 0, 128));
 }
 
 void NoteView::drawAssistLine(vsq::tick_t tick, QPainter *painter)

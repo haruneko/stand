@@ -19,7 +19,8 @@
 AbstractGridView::AbstractGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
     AbstractSequenceView(sequence, parent)
 {
-    _beatWidth = beatWidth;
+    _beatWidth = -1;
+    beatWidthChanged(beatWidth);
     setDivCount(divCount);
     gridLineColor = QColor(128, 192, 255);
 }
@@ -53,7 +54,7 @@ void AbstractGridView::beatWidthChanged(int w)
         return;
     }
     _beatWidth = w;
-    setFixedWidth(xAt(sequence()->getTotalClocks()));
+    setMinimumWidth(xAt(sequence()->getTotalClocks()));
     update();
 }
 

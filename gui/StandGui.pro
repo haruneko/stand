@@ -23,7 +23,10 @@ HEADERS += \
     views/PianoPainter.h \
     views/NoteView.h \
     models/Selection.h \
-    views/BeatView.h
+    views/BeatView.h \
+    views/TempoView.h \
+    views/AbstractLabelView.h \
+    views/SingerView.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -34,5 +37,8 @@ SOURCES += \
     views/PianoPainter.cpp \
     views/NoteView.cpp \
     models/Selection.cpp \
-    views/BeatView.cpp
+    views/BeatView.cpp \
+    views/TempoView.cpp \
+    views/AbstractLabelView.cpp \
+    views/SingerView.cpp
 
