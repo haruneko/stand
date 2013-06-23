@@ -19,6 +19,7 @@
 #include "views/TempoView.h"
 #include "views/SingerView.h"
 #include "views/TrackSelectionView.h"
+#include "views/PianoView.h"
 
 #include "SequenceWindow.h"
 #include "ui_SequenceWindow.h"
@@ -48,12 +49,15 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     ui->Beat->setWidget(new BeatView(4, 16, 40, sequence, ui->Beat));
     ui->Tempo->setWidget(new TempoView(4, 16, 40, sequence, ui->Beat));
     ui->Singer->setWidget(new SingerView(0, 4, 16, 40, sequence, ui->Beat));
-    ui->centralWidget->layout()->addWidget(new TrackSelectionView(16, sequence, this));
+    ui->Piano->setWidget(new PianoView(16, ui->Piano));
+    ui->gridLayout->addWidget(new TrackSelectionView(16, sequence, this), 6, 1, 1, 1);
 
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Control->horizontalScrollBar(), SLOT(setValue(int)));
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Beat->horizontalScrollBar(), SLOT(setValue(int)));
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Tempo->horizontalScrollBar(), SLOT(setValue(int)));
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Singer->horizontalScrollBar(), SLOT(setValue(int)));
+    connect(ui->Pianoroll->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->Piano->verticalScrollBar(), SLOT(setValue(int)));
+    connect(ui->Piano->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->Pianoroll->verticalScrollBar(), SLOT(setValue(int)));
 }
 
 SequenceWindow::~SequenceWindow()
