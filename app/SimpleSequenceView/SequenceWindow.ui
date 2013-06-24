@@ -39,7 +39,7 @@
        </size>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -52,7 +52,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>544</width>
+         <width>527</width>
          <height>16</height>
         </rect>
        </property>
@@ -80,7 +80,7 @@
        </size>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -93,7 +93,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>544</width>
+         <width>527</width>
          <height>16</height>
         </rect>
        </property>
@@ -151,7 +151,7 @@
        </size>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -164,7 +164,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>544</width>
+         <width>527</width>
          <height>178</height>
         </rect>
        </property>
@@ -183,7 +183,7 @@
        <enum>Qt::ScrollBarAlwaysOff</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
       <property name="widgetResizable">
        <bool>true</bool>
@@ -194,7 +194,7 @@
          <x>0</x>
          <y>0</y>
          <width>94</width>
-         <height>246</height>
+         <height>229</height>
         </rect>
        </property>
       </widget>
@@ -203,10 +203,13 @@
     <item row="4" column="0">
      <widget class="QFrame" name="frame">
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::Box</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
       </property>
      </widget>
     </item>
@@ -261,7 +264,7 @@
        </size>
       </property>
       <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
       <property name="horizontalScrollBarPolicy">
        <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -274,7 +277,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>544</width>
+         <width>527</width>
          <height>16</height>
         </rect>
        </property>

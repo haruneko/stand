@@ -28,7 +28,8 @@ HEADERS += \
     views/AbstractLabelView.h \
     views/SingerView.h \
     views/TrackSelectionView.h \
-    views/PianoView.h
+    views/PianoView.h \
+    views/ControlSelectionView.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -44,5 +45,6 @@ SOURCES += \
     views/AbstractLabelView.cpp \
     views/SingerView.cpp \
     views/TrackSelectionView.cpp \
-    views/PianoView.cpp
+    views/PianoView.cpp \
+    views/ControlSelectionView.cpp
 
