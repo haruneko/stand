@@ -17,7 +17,6 @@ CONFIG += staticlib
 HEADERS += \
     views/AbstractSequenceView.h \
     views/ControlCurveView.h \
-    views/ControlGridView.h \
     views/AbstractGridView.h \
     utility/Utility.h \
     views/PianoPainter.h \
@@ -37,7 +36,6 @@ HEADERS += \
 SOURCES += \
     views/AbstractSequenceView.cpp \
     views/ControlCurveView.cpp \
-    views/ControlGridView.cpp \
     views/AbstractGridView.cpp \
     utility/Utility.cpp \
     views/PianoPainter.cpp \

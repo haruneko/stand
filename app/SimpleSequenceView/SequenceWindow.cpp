@@ -14,13 +14,15 @@
 #include <QSlider>
 
 #include "views/NoteView.h"
-#include "views/ControlGridView.h"
+#include "views/ControlCurveView.h"
 #include "views/BeatView.h"
 #include "views/TempoView.h"
 #include "views/SingerView.h"
 #include "views/TrackSelectionView.h"
 #include "views/PianoView.h"
 #include "views/ControlSelectionView.h"
+
+#include "models/ControlCurveSelection.h"
 
 #include "SequenceWindow.h"
 #include "ui_SequenceWindow.h"
@@ -46,7 +48,17 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     ui->Pianoroll->addScrollBarWidget(v, Qt::AlignBottom);
 
     ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, sequence, ui->Pianoroll));
-    ui->Control->setWidget(new ControlGridView(4, 40, sequence, ui->Control));
+
+    ControlCurveSelection selection;
+    selection.mainName = "PIT";
+    selection.subNames << "BRI";
+    QHash<QString, std::string> labels;
+    labels["PIT"] = "pit";
+    labels["BRI"] = "bri";
+    ControlCurveView *controlView = new ControlCurveView(labels, 0, 4, 40, sequence, ui->Control);
+    controlView->controlCurveSelectionChanged(selection);
+    ui->Control->setWidget(controlView);
+
     ui->Beat->setWidget(new BeatView(4, 16, 40, sequence, ui->Beat));
     ui->Tempo->setWidget(new TempoView(4, 16, 40, sequence, ui->Beat));
     ui->Singer->setWidget(new SingerView(0, 4, 16, 40, sequence, ui->Beat));

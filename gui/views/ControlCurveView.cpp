@@ -15,19 +15,53 @@
 
 #include <BPList.hpp>
 #include <Track.hpp>
+
+#include "../models/ControlCurveSelection.h"
+
+#include "AbstractControlPainter.h"
+#include "ControlCurvePainter.h"
+
 #include "ControlCurveView.h"
 
-ControlCurveView::ControlCurveView(int trackId, const string &controlName, int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent)
-    : AbstractGridView(divCount, beatWidth, sequence, parent)
+ControlCurveView::ControlCurveView(const QHash<QString, string> &labels, int trackId, int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent)
+    : AbstractGridView(divCount, beatWidth, sequence, parent),
+      backgroundColor(64, 64, 64),
+      controlColor(255, 255, 255, 192),
+      controlSubColor(192, 255, 255, 192)
 {
-    _controlName = controlName;
-    backgroundColor = Qt::black;
-    color = Qt::white;
-    _control = NULL;
     _trackId = trackId;
-    if(sequence && (0 <= trackId && trackId < sequence->tracks()->size()))
+    _controlNames = labels;
+    _reset();
+}
+
+ControlCurveView::~ControlCurveView()
+{
+    _destroy();
+}
+
+void ControlCurveView::_destroy()
+{
+    qDeleteAll(_painters);
+    _painters.clear();
+    _shownPainters.clear();
+}
+
+void ControlCurveView::_reset()
+{
+    _destroy();
+    if(_trackId < 0 || sequence()->tracks()->size() <= _trackId)
     {
-        _control = sequence->track(trackId)->curve(controlName);
+        return;
+    }
+    const vsq::Track *track = sequence()->track(_trackId);
+    for(QHash<QString, std::string>::iterator it = _controlNames.begin(); it != _controlNames.end(); it++)
+    {
+        const vsq::BPList *control = track->curve(it.value());
+        if(!control)
+        {
+            continue;
+        }
+        _painters.insert(it.key(), new ControlCurvePainter(control, this));
     }
 }
 
@@ -35,58 +69,84 @@ void ControlCurveView::trackChanged(int id)
 {
     if(id != _trackId)
     {
-        _control = sequence()->track(id)->curve(_controlName);
+        _reset();
         update();
     }
     _trackId = id;
 }
 
-void ControlCurveView::setControlName(const std::string &curveName)
+void ControlCurveView::sequenceChanged()
 {
-    if(_controlName == curveName)
-    {
-        return;
-    }
-    _control = sequence()->track(_trackId)->curve(curveName);
-    update();
+    _reset();
 }
 
-void ControlCurveView::paintEvent(QPaintEvent *e)
+void ControlCurveView::controlCurveSelectionChanged(const ControlCurveSelection &selection)
 {
-    QPainter p(this);
-    QRegion region(e->region());
-    foreach(const QRect &r, region.rects())
+    _shownPainters.clear();
+    for(int i = 0; i < selection.subNames.size(); i++)
     {
-        p.fillRect(r, backgroundColor);
-        paint(r, &p);
+        // 値が含まれていてもメインと同じなら表示しない．
+        if(_painters.contains(selection.subNames[i]) && selection.subNames[i] != selection.mainName)
+        {
+            AbstractControlPainter *p = _painters[selection.subNames[i]];
+            p->color = controlSubColor;
+            _shownPainters.push_back(p);
+        }
+    }
+    if(_painters.contains(selection.mainName))
+    {
+        AbstractControlPainter *p = _painters[selection.mainName];
+        p->color = controlColor;
+        _shownPainters.push_back(p);
     }
 }
 
-void ControlCurveView::paint(const QRect &rect, QPainter *painter)
+void ControlCurveView::paintBefore(const QRect &rect, QPainter *painter)
 {
-    if(!_control)
+    painter->fillRect(rect, backgroundColor);
+    foreach(AbstractControlPainter *p, _shownPainters)
     {
-        return;
+        p->paint(rect, painter);
     }
+}
 
-    int currentIndex;
-    vsq::tick_t begin = tickAt(rect.left());
-    _control->getValueAt(begin, &currentIndex);
-    int maximum = _control->getMaximum();
-    int minimum = _control->getMinimum();
-    vsq::BP current = _control->get(currentIndex);
-    int x = rect.left();
+void ControlCurveView::paintAfter(const QRect &rect, QPainter *painter)
+{
+    // 真ん中の横線
+    painter->setPen(gridLineColor);
+    painter->drawLine(rect.left(), height() / 2, rect.right() + 1, height() / 2);
+    // 1/4, 3/4 の横線
+    QColor weakColor(gridLineColor.red(), gridLineColor.green(), gridLineColor.blue(), gridLineColor.alpha() / 2);
+    painter->setPen(weakColor);
+    painter->drawLine(rect.left(), height() / 4, rect.right() + 1, height() / 4);
+    painter->drawLine(rect.left(), height() * 3 / 4, rect.right() + 1, height() * 3 / 4);
+}
 
-    for(; x <= rect.right() && currentIndex + 1 < _control->size();)
-    {
-        int nextX = xAt(_control->getKeyClock(currentIndex + 1));
-        int y = height() * (1.0 - (current.value - minimum) / (double)maximum);
-        painter->fillRect(x, y, nextX - x + 1, height() - y + 1, color);
-        x = nextX;
-    }
-    if(x <= rect.right())
-    {
-        int y = height() * (1.0 - (current.value - minimum) / (double)maximum);
-        painter->fillRect(x, y, rect.right() - x + 1, height() - y + 1, color);
-    }
+void ControlCurveView::drawBarLine(vsq::tick_t tick, QPainter *painter)
+{
+    int x = xAt(tick);
+    painter->setPen(gridLineColor);
+    painter->drawLine(x, 0, x, height());
+}
+
+void ControlCurveView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
+{
+    QColor weakColor(gridLineColor.red(), gridLineColor.green(), gridLineColor.blue(), gridLineColor.alpha() * 3 /4);
+    int x = xAt(tick);
+    painter->setPen(weakColor);
+    int h = height();
+    painter->drawLine(x, 0, x, h / 8);
+    painter->drawLine(x, h * 3 / 8, x, h * 5 / 8);
+    painter->drawLine(x, h * 7 / 8, x, h);
+}
+
+void ControlCurveView::drawAssistLine(vsq::tick_t tick, QPainter *painter)
+{
+    QColor weakColor(gridLineColor.red(), gridLineColor.green(), gridLineColor.blue(), gridLineColor.alpha() / 2);
+    int x = xAt(tick);
+    painter->setPen(weakColor);
+    int h = height();
+    painter->drawLine(x, 0, x, h / 16);
+    painter->drawLine(x, h * 7 / 16, x, h * 9 / 16);
+    painter->drawLine(x, h * 15 / 16, x, h);
 }
