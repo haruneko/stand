@@ -188,8 +188,12 @@ void NoteView::paintBefore(const QRect &rect, QPainter *painter)
     low.paint(_noteHeight, rect, painter);
 }
 
-void NoteView::paintAfter(const QRect &/*rect*/, QPainter *painter)
+void NoteView::paintAfter(const QRect &rect, QPainter *painter)
 {
+    // 基準線． yAt は top を返すので．
+    int y = yAt(47);
+    painter->setPen(QColor(192, 0, 0));
+    painter->drawLine(rect.left(), y, rect.right() + 1, y);
     // 手抜きだけどプリメジャー部
     painter->fillRect(0, 0, xAt(0), height(), QColor(0, 0, 0, 128));
 }
