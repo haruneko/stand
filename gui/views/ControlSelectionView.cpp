@@ -14,7 +14,10 @@
 #include <QHash>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QBoxLayout>
+#include <QVBoxLayout>
+
+#include "../utility/Utility.h"
+#include "../models/ControlCurveSelection.h"
 
 #include "ControlSelectionView.h"
 
@@ -36,8 +39,9 @@ void ControlSelectionView::_destroy()
 {
     qDeleteAll(_labels);
     _labels.clear();
-    setLayout(new QBoxLayout(QBoxLayout::TopToBottom, this));
+    setLayout(new QVBoxLayout(this));
     layout()->setContentsMargins(0, 0, 0, 0);
+    layout()->setContentsMargins(1, 1, 1, 1);
 }
 
 void ControlSelectionView::controlKindChanged(const QList<QString> &kinds)
@@ -46,6 +50,32 @@ void ControlSelectionView::controlKindChanged(const QList<QString> &kinds)
     foreach(const QString &kind, kinds)
     {
         layout()->addWidget(_registerLabel(kind));
+    }
+}
+
+void ControlSelectionView::selectionChanged(const ControlCurveSelection &selection)
+{
+    QColor main = mixColor(foregroundColor, backgroundColor, 1.0 / 3);
+    QColor sub = mixColor(foregroundColor, backgroundColor, 1.0 / 6);
+    for(QHash<QString, QLabel *>::iterator it = _labels.begin(); it != _labels.end(); it++)
+    {
+        const QString &key = it.key();
+        QColor *c = NULL;
+        if(selection.mainName == key)
+        {
+            c = &main;
+        }
+        if(selection.subNames.contains(key))
+        {
+            c = &sub;
+        }
+        if(c != NULL)
+        {
+            QLabel *l = it.value();
+            QPalette palette(l->palette());
+            palette.setColor(l->backgroundRole(), *c);
+            l->setPalette(palette);
+        }
     }
 }
 

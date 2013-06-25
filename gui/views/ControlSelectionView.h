@@ -16,6 +16,7 @@
 #include <QWidget>
 
 class QLabel;
+class ControlCurveSelection;
 
 /**
  *  @brief 現在編集中のコントローラが何か表示します．
@@ -31,6 +32,13 @@ public:
     /** @brief 背景色 */
     QColor backgroundColor;
 public slots:
+    /**
+     *  @brief コントロールトラックの選択が変更された際に呼ばれるスロットです．
+     */
+    void selectionChanged(const ControlCurveSelection &selection);
+    /**
+     *  @brief 半音分の高さが変化した際に呼ばれるスロットです．
+     */
     void noteHeightChanged(int h);
     /**
      *  @brief 表示すべきコントロールのキー名に変更があった際の通知を受け取ります．

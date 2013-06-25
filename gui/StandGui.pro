@@ -29,7 +29,10 @@ HEADERS += \
     views/SingerView.h \
     views/TrackSelectionView.h \
     views/PianoView.h \
-    views/ControlSelectionView.h
+    views/ControlSelectionView.h \
+    models/ControlCurveSelection.h \
+    views/ControlCurvePainter.h \
+    views/AbstractControlPainter.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -46,5 +49,8 @@ SOURCES += \
     views/SingerView.cpp \
     views/TrackSelectionView.cpp \
     views/PianoView.cpp \
-    views/ControlSelectionView.cpp
+    views/ControlSelectionView.cpp \
+    models/ControlCurveSelection.cpp \
+    views/ControlCurvePainter.cpp \
+    views/AbstractControlPainter.cpp
 

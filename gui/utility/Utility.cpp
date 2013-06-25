@@ -85,3 +85,13 @@ double NoteAt(double frequency)
 {
     return log(frequency / a4_frequency) / log(2.0) * 12.0 + a4_note_number;
 }
+
+QColor mixColor(const QColor &a, const QColor &b, double r)
+{
+    double _r = 1 - r;
+    int red = a.red() * r + b.red() * _r;
+    int green = a.green() * r + b.green() * _r;
+    int blue = a.blue() * r + b.blue() * _r;
+    int alpha = a.alpha() * r + b.alpha() * _r;
+    return QColor(red, green, blue, alpha);
+}

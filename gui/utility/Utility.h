@@ -13,6 +13,7 @@
 #define STAND_GUI_UTILITY_H
 
 #include <QDir>
+#include <QColor>
 
 class QWidget;
 
@@ -45,5 +46,10 @@ double NoteFrequency(double note);
  * @note 戻り値のノート番号は小数点以下を含みます．
  */
 double NoteAt(double frequency);
+
+/*!
+ *  @brief 色を r : 1-r の割合で混ぜ合わせます．
+ */
+QColor mixColor(const QColor &a, const QColor &b, double r);
 
 #endif // STAND_GUI_UTILITY_H
