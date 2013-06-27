@@ -45,13 +45,13 @@ void ControlCurvePainter::paint(const QRect &rect, QPainter *painter)
     for(; x <= rect.right() && currentIndex + 1 < _control->size();)
     {
         int nextX = _parent->xAt(_control->getKeyClock(currentIndex + 1));
-        int y = _parent->height() * (1.0 - (current.value - minimum) / (double)maximum);
-        painter->fillRect(x, y, nextX - x + 1, _parent->height() - y + 1, color);
+        int y = (_parent->height() + 1) * (1.0 - (current.value - minimum) / (double)maximum);
+        painter->fillRect(x, y + 1, nextX - x + 1, _parent->height() - y + 1, color);
         x = nextX;
     }
     if(x <= rect.right())
     {
-        int y = _parent->height() * (1.0 - (current.value - minimum) / (double)maximum);
-        painter->fillRect(x, y, rect.right() - x + 1, _parent->height() - y + 1, color);
+        int y = (_parent->height() + 1) * (1.0 - (current.value - minimum) / (double)maximum);
+        painter->fillRect(x, y + 1, rect.right() - x + 1, _parent->height() - y + 1, color);
     }
 }
