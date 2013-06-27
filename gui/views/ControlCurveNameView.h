@@ -1,6 +1,6 @@
 /*
  *
- *    ControlSelectionView.h
+ *    ControlCurveNameView.h
  *                                    (c) HAL@shurabaP
  *                                        2013/06/23
  *
@@ -10,9 +10,10 @@
  *
  */
 
-#ifndef CONTROLSELECTIONVIEW_H
-#define CONTROLSELECTIONVIEW_H
+#ifndef CONTROLCURVENAMEVIEW_H
+#define CONTROLCURVENAMEVIEW_H
 
+#include <QHash>
 #include <QWidget>
 
 class QLabel;
@@ -21,11 +22,18 @@ class ControlCurveSelection;
 /**
  *  @brief 現在編集中のコントローラが何か表示します．
  */
-class ControlSelectionView : public QWidget
+class ControlCurveNameView : public QWidget
 {
+    Q_OBJECT
 public:
-    explicit ControlSelectionView(const QList<QString> &labelNames, int noteHeight, QWidget *parent = 0);
-    virtual ~ControlSelectionView();
+    explicit ControlCurveNameView(const QList<QString> &labelNames, int noteHeight, QWidget *parent = 0);
+    virtual ~ControlCurveNameView();
+
+    /**
+     *  @brief 表示しているラベルをリストにして返します．
+     */
+    QList<QLabel *> labels();
+    QList<const QLabel *> labels() const;
 
     /** @brief 線とフォント色 */
     QColor foregroundColor;
@@ -35,7 +43,7 @@ public slots:
     /**
      *  @brief コントロールトラックの選択が変更された際に呼ばれるスロットです．
      */
-    void selectionChanged(const ControlCurveSelection &selection);
+    void selectionChanged(ControlCurveSelection &selection);
     /**
      *  @brief 半音分の高さが変化した際に呼ばれるスロットです．
      */
@@ -44,9 +52,10 @@ public slots:
      *  @brief 表示すべきコントロールのキー名に変更があった際の通知を受け取ります．
      *  @param [in] kinds
      */
-    void controlKindChanged(const QList<QString> &kinds);
+    void controlKindChanged(QList<QString> &kinds);
 
 protected:
+    // @Override
     virtual void paintEvent(QPaintEvent *e);
 
 private:
@@ -57,4 +66,4 @@ private:
     int _noteHeight;
 };
 
-#endif // CONTROLSELECTIONVIEW_H
+#endif // CONTROLCURVENAMEVIEW_H

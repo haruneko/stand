@@ -62,7 +62,7 @@ public slots:
     /**
      *  @brief コントロールトラックの選択が変更された際に呼ばれるスロットです．
      */
-    void controlCurveSelectionChanged(const ControlCurveSelection &selection);
+    void controlCurveSelectionChanged(ControlCurveSelection &selection);
     // @Override
     void noteHeightChanged(int /*h*/){ }
 

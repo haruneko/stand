@@ -1,6 +1,6 @@
 /*
  *
- *    ControlSelectionView.cpp
+ *    ControlCurveNameView.cpp
  *                                    (c) HAL@shurabaP
  *                                        2013/06/23
  *
@@ -19,23 +19,26 @@
 #include "../utility/Utility.h"
 #include "../models/ControlCurveSelection.h"
 
-#include "ControlSelectionView.h"
+#include "../controllers/ControlCurveSelector.h"
 
-ControlSelectionView::ControlSelectionView(const QList<QString> &labelNames, int noteHeight, QWidget *parent) :
+#include "ControlCurveNameView.h"
+
+ControlCurveNameView::ControlCurveNameView(const QList<QString> &labelNames, int noteHeight, QWidget *parent) :
     QWidget(parent),
     foregroundColor(128, 192, 255),
     backgroundColor(64, 64, 64)
 {
     _noteHeight = noteHeight;
-    controlKindChanged(labelNames);
+    QList<QString> names = labelNames;
+    controlKindChanged(names);
 }
 
-ControlSelectionView::~ControlSelectionView()
+ControlCurveNameView::~ControlCurveNameView()
 {
     _destroy();
 }
 
-void ControlSelectionView::_destroy()
+void ControlCurveNameView::_destroy()
 {
     qDeleteAll(_labels);
     _labels.clear();
@@ -44,7 +47,7 @@ void ControlSelectionView::_destroy()
     layout()->setContentsMargins(1, 1, 1, 1);
 }
 
-void ControlSelectionView::controlKindChanged(const QList<QString> &kinds)
+void ControlCurveNameView::controlKindChanged(QList<QString> &kinds)
 {
     _destroy();
     foreach(const QString &kind, kinds)
@@ -53,10 +56,18 @@ void ControlSelectionView::controlKindChanged(const QList<QString> &kinds)
     }
 }
 
-void ControlSelectionView::selectionChanged(const ControlCurveSelection &selection)
+void ControlCurveNameView::noteHeightChanged(int h)
 {
-    QColor main = mixColor(foregroundColor, backgroundColor, 1.0 / 3);
-    QColor sub = mixColor(foregroundColor, backgroundColor, 1.0 / 6);
+    foreach(QLabel *l, _labels)
+    {
+        l->setFixedHeight(h);
+    }
+}
+
+void ControlCurveNameView::selectionChanged(ControlCurveSelection &selection)
+{
+    QColor main = mixColor(foregroundColor, backgroundColor, 1.0 / 2);
+    QColor sub = mixColor(foregroundColor, backgroundColor, 1.0 / 3);
     for(QHash<QString, QLabel *>::iterator it = _labels.begin(); it != _labels.end(); it++)
     {
         const QString &key = it.key();
@@ -65,21 +76,22 @@ void ControlSelectionView::selectionChanged(const ControlCurveSelection &selecti
         {
             c = &main;
         }
-        if(selection.subNames.contains(key))
+        else if(selection.subNames.contains(key))
         {
             c = &sub;
         }
-        if(c != NULL)
+        else
         {
-            QLabel *l = it.value();
-            QPalette palette(l->palette());
-            palette.setColor(l->backgroundRole(), *c);
-            l->setPalette(palette);
+            c = &backgroundColor;
         }
+        QLabel *l = it.value();
+        QPalette palette(l->palette());
+        palette.setColor(l->backgroundRole(), *c);
+        l->setPalette(palette);
     }
 }
 
-QLabel *ControlSelectionView::_registerLabel(const QString &name)
+QLabel *ControlCurveNameView::_registerLabel(const QString &name)
 {
     QLabel *l = new QLabel(name, this);
     QPalette palette(l->palette());
@@ -88,12 +100,24 @@ QLabel *ControlSelectionView::_registerLabel(const QString &name)
     l->setPalette(palette);
     l->setFixedHeight(_noteHeight);
     l->setFrameStyle(QFrame::Box);
+    l->setAutoFillBackground(true);
     _labels.insert(name, l);
+
     return l;
 }
 
-void ControlSelectionView::paintEvent(QPaintEvent *e)
+void ControlCurveNameView::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
     p.fillRect(e->rect(), backgroundColor);
+}
+
+QList<QLabel *> ControlCurveNameView::labels()
+{
+    QList<QLabel *> ret;
+    foreach(QLabel *l, _labels)
+    {
+        ret.append(l);
+    }
+    return ret;
 }

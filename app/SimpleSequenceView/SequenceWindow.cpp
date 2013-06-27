@@ -20,9 +20,11 @@
 #include "views/SingerView.h"
 #include "views/TrackSelectionView.h"
 #include "views/PianoView.h"
-#include "views/ControlSelectionView.h"
+#include "views/ControlCurveNameView.h"
 
 #include "models/ControlCurveSelection.h"
+
+#include "controllers/ControlCurveSelector.h"
 
 #include "SequenceWindow.h"
 #include "ui_SequenceWindow.h"
@@ -49,15 +51,16 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
 
     ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, sequence, ui->Pianoroll));
 
-    ControlCurveSelection selection;
-    selection.mainName = "PIT";
-    selection.subNames << "BRI";
+    ControlCurveSelection *selection = new ControlCurveSelection(1, this);
+    selection->mainName = "PIT";
+    selection->subNames << "BRI";
     QHash<QString, std::string> labels;
     labels["PIT"] = "pit";
     labels["BRI"] = "bri";
     ControlCurveView *controlView = new ControlCurveView(labels, 0, 4, 40, sequence, ui->Control);
-    controlView->controlCurveSelectionChanged(selection);
+    controlView->controlCurveSelectionChanged(*selection);
     ui->Control->setWidget(controlView);
+    connect(selection, SIGNAL(changeControlCurve(ControlCurveSelection&)), controlView, SLOT(controlCurveSelectionChanged(ControlCurveSelection&)));
 
     ui->Beat->setWidget(new BeatView(4, 16, 40, sequence, ui->Beat));
     ui->Tempo->setWidget(new TempoView(4, 16, 40, sequence, ui->Beat));
@@ -66,7 +69,10 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     ui->gridLayout->addWidget(new TrackSelectionView(16, sequence, this), 6, 1, 1, 1);
     QList<QString> names;
     names << "VEL" << "DYN" << "BRI";
-    ui->gridLayout->addWidget(new ControlSelectionView(names, 16, this), 4, 0, 1, 1);
+    ControlCurveNameView *controlNameView = new ControlCurveNameView(names, 16, this);
+    ui->gridLayout->addWidget(controlNameView, 4, 0, 1, 1);
+    ControlCurveSelector *selector = new ControlCurveSelector(selection, controlNameView);
+    connect(selection, SIGNAL(changeControlCurve(ControlCurveSelection&)), controlNameView, SLOT(selectionChanged(ControlCurveSelection&)));
 
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Control->horizontalScrollBar(), SLOT(setValue(int)));
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Beat->horizontalScrollBar(), SLOT(setValue(int)));

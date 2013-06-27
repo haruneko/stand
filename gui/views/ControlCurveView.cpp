@@ -80,7 +80,7 @@ void ControlCurveView::sequenceChanged()
     _reset();
 }
 
-void ControlCurveView::controlCurveSelectionChanged(const ControlCurveSelection &selection)
+void ControlCurveView::controlCurveSelectionChanged(ControlCurveSelection &selection)
 {
     _shownPainters.clear();
     for(int i = 0; i < selection.subNames.size(); i++)
@@ -99,6 +99,7 @@ void ControlCurveView::controlCurveSelectionChanged(const ControlCurveSelection 
         p->color = controlColor;
         _shownPainters.push_back(p);
     }
+    update();
 }
 
 void ControlCurveView::paintBefore(const QRect &rect, QPainter *painter)
