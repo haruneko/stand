@@ -23,11 +23,11 @@
 
 #include "ControlCurveView.h"
 
-ControlCurveView::ControlCurveView(const QHash<QString, string> &labels, int trackId, int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent)
-    : AbstractGridView(divCount, beatWidth, sequence, parent),
+ControlCurveView::ControlCurveView(const QHash<QString, string> &labels, int trackId, int divCount, int beatWidth, SequenceModel *model, QWidget *parent)
+    : AbstractGridView(divCount, beatWidth, model, parent),
       backgroundColor(64, 64, 64),
       controlColor(255, 255, 255, 192),
-      controlSubColor(192, 255, 255, 192)
+      controlSubColor(128, 192, 192, 192)
 {
     _trackId = trackId;
     _controlNames = labels;

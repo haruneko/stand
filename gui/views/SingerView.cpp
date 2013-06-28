@@ -12,8 +12,8 @@
 
 #include "SingerView.h"
 
-SingerView::SingerView(int trackId, int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractLabelView(divCount, noteHeight, beatWidth, sequence, parent)
+SingerView::SingerView(int trackId, int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
+    AbstractLabelView(divCount, noteHeight, beatWidth, model, parent)
 {
     _trackId = trackId;
     reset();

@@ -21,7 +21,7 @@
 class TempoView : public AbstractLabelView
 {
 public:
-    explicit TempoView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
+    explicit TempoView(int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent);
 
 protected:
     // @Override

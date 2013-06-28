@@ -44,7 +44,7 @@ public:
             int trackId,
             int divCount,
             int beatWidth,
-            const vsq::Sequence *sequence,
+            SequenceModel *model,
             QWidget *parent
             );
     virtual ~ControlCurveView();

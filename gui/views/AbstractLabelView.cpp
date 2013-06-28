@@ -15,8 +15,8 @@
 
 #include "AbstractLabelView.h"
 
-AbstractLabelView::AbstractLabelView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractGridView(divCount, beatWidth, sequence, parent),
+AbstractLabelView::AbstractLabelView(int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
+    AbstractGridView(divCount, beatWidth, model, parent),
     barLineColor(128, 192, 255),
     fontColor(128, 192, 255),
     backgroundColor(64, 64, 64)

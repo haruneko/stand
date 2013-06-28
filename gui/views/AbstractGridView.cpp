@@ -16,8 +16,8 @@
 
 #include "AbstractGridView.h"
 
-AbstractGridView::AbstractGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractSequenceView(sequence, parent)
+AbstractGridView::AbstractGridView(int divCount, int beatWidth, SequenceModel *model, QWidget *parent) :
+    AbstractSequenceView(model, parent)
 {
     _beatWidth = -1;
     beatWidthChanged(beatWidth);

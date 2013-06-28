@@ -26,7 +26,7 @@ class AbstractLabelView : public AbstractGridView
 {
     Q_OBJECT
 public:
-    explicit AbstractLabelView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
+    explicit AbstractLabelView(int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent);
     virtual ~AbstractLabelView();
 
     /** @brief 補助線の色 */

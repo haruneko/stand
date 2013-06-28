@@ -29,7 +29,7 @@ public:
             int divCount,
             int noteHeight,
             int beatWidth,
-            const vsq::Sequence *sequence,
+            SequenceModel *model,
             QWidget *parent = 0
             );
 

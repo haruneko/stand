@@ -24,7 +24,7 @@ class BeatView : public AbstractLabelView
 {
     Q_OBJECT
 public:
-    explicit BeatView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
+    explicit BeatView(int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent);
 
 protected:
     // @Override

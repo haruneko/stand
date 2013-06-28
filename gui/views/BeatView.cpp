@@ -15,8 +15,8 @@
 
 #include "BeatView.h"
 
-BeatView::BeatView(int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractLabelView(divCount, noteHeight, beatWidth, sequence, parent)
+BeatView::BeatView(int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
+    AbstractLabelView(divCount, noteHeight, beatWidth, model, parent)
 {
     reset();
 }

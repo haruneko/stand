@@ -21,6 +21,7 @@ namespace vsq
 class Sequence;
 }
 class Selection;
+class SequenceModel;
 
 /**
  *  @brief シーケンスを表示する基底クラス．
@@ -31,22 +32,17 @@ class AbstractSequenceView : public QWidget
 public:
     /**
      *  @brief 与えられた値で初期化します．
-     *  @param [in] sequence 表示すべきシーケンス．
+     *  @param [in] model 表示すべきシーケンスモデル．
      *  @param [in] parent 親 Widget ．
      */
-    explicit AbstractSequenceView(const vsq::Sequence *sequence, QWidget *parent);
+    explicit AbstractSequenceView(SequenceModel *model, QWidget *parent);
 
     /**
      *  @brief  表示すべきシーケンスを変更します．
      *          与えられたシーケンスは view クラス内では変更できません．
      *  @param [in] sequence 変更後のシーケンス．
      */
-    void setSequence(const vsq::Sequence *sequence)
-    {
-        _sequence = sequence;
-        sequenceChanged();
-        update();
-    }
+    void setSequence(SequenceModel *model);
 
     /**
      *  @brief  現在表示しているシーケンスへのポインタを返します．
@@ -112,6 +108,7 @@ public slots:
      */
     virtual void noteHeightChanged(int h) = 0;
 private:
+    SequenceModel *_model;          //! @brief 現在保持しているモデル
     const vsq::Sequence *_sequence; //! @brief 現在表示しているシーケンス
 
     QWidget *_parent;               //! @brief 親Widget

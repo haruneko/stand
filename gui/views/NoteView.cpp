@@ -17,8 +17,8 @@
 
 #include "NoteView.h"
 
-NoteView::NoteView(int trackId, int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractGridView(divCount, beatWidth, sequence, parent),
+NoteView::NoteView(int trackId, int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
+    AbstractGridView(divCount, beatWidth, model, parent),
     low(0, 32, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64)),
     middle(33, 72, QColor(255, 255, 255), QColor(224, 224, 255), QColor(64, 64, 64)),
     high(73, 128, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64))

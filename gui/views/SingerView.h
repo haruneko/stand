@@ -21,7 +21,7 @@
 class SingerView : public AbstractLabelView
 {
 public:
-    explicit SingerView(int trackId, int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
+    explicit SingerView(int trackId, int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent);
 protected:
     // @Override
     void trackChanged(int id);

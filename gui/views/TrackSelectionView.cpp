@@ -16,8 +16,8 @@
 
 #include "TrackSelectionView.h"
 
-TrackSelectionView::TrackSelectionView(int noteHeight, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractSequenceView(sequence, parent),
+TrackSelectionView::TrackSelectionView(int noteHeight, SequenceModel *model, QWidget *parent) :
+    AbstractSequenceView(model, parent),
     foregroundColor(128, 192, 255),
     backgroundColor(64, 64, 64)
 {
