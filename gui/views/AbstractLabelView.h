@@ -33,6 +33,10 @@ public:
     QColor barLineColor;
     /** @brief 背景色 */
     QColor backgroundColor;
+    /** @brief ラベルの色 */
+    QColor labelColor;
+    /** @brief 選択色 */
+    QColor selectedColor;
     /** @brief 文字色 */
     QColor fontColor;
 public slots:
