@@ -15,6 +15,8 @@
 #include <QPainter>
 #include <QPalette>
 
+#include "../models/EventSelection.h"
+
 #include "NoteView.h"
 
 NoteView::NoteView(int trackId, int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
@@ -230,4 +232,31 @@ QList<QLabel *> NoteView::labels()
         }
     }
     return ret;
+}
+
+void NoteView::changeSelection(EventSelection *current, EventSelection *previous)
+{
+    _setLabelColor(previous, noteColor);
+    _setLabelColor(current, noteColor);
+}
+
+void NoteView::_setLabelColor(EventSelection *s, const QColor &c)
+{
+    int trackId = s->trackId();
+    // トラック ID が範囲外なら何もしない
+    if(trackId < 0 || _noteLabels.size() <= trackId)
+    {
+        return;
+    }
+    QHash<int, QLabel *> &labels = _noteLabels[trackId];
+    foreach(int i, s->ids())
+    {
+        if(labels.contains(i))
+        {
+            QLabel *l = labels[i];
+            QPalette p(l->palette());
+            p.setColor(l->backgroundRole(), c);
+            l->setPalette(p);
+        }
+    }
 }

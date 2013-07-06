@@ -18,6 +18,8 @@
 
 #include "PianoPainter.h"
 
+class EventSelection;
+
 /**
  *  @brief シーケンスからピアノロールを表示するクラス．
  */
@@ -66,6 +68,12 @@ public slots:
     virtual void beatWidthChanged(int w);
     // @Override
     virtual void noteHeightChanged(int h);
+    /**
+     *  @brief 音符の選択が変更されたときのシグナルを受け取るスロットです．
+     *  @param[in] current 現在新たに選択されている音符などのイベント．
+     *  @param[in] previous 直前まで選択されていた音符などのイベント．
+     */
+    void changeSelection(EventSelection *current, EventSelection *previous);
 
 protected:
     // @Override
@@ -83,6 +91,7 @@ protected:
 private:
     void _destroy();
     void _reset();
+    void _setLabelColor(EventSelection *s, const QColor& c);
     QLabel *_labelFromEvent(const vsq::Event *e);
 
     int _noteHeight;
