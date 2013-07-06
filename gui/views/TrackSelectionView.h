@@ -34,7 +34,7 @@ public:
 
 protected:
     // @Override
-    void sequenceChanged();
+    void modelChanged();
 public slots:
     // @Override
     virtual void paint(const QRect &rect, QPainter *painter);

@@ -68,7 +68,7 @@ public slots:
 
 protected:
     // @Override
-    void sequenceChanged();
+    void modelChanged();
     // @Override
     void paintBefore(const QRect &rect, QPainter *painter);
     // @Override

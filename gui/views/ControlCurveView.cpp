@@ -75,7 +75,7 @@ void ControlCurveView::trackChanged(int id)
     _trackId = id;
 }
 
-void ControlCurveView::sequenceChanged()
+void ControlCurveView::modelChanged()
 {
     _reset();
 }

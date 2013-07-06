@@ -54,6 +54,11 @@ public:
     {
         return _noteHeight;
     }
+
+    /**
+     *  @brief このクラスが保持している音符のラベルを返します．
+     */
+    QList<QLabel *> labels();
 public slots:
     // @Override
     virtual void trackChanged(int id);
@@ -74,7 +79,7 @@ protected:
     // @Override
     virtual void drawAssistLine(vsq::tick_t tick, QPainter *painter);
     // @Override
-    virtual void sequenceChanged();
+    virtual void modelChanged();
 private:
     void _destroy();
     void _reset();

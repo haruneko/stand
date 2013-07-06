@@ -33,11 +33,11 @@ void AbstractSequenceView::dataChanged(int /*tickBegin*/, int /*tickEnd*/)
 {
 }
 
-void AbstractSequenceView::setSequence(SequenceModel *model)
+void AbstractSequenceView::setModel(SequenceModel *model)
 {
     _model = model;
     _sequence = model->sequence();
-    sequenceChanged();
+    modelChanged();
     update();
 }
 
@@ -57,4 +57,14 @@ void AbstractSequenceView::paintEvent(QPaintEvent *e)
 
 void AbstractSequenceView::selectionChanged(const Selection &/*current*/, const Selection &/*previous*/)
 {
+}
+
+SequenceModel *AbstractSequenceView::model()
+{
+    return _model;
+}
+
+const SequenceModel *AbstractSequenceView::model() const
+{
+    return _model;
 }

@@ -107,7 +107,7 @@ void NoteView::beatWidthChanged(int w)
     AbstractGridView::beatWidthChanged(w);
 }
 
-void NoteView::sequenceChanged()
+void NoteView::modelChanged()
 {
     _reset();
 }
@@ -217,4 +217,17 @@ void NoteView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
     int x = xAt(tick);
     painter->setPen(beatLineColor);
     painter->drawLine(x, 0, x, height());
+}
+
+QList<QLabel *> NoteView::labels()
+{
+    QList<QLabel *> ret;
+    for(int i = 0; i < _noteLabels.size(); i++)
+    {
+        foreach(QLabel *l, _noteLabels[i])
+        {
+            ret.append(l);
+        }
+    }
+    return ret;
 }

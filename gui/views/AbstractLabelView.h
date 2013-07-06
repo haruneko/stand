@@ -51,7 +51,7 @@ protected:
     // @Override
     virtual void paintBefore(const QRect &rect, QPainter *painter);
     // @Override
-    void sequenceChanged();
+    void modelChanged();
     /**
      *  @brief  このメソッド内でラベルを登録して下さい．
      */

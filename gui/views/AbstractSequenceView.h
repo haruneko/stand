@@ -42,7 +42,13 @@ public:
      *          与えられたシーケンスは view クラス内では変更できません．
      *  @param [in] sequence 変更後のシーケンス．
      */
-    void setSequence(SequenceModel *model);
+    void setModel(SequenceModel *model);
+
+    /**
+     *  @brief  ビューが保持しているモデルを返します．
+     */
+    SequenceModel *model();
+    const SequenceModel *model() const;
 
     /**
      *  @brief  現在表示しているシーケンスへのポインタを返します．
@@ -57,10 +63,10 @@ protected:
     virtual void paintEvent(QPaintEvent *e);
 
     /**
-     *  @brief  シーケンスが変更された時に呼び出されます．
+     *  @brief  モデルが変更された時に呼び出されます．
      *          このメソッドをオーバーライドすることでシーケンス変更時の処理が記述できます．
      */
-    virtual void sequenceChanged(){ }
+    virtual void modelChanged(){ }
 
 signals:
     

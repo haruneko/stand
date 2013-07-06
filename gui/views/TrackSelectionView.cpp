@@ -24,7 +24,7 @@ TrackSelectionView::TrackSelectionView(int noteHeight, SequenceModel *model, QWi
     _noteHeight = noteHeight;
     _currentTrackId = 0;
     setFixedHeight(noteHeight);
-    sequenceChanged();
+    modelChanged();
 }
 
 TrackSelectionView::~TrackSelectionView()
@@ -91,7 +91,7 @@ void TrackSelectionView::trackChanged(int id)
     }
 }
 
-void TrackSelectionView::sequenceChanged()
+void TrackSelectionView::modelChanged()
 {
     _destroy();
     const std::vector<vsq::Track> *tracks = sequence()->tracks();

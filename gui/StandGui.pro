@@ -33,7 +33,8 @@ HEADERS += \
     views/AbstractControlPainter.h \
     controllers/ControlCurveSelector.h \
     views/ControlCurveNameView.h \
-    models/SequenceModel.h
+    models/SequenceModel.h \
+    controllers/NoteClickHandler.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -54,5 +55,6 @@ SOURCES += \
     views/AbstractControlPainter.cpp \
     controllers/ControlCurveSelector.cpp \
     views/ControlCurveNameView.cpp \
-    models/SequenceModel.cpp
+    models/SequenceModel.cpp \
+    controllers/NoteClickHandler.cpp
 

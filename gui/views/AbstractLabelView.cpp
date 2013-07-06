@@ -54,7 +54,7 @@ void AbstractLabelView::noteHeightChanged(int h)
     update();
 }
 
-void AbstractLabelView::sequenceChanged()
+void AbstractLabelView::modelChanged()
 {
     reset();
     update();
