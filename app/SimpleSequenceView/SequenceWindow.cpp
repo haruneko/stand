@@ -20,9 +20,12 @@
 #include "views/SingerView.h"
 #include "views/TrackSelectionView.h"
 #include "views/PianoView.h"
-#include "views/ControlSelectionView.h"
+#include "views/ControlCurveNameView.h"
 
+#include "models/SequenceModel.h"
 #include "models/ControlCurveSelection.h"
+
+#include "controllers/ControlCurveSelector.h"
 
 #include "SequenceWindow.h"
 #include "ui_SequenceWindow.h"
@@ -37,6 +40,7 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     vsq::Event e(480 * 4, vsq::EventType::UNKNOWN);
     sequence->updateTotalClocks();
     sequence->track(0)->events()->add(e);
+    SequenceModel *model = new SequenceModel(sequence, this);
 
     ui->Pianoroll->horizontalScrollBar()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->Pianoroll->verticalScrollBar()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -47,26 +51,30 @@ SequenceWindow::SequenceWindow(QWidget *parent) :
     ui->Pianoroll->addScrollBarWidget(h, Qt::AlignRight);
     ui->Pianoroll->addScrollBarWidget(v, Qt::AlignBottom);
 
-    ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, sequence, ui->Pianoroll));
+    ui->Pianoroll->setWidget(new NoteView(0, 4, 16, 40, model, ui->Pianoroll));
 
-    ControlCurveSelection selection;
-    selection.mainName = "PIT";
-    selection.subNames << "BRI";
+    ControlCurveSelection *selection = new ControlCurveSelection(1, this);
+    selection->mainName = "PIT";
+    selection->subNames << "BRI";
     QHash<QString, std::string> labels;
     labels["PIT"] = "pit";
     labels["BRI"] = "bri";
-    ControlCurveView *controlView = new ControlCurveView(labels, 0, 4, 40, sequence, ui->Control);
-    controlView->controlCurveSelectionChanged(selection);
+    ControlCurveView *controlView = new ControlCurveView(labels, 0, 4, 40, model, ui->Control);
+    controlView->controlCurveSelectionChanged(*selection);
     ui->Control->setWidget(controlView);
+    connect(selection, SIGNAL(changeControlCurve(ControlCurveSelection&)), controlView, SLOT(controlCurveSelectionChanged(ControlCurveSelection&)));
 
-    ui->Beat->setWidget(new BeatView(4, 16, 40, sequence, ui->Beat));
-    ui->Tempo->setWidget(new TempoView(4, 16, 40, sequence, ui->Beat));
-    ui->Singer->setWidget(new SingerView(0, 4, 16, 40, sequence, ui->Beat));
+    ui->Beat->setWidget(new BeatView(4, 16, 40, model, ui->Beat));
+    ui->Tempo->setWidget(new TempoView(4, 16, 40, model, ui->Beat));
+    ui->Singer->setWidget(new SingerView(0, 4, 16, 40, model, ui->Beat));
     ui->Piano->setWidget(new PianoView(16, ui->Piano));
-    ui->gridLayout->addWidget(new TrackSelectionView(16, sequence, this), 6, 1, 1, 1);
+    ui->gridLayout->addWidget(new TrackSelectionView(16, model, this), 6, 1, 1, 1);
     QList<QString> names;
     names << "VEL" << "DYN" << "BRI";
-    ui->gridLayout->addWidget(new ControlSelectionView(names, 16, this), 4, 0, 1, 1);
+    ControlCurveNameView *controlNameView = new ControlCurveNameView(names, 16, this);
+    ui->gridLayout->addWidget(controlNameView, 4, 0, 1, 1);
+    ControlCurveSelector *selector = new ControlCurveSelector(selection, controlNameView);
+    connect(selection, SIGNAL(changeControlCurve(ControlCurveSelection&)), controlNameView, SLOT(selectionChanged(ControlCurveSelection&)));
 
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Control->horizontalScrollBar(), SLOT(setValue(int)));
     connect(ui->Pianoroll->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->Beat->horizontalScrollBar(), SLOT(setValue(int)));

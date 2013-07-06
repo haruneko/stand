@@ -15,10 +15,12 @@
 #include <QPainter>
 #include <QPalette>
 
+#include "../models/EventSelection.h"
+
 #include "NoteView.h"
 
-NoteView::NoteView(int trackId, int divCount, int noteHeight, int beatWidth, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractGridView(divCount, beatWidth, sequence, parent),
+NoteView::NoteView(int trackId, int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
+    AbstractGridView(divCount, beatWidth, model, parent),
     low(0, 32, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64)),
     middle(33, 72, QColor(255, 255, 255), QColor(224, 224, 255), QColor(64, 64, 64)),
     high(73, 128, QColor(192, 192, 192), QColor(128, 128, 128), QColor(64, 64, 64))
@@ -107,7 +109,7 @@ void NoteView::beatWidthChanged(int w)
     AbstractGridView::beatWidthChanged(w);
 }
 
-void NoteView::sequenceChanged()
+void NoteView::modelChanged()
 {
     _reset();
 }
@@ -217,4 +219,44 @@ void NoteView::drawBeatLine(vsq::tick_t tick, QPainter *painter)
     int x = xAt(tick);
     painter->setPen(beatLineColor);
     painter->drawLine(x, 0, x, height());
+}
+
+QList<QLabel *> NoteView::labels()
+{
+    QList<QLabel *> ret;
+    for(int i = 0; i < _noteLabels.size(); i++)
+    {
+        foreach(QLabel *l, _noteLabels[i])
+        {
+            ret.append(l);
+        }
+    }
+    return ret;
+}
+
+void NoteView::changeSelection(EventSelection *current, EventSelection *previous)
+{
+    _setLabelColor(previous, noteColor);
+    _setLabelColor(current, noteColor);
+}
+
+void NoteView::_setLabelColor(EventSelection *s, const QColor &c)
+{
+    int trackId = s->trackId();
+    // トラック ID が範囲外なら何もしない
+    if(trackId < 0 || _noteLabels.size() <= trackId)
+    {
+        return;
+    }
+    QHash<int, QLabel *> &labels = _noteLabels[trackId];
+    foreach(int i, s->ids())
+    {
+        if(labels.contains(i))
+        {
+            QLabel *l = labels[i];
+            QPalette p(l->palette());
+            p.setColor(l->backgroundRole(), c);
+            l->setPalette(p);
+        }
+    }
 }

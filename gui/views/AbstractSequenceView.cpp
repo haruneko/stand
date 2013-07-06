@@ -13,12 +13,15 @@
 #include <QPaintEvent>
 #include <QPainter>
 
+#include "../models/SequenceModel.h"
+
 #include "AbstractSequenceView.h"
 
-AbstractSequenceView::AbstractSequenceView(const vsq::Sequence *sequence, QWidget *parent) :
+AbstractSequenceView::AbstractSequenceView(SequenceModel *model, QWidget *parent) :
     QWidget(parent)
 {
-    _sequence = sequence;
+    _model = model;
+    _sequence = model->sequence();
     _parent = parent;
 }
 
@@ -26,8 +29,12 @@ void AbstractSequenceView::trackChanged(int /*id*/)
 {
 }
 
-void AbstractSequenceView::dataChanged(int /*tickBegin*/, int /*tickEnd*/)
+void AbstractSequenceView::setModel(SequenceModel *model)
 {
+    _model = model;
+    _sequence = model->sequence();
+    modelChanged();
+    update();
 }
 
 void AbstractSequenceView::paint(const QRegion &region, QPainter *painter)
@@ -44,6 +51,12 @@ void AbstractSequenceView::paintEvent(QPaintEvent *e)
     paint(e->region(), &(QPainter(this)));
 }
 
-void AbstractSequenceView::selectionChanged(const Selection &/*current*/, const Selection &/*previous*/)
+SequenceModel *AbstractSequenceView::model()
 {
+    return _model;
+}
+
+const SequenceModel *AbstractSequenceView::model() const
+{
+    return _model;
 }

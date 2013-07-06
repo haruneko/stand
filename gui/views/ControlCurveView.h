@@ -44,7 +44,7 @@ public:
             int trackId,
             int divCount,
             int beatWidth,
-            const vsq::Sequence *sequence,
+            SequenceModel *model,
             QWidget *parent
             );
     virtual ~ControlCurveView();
@@ -62,13 +62,13 @@ public slots:
     /**
      *  @brief コントロールトラックの選択が変更された際に呼ばれるスロットです．
      */
-    void controlCurveSelectionChanged(const ControlCurveSelection &selection);
+    void controlCurveSelectionChanged(ControlCurveSelection &selection);
     // @Override
     void noteHeightChanged(int /*h*/){ }
 
 protected:
     // @Override
-    void sequenceChanged();
+    void modelChanged();
     // @Override
     void paintBefore(const QRect &rect, QPainter *painter);
     // @Override

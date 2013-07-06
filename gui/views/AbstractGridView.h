@@ -28,7 +28,7 @@ public:
      *  @param [in] sequence 表示すべきシーケンス．
      *  @param [in] parent 親 Widget ．
      */
-    explicit AbstractGridView(int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent);
+    explicit AbstractGridView(int divCount, int beatWidth, SequenceModel *model, QWidget *parent);
 
     /** グリッド線の色 */
     QColor gridLineColor;

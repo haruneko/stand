@@ -24,7 +24,7 @@ class TrackSelectionView : public AbstractSequenceView
 {
     Q_OBJECT
 public:
-    explicit TrackSelectionView(int noteHeight, const vsq::Sequence *sequence, QWidget *parent);
+    explicit TrackSelectionView(int noteHeight, SequenceModel *model, QWidget *parent);
     virtual ~TrackSelectionView();
 
     /** @brief 背景色 */
@@ -34,7 +34,7 @@ public:
 
 protected:
     // @Override
-    void sequenceChanged();
+    void modelChanged();
 public slots:
     // @Override
     virtual void paint(const QRect &rect, QPainter *painter);

@@ -23,11 +23,11 @@
 
 #include "ControlCurveView.h"
 
-ControlCurveView::ControlCurveView(const QHash<QString, string> &labels, int trackId, int divCount, int beatWidth, const vsq::Sequence *sequence, QWidget *parent)
-    : AbstractGridView(divCount, beatWidth, sequence, parent),
+ControlCurveView::ControlCurveView(const QHash<QString, string> &labels, int trackId, int divCount, int beatWidth, SequenceModel *model, QWidget *parent)
+    : AbstractGridView(divCount, beatWidth, model, parent),
       backgroundColor(64, 64, 64),
       controlColor(255, 255, 255, 192),
-      controlSubColor(192, 255, 255, 192)
+      controlSubColor(128, 192, 192, 192)
 {
     _trackId = trackId;
     _controlNames = labels;
@@ -75,12 +75,12 @@ void ControlCurveView::trackChanged(int id)
     _trackId = id;
 }
 
-void ControlCurveView::sequenceChanged()
+void ControlCurveView::modelChanged()
 {
     _reset();
 }
 
-void ControlCurveView::controlCurveSelectionChanged(const ControlCurveSelection &selection)
+void ControlCurveView::controlCurveSelectionChanged(ControlCurveSelection &selection)
 {
     _shownPainters.clear();
     for(int i = 0; i < selection.subNames.size(); i++)
@@ -99,6 +99,7 @@ void ControlCurveView::controlCurveSelectionChanged(const ControlCurveSelection 
         p->color = controlColor;
         _shownPainters.push_back(p);
     }
+    update();
 }
 
 void ControlCurveView::paintBefore(const QRect &rect, QPainter *painter)

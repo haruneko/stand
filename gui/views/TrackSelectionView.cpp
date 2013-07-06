@@ -16,15 +16,15 @@
 
 #include "TrackSelectionView.h"
 
-TrackSelectionView::TrackSelectionView(int noteHeight, const vsq::Sequence *sequence, QWidget *parent) :
-    AbstractSequenceView(sequence, parent),
+TrackSelectionView::TrackSelectionView(int noteHeight, SequenceModel *model, QWidget *parent) :
+    AbstractSequenceView(model, parent),
     foregroundColor(128, 192, 255),
     backgroundColor(64, 64, 64)
 {
     _noteHeight = noteHeight;
     _currentTrackId = 0;
     setFixedHeight(noteHeight);
-    sequenceChanged();
+    modelChanged();
 }
 
 TrackSelectionView::~TrackSelectionView()
@@ -91,7 +91,7 @@ void TrackSelectionView::trackChanged(int id)
     }
 }
 
-void TrackSelectionView::sequenceChanged()
+void TrackSelectionView::modelChanged()
 {
     _destroy();
     const std::vector<vsq::Track> *tracks = sequence()->tracks();
