@@ -34,7 +34,8 @@ HEADERS += \
     controllers/ControlCurveSelector.h \
     views/ControlCurveNameView.h \
     models/SequenceModel.h \
-    controllers/NoteClickHandler.h
+    controllers/NoteClickHandler.h \
+    models/EventSelection.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -56,5 +57,6 @@ SOURCES += \
     controllers/ControlCurveSelector.cpp \
     views/ControlCurveNameView.cpp \
     models/SequenceModel.cpp \
-    controllers/NoteClickHandler.cpp
+    controllers/NoteClickHandler.cpp \
+    models/EventSelection.cpp
 

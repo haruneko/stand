@@ -72,13 +72,6 @@ signals:
     
 public slots:
     /**
-     *  @brief データの変更通知を受け取るスロットです．与えられた tick 単位での範囲を通知で受け取ります．
-     *  @param [in] tickBegin 開始 tick
-     *  @param [in] tickEnd 終了 tick
-     */
-    virtual void dataChanged(int tickBegin, int tickEnd);
-
-    /**
      *  @brief 該当する領域を描画します．
      *  @param [in] region 描画すべき領域．
      *  @param [in/out] painter 描画対象から得た QPainter クラスへのポインタ．
@@ -96,13 +89,6 @@ public slots:
      *  @brief 表示すべきトラックが変更された際に通知を受け取るスロットです．
      */
     virtual void trackChanged(int id);
-
-    /**
-     *  @brief 選択範囲が変更された際に通知を受け取るスロットです．
-     *  @param[in] current 更新された現在の選択範囲
-     *  @param[in] previous 更新される前の選択範囲
-     */
-    virtual void selectionChanged(const Selection &current, const Selection &previous);
 
     /**
      *  @brief 四分音符の幅が変更された際に通知を受け取るスロットです．

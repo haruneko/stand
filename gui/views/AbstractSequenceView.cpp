@@ -29,10 +29,6 @@ void AbstractSequenceView::trackChanged(int /*id*/)
 {
 }
 
-void AbstractSequenceView::dataChanged(int /*tickBegin*/, int /*tickEnd*/)
-{
-}
-
 void AbstractSequenceView::setModel(SequenceModel *model)
 {
     _model = model;
@@ -53,10 +49,6 @@ void AbstractSequenceView::paint(const QRegion &region, QPainter *painter)
 void AbstractSequenceView::paintEvent(QPaintEvent *e)
 {
     paint(e->region(), &(QPainter(this)));
-}
-
-void AbstractSequenceView::selectionChanged(const Selection &/*current*/, const Selection &/*previous*/)
-{
 }
 
 SequenceModel *AbstractSequenceView::model()
