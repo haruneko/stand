@@ -26,7 +26,11 @@ public:
     explicit SequenceModel(vsq::Sequence *sequence, QObject *parent = 0);
 
     const vsq::Sequence *sequence() const;
-    
+    /** @brief スナップする幅 */
+    int noteSnapTick;
+    /** @brief 末端と判断される幅 */
+    int edgeWidth;
+
 signals:
     void dataChanged();
 public slots:

@@ -16,6 +16,8 @@ SequenceModel::SequenceModel(vsq::Sequence *sequence, QObject *parent) :
     QObject(parent)
 {
     _sequence = sequence;
+    noteSnapTick = 120;
+    edgeWidth = 16;
 }
 
 const vsq::Sequence *SequenceModel::sequence() const

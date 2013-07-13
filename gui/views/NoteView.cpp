@@ -234,6 +234,19 @@ QList<QLabel *> NoteView::labels()
     return ret;
 }
 
+QList <QLabel *> NoteView::labels(int trackId, const QList<int> &ids)
+{
+    QList<QLabel *> ret;
+    if(0 <= trackId && trackId < _noteLabels.size())
+    {
+        foreach(int id, ids)
+        {
+            ret.append(_noteLabels[trackId][id]);
+        }
+    }
+    return ret;
+}
+
 void NoteView::changeSelection(EventSelection *current, EventSelection *previous)
 {
     _setLabelColor(previous, noteColor);

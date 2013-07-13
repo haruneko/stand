@@ -14,14 +14,18 @@
 #include <QEvent>
 #include <QMouseEvent>
 
+#include "../models/EventSelection.h"
+#include "../models/SequenceModel.h"
 #include "../views/NoteView.h"
 
 #include "NoteClickHandler.h"
 
-NoteClickHandler::NoteClickHandler(NoteView *view) :
+NoteClickHandler::NoteClickHandler(SequenceModel *model, EventSelection *selection, NoteView *view) :
     QObject(view)
 {
     _view = NULL;
+    setSequence(model);
+    setSelection(selection);
     setView(view);
 }
 
@@ -36,6 +40,16 @@ void NoteClickHandler::_destroy()
     {
         l->removeEventFilter(this);
     }
+}
+
+void NoteClickHandler::setSelection(EventSelection *selection)
+{
+    _selection = selection;
+}
+
+void NoteClickHandler::setSequence(SequenceModel *model)
+{
+    _model = model;
 }
 
 void NoteClickHandler::setView(NoteView *view)
@@ -77,19 +91,78 @@ bool NoteClickHandler::eventFilter(QObject *o, QEvent *e)
 
 bool NoteClickHandler::_mousePressed(QLabel *l, QMouseEvent *e)
 {
+    // 初期化
     _mouseDragged = false;
-    _mouseClicked = e->pos();
+    _labelLocations.clear();
+    // 選択されたラベルの現在位置取得
+    QList<QLabel *> &labels = _view->labels(_selection->trackId(), _selection->ids());
+    foreach(QLabel *l, labels)
+    {
+        _labelLocations.append(l->pos());
+    }
+
+    // 親オブジェクト内での位置を計算する．
+    _mouseClicked = QPoint(l->x() + e->x(), l->y() + e->y());
+
+    if(e->x() < _model->edgeWidth)
+    {
+        _operationType = ExtendForward;
+    }
+    else if(l->width() - e->x() < _model->edgeWidth)
+    {
+        _operationType = ExtendBackward;
+    }
+    else
+    {
+        _operationType = Move;
+    }
     return true;
 }
 
 bool NoteClickHandler::_mouseMoved(QLabel *l, QMouseEvent *e)
 {
     _mouseDragged = true;
+
+    switch(_operationType)
+    {
+    case Move:
+        _move(l, e);
+        break;
+    case ExtendForward:
+        _extendForward(l, e);
+        break;
+    case ExtendBackward:
+        _extendBackward(l, e);
+        break;
+    }
+
     return true;
+}
+
+void NoteClickHandler::_move(QLabel *l, QMouseEvent *e)
+{
+    QPoint current(l->x() + e->x(), l->y() + e->y());
+//    int tickDiff = _view->tickAt(current.x() - _mouseClicked.x());
+//    int noteDiff = _view->noteAt(current.y()) - _view->noteAt(_mouseClicked.x());
+}
+
+void NoteClickHandler::_extendForward(QLabel *l, QMouseEvent *e)
+{
+
+}
+
+void NoteClickHandler::_extendBackward(QLabel *l, QMouseEvent *e)
+{
+
 }
 
 bool NoteClickHandler::_mouseReleased(QLabel *l, QMouseEvent *e)
 {
+    if(!_mouseDragged)
+    {
+        _operationType = Select;
+    }
+    QPoint diff(e->globalX() - _mouseClicked.x(), e->globalY() - _mouseClicked.y());
     return true;
 }
 
