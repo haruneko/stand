@@ -60,6 +60,12 @@ int NoteView::yAt(int note)
     return (127 - note) * _noteHeight;
 }
 
+int NoteView::noteAt(int y) const
+{
+    // [0, _noteHeight] が notenum = 127
+    return (127 - y / _noteHeight);
+}
+
 void NoteView::setNoteHeight(int noteHeight)
 {
     if(noteHeight == _noteHeight)
@@ -229,6 +235,19 @@ QList<QLabel *> NoteView::labels()
         foreach(QLabel *l, _noteLabels[i])
         {
             ret.append(l);
+        }
+    }
+    return ret;
+}
+
+QList <QPair<int, QLabel *> > NoteView::labels(int trackId, const QList<int> &ids)
+{
+    QList<QPair<int, QLabel *> > ret;
+    if(0 <= trackId && trackId < _noteLabels.size())
+    {
+        foreach(int id, ids)
+        {
+            ret.append(QPair<int, QLabel *>(id, _noteLabels[trackId][id]));
         }
     }
     return ret;

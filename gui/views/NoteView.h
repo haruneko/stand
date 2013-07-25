@@ -52,6 +52,12 @@ public:
      */
     int yAt(int note);
 
+
+    /**
+     *  @brief  該当する y 座標での音高を返します.
+     */
+    int noteAt(int y) const;
+
     int noteHeight() const
     {
         return _noteHeight;
@@ -61,6 +67,7 @@ public:
      *  @brief このクラスが保持している音符のラベルを返します．
      */
     QList<QLabel *> labels();
+    QList<QPair<int, QLabel *> > labels(int trackId, const QList<int> &ids);
 public slots:
     // @Override
     virtual void trackChanged(int id);

@@ -10,6 +10,7 @@ Release:TARGET = StandGui
 Debug:TARGET = StandGuid
 
 DESTDIR = ../lib/
+INCLUDEPATH += ../libvsq/
 
 TEMPLATE = lib
 CONFIG += staticlib
