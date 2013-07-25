@@ -52,6 +52,12 @@ public:
      */
     int yAt(int note);
 
+
+    /**
+     *  @brief  該当する y 座標での音高を返します.
+     */
+    int noteAt(int y) const;
+
     int noteHeight() const
     {
         return _noteHeight;

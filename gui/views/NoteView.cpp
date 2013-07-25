@@ -60,6 +60,12 @@ int NoteView::yAt(int note)
     return (127 - note) * _noteHeight;
 }
 
+int NoteView::noteAt(int y) const
+{
+    // [0, _noteHeight] が notenum = 127
+    return (127 - y / _noteHeight);
+}
+
 void NoteView::setNoteHeight(int noteHeight)
 {
     if(noteHeight == _noteHeight)

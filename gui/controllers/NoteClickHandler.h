@@ -17,6 +17,8 @@
 #include <QHash>
 #include <QRect>
 
+#include <Event.hpp>
+
 class QLabel;
 class QMouseEvent;
 class NoteView;
@@ -57,14 +59,20 @@ protected:
     // @Override
     virtual bool eventFilter(QObject *o, QEvent *e);
 private:
+    // Qt のイベントを受けるメソッド
     bool _mousePressed(QLabel *l, QMouseEvent *e);
     bool _mouseMoved(QLabel *l, QMouseEvent *e);
-    void _move(const QPoint &diff, QLabel *l, QMouseEvent *e);
-    void _extendForward(const QPoint &diff, QLabel *l, QMouseEvent *e);
-    void _extendBackward(const QPoint &diff, QLabel *l, QMouseEvent *e);
     bool _mouseReleased(QLabel *l, QMouseEvent *e);
 
     void _destroy();
+
+    // 移動距離からイベント一個分を計算する関数
+    vsq::Event _eventExtendedForward(const QPoint& diff, QLabel *l);
+    vsq::Event _eventExtendedBackward(const QPoint &diff, QLabel *l);
+    vsq::Event _eventMoved(const QPoint &diff, QLabel *l);
+    void _selectNotes(QLabel *l , QMouseEvent *e);
+    void _updateLabels(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &diff, QLabel *l));
+    void _updateNotes(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &diff, QLabel *l));
 
     NoteView *_view;
 
@@ -86,6 +94,8 @@ private:
     SequenceModel *_model;
     EventSelection *_selection;
     QHash<QLabel *, QPair<int, QRect> > _labelLocations;
+
+    static vsq::Event (NoteClickHandler::* const _eventFunctions[])(const QPoint &, QLabel *);
 };
 
 #endif // NOTECLICKHANDLER_H
