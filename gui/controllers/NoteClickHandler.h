@@ -67,14 +67,14 @@ private:
     void _destroy();
 
     // 移動距離からイベント一個分を計算する関数
-    vsq::Event _eventExtendedForward(const QPoint& diff, QLabel *l);
-    vsq::Event _eventExtendedBackward(const QPoint &diff, QLabel *l);
-    vsq::Event _eventMoved(const QPoint &diff, QLabel *l);
+    vsq::Event _eventExtendedForward(const QPoint& diff, const QPair<int, QRect> &val);
+    vsq::Event _eventExtendedBackward(const QPoint &diff, const QPair<int, QRect> &val);
+    vsq::Event _eventMoved(const QPoint &diff, const QPair<int, QRect> &val);
 
     // モデルに変更を加えるメソッド
     void _selectNotes(QLabel *l , QMouseEvent *e);
-    void _updateLabels(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &diff, QLabel *l));
-    void _updateNotes(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &diff, QLabel *l));
+    void _updateLabels(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, const QPair<int, QRect> &));
+    void _updateNotes(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, const QPair<int, QRect> &));
 
     /** @brief マウスドラッグ判定用 */
     bool _mouseDragged;
@@ -96,7 +96,7 @@ private:
     EventSelection *_selection;
     QHash<QLabel *, QPair<int, QRect> > _labelLocations;
 
-    static vsq::Event (NoteClickHandler::* const _eventFunctions[])(const QPoint &, QLabel *);
+    static vsq::Event (NoteClickHandler::* const _eventFunctions[])(const QPoint &, const QPair<int, QRect> &);
 };
 
 #endif // NOTECLICKHANDLER_H
