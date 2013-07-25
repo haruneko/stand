@@ -50,10 +50,19 @@ public:
      *  @brief 音符情報を変更します.
      */
     void updateNotes(int trackId, const QList<vsq::Event> &changes);
+
 signals:
     void dataChanged();
 public slots:
-    
+
+private slots:
+    /**
+     *  @brief 実際に値を変更するスロットです. Action クラスの SIGNAL と接続されます.
+     *  @param [in] trackId トラック番号
+     *  @param [in] changes 変更のあるノートとその情報
+     */
+    void apply(int trackId, QList<vsq::Event> &changes);
+
 private:
     vsq::Sequence *_sequence;
     /** 編集履歴 */
