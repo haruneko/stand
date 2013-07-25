@@ -14,7 +14,8 @@
 #define NOTECLICKHANDLER_H
 
 #include <QObject>
-#include <QPoint>
+#include <QHash>
+#include <QRect>
 
 class QLabel;
 class QMouseEvent;
@@ -42,6 +43,7 @@ public:
      *  @brief ビューを交換します．すべての設定はリセットされます．
      */
     void setView(NoteView *view);
+
 public slots:
     /**
      *  @brief 編集対象のモデルを変更します．
@@ -57,9 +59,9 @@ protected:
 private:
     bool _mousePressed(QLabel *l, QMouseEvent *e);
     bool _mouseMoved(QLabel *l, QMouseEvent *e);
-    void _move(QLabel *l, QMouseEvent *e);
-    void _extendForward(QLabel *l, QMouseEvent *e);
-    void _extendBackward(QLabel *l, QMouseEvent *e);
+    void _move(const QPoint &diff, QLabel *l, QMouseEvent *e);
+    void _extendForward(const QPoint &diff, QLabel *l, QMouseEvent *e);
+    void _extendBackward(const QPoint &diff, QLabel *l, QMouseEvent *e);
     bool _mouseReleased(QLabel *l, QMouseEvent *e);
 
     void _destroy();
@@ -83,7 +85,7 @@ private:
 
     SequenceModel *_model;
     EventSelection *_selection;
-    QList<QPoint> _labelLocations;
+    QHash<QLabel *, QPair<int, QRect> > _labelLocations;
 };
 
 #endif // NOTECLICKHANDLER_H

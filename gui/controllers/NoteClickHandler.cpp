@@ -95,10 +95,10 @@ bool NoteClickHandler::_mousePressed(QLabel *l, QMouseEvent *e)
     _mouseDragged = false;
     _labelLocations.clear();
     // 選択されたラベルの現在位置取得
-    QList<QLabel *> &labels = _view->labels(_selection->trackId(), _selection->ids());
-    foreach(QLabel *l, labels)
+    QList<QPair<int, QLabel *> > &labels = _view->labels(_selection->trackId(), _selection->ids());
+    for(int i = 0; i < labels.size(); i++)
     {
-        _labelLocations.append(l->pos());
+        _labelLocations.insert(labels[i].second, QPair<int, QRect>(labels[i].first, labels[i].second->rect()));
     }
 
     // 親オブジェクト内での位置を計算する．
@@ -123,37 +123,56 @@ bool NoteClickHandler::_mouseMoved(QLabel *l, QMouseEvent *e)
 {
     _mouseDragged = true;
 
+    QPoint current(l->x() + e->x(), l->y() + e->y());
+    QPoint diff = current - _mouseClicked;
+
     switch(_operationType)
     {
     case Move:
-        _move(l, e);
+        _move(diff, l, e);
         break;
     case ExtendForward:
-        _extendForward(l, e);
+        _extendForward(diff, l, e);
         break;
     case ExtendBackward:
-        _extendBackward(l, e);
+        _extendBackward(diff, l, e);
         break;
     }
 
     return true;
 }
 
-void NoteClickHandler::_move(QLabel *l, QMouseEvent *e)
+void NoteClickHandler::_move(const QPoint &diff, QLabel *l, QMouseEvent *e)
 {
-    QPoint current(l->x() + e->x(), l->y() + e->y());
-//    int tickDiff = _view->tickAt(current.x() - _mouseClicked.x());
-//    int noteDiff = _view->noteAt(current.y()) - _view->noteAt(_mouseClicked.x());
+    foreach(QLabel *l, _labelLocations.keys())
+    {
+        const QPair<int, QRect> &val = _labelLocations[l];
+        int tick = _model->snappedTick(_view->tickAt(val.second.x() + diff.x()));
+        int x = _view->xAt(tick);
+        l->setGeometry(x, l->y(), l->width(), l->height());
+    }
 }
 
-void NoteClickHandler::_extendForward(QLabel *l, QMouseEvent *e)
+void NoteClickHandler::_extendForward(const QPoint &diff, QLabel */*l*/, QMouseEvent */*e*/)
 {
-
+    foreach(QLabel *l, _labelLocations.keys())
+    {
+        const QPair<int, QRect> &val = _labelLocations[l];
+        int tick = _model->snappedTick(_view->tickAt(val.second.x() + diff.x()));
+        int x = _view->xAt(tick);
+        l->setGeometry(x, l->y(), l->rect().right() - x, l->height());
+    }
 }
 
-void NoteClickHandler::_extendBackward(QLabel *l, QMouseEvent *e)
+void NoteClickHandler::_extendBackward(const QPoint &diff, QLabel *l, QMouseEvent *e)
 {
-
+    foreach(QLabel *l, _labelLocations.keys())
+    {
+        const QPair<int, QRect> &val = _labelLocations[l];
+        int tick = _model->snappedTick(_view->tickAt(val.second.right() + diff.x()));
+        int width = _view->xAt(tick) - l->x();
+        l->setGeometry(l->x(), l->y(), width, l->height());
+    }
 }
 
 bool NoteClickHandler::_mouseReleased(QLabel *l, QMouseEvent *e)

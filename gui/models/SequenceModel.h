@@ -26,6 +26,11 @@ public:
     explicit SequenceModel(vsq::Sequence *sequence, QObject *parent = 0);
 
     const vsq::Sequence *sequence() const;
+    /**
+     *  @brief スナップされた位置を返します．
+     */
+    int snappedTick(int tick) const;
+
     /** @brief スナップする幅 */
     int noteSnapTick;
     /** @brief 末端と判断される幅 */

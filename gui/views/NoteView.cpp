@@ -234,14 +234,14 @@ QList<QLabel *> NoteView::labels()
     return ret;
 }
 
-QList <QLabel *> NoteView::labels(int trackId, const QList<int> &ids)
+QList <QPair<int, QLabel *> > NoteView::labels(int trackId, const QList<int> &ids)
 {
-    QList<QLabel *> ret;
+    QList<QPair<int, QLabel *> > ret;
     if(0 <= trackId && trackId < _noteLabels.size())
     {
         foreach(int id, ids)
         {
-            ret.append(_noteLabels[trackId][id]);
+            ret.append(QPair<int, QLabel *>(id, _noteLabels[trackId][id]));
         }
     }
     return ret;

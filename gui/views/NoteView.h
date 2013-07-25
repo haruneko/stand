@@ -61,7 +61,7 @@ public:
      *  @brief このクラスが保持している音符のラベルを返します．
      */
     QList<QLabel *> labels();
-    QList<QLabel *> labels(int trackId, const QList<int> &ids);
+    QList<QPair<int, QLabel *> > labels(int trackId, const QList<int> &ids);
 public slots:
     // @Override
     virtual void trackChanged(int id);
