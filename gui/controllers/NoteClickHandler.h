@@ -70,11 +70,11 @@ private:
     vsq::Event _eventExtendedForward(const QPoint& diff, QLabel *l);
     vsq::Event _eventExtendedBackward(const QPoint &diff, QLabel *l);
     vsq::Event _eventMoved(const QPoint &diff, QLabel *l);
+
+    // モデルに変更を加えるメソッド
     void _selectNotes(QLabel *l , QMouseEvent *e);
     void _updateLabels(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &diff, QLabel *l));
     void _updateNotes(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &diff, QLabel *l));
-
-    NoteView *_view;
 
     /** @brief マウスドラッグ判定用 */
     bool _mouseDragged;
@@ -91,6 +91,7 @@ private:
         ExtendBackward
     } _operationType;
 
+    NoteView *_view;
     SequenceModel *_model;
     EventSelection *_selection;
     QHash<QLabel *, QPair<int, QRect> > _labelLocations;

@@ -215,5 +215,23 @@ void NoteClickHandler::_updateNotes(const QPoint &diff, vsq::Event (NoteClickHan
 
 void NoteClickHandler::_selectNotes(QLabel *l, QMouseEvent *e)
 {
+    QList<int> ids;
+    if(e->modifiers() & Qt::ControlModifier)
+    {
+        // コントロール押されていたら今の選択範囲に追加するなど
+        ids = _selection->ids();
+    }
+    int id = _labelLocations[l].first;
 
+    if(!ids.contains(id))
+    {
+        // 選択済みでなければ選択に追加
+        ids.append(id);
+    }
+    else
+    {
+        // 選択済みであれば選択解除
+        ids.removeOne(id);
+    }
+    _selection->setIds(ids);
 }
