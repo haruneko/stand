@@ -67,6 +67,13 @@ public:
      *  @brief このクラスが保持している音符のラベルを返します．
      */
     QList<QLabel *> labels();
+    /**
+     *  @brief このクラスが保持している音符のラベルをトラック番号を指定して ID つきで返します.
+     */
+    QList<QPair<int, QLabel *> > labels(int trackId);
+    /**
+     *  @brief このクラスが保持している音符のラベルをトラック番号と ID を指定して ID つきで返します.
+     */
     QList<QPair<int, QLabel *> > labels(int trackId, const QList<int> &ids);
 public slots:
     // @Override

@@ -37,7 +37,8 @@ HEADERS += \
     models/SequenceModel.h \
     controllers/NoteClickHandler.h \
     models/EventSelection.h \
-    models/actions/NoteChangeAction.h
+    models/actions/NoteChangeAction.h \
+    controllers/NoteSelector.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -61,5 +62,6 @@ SOURCES += \
     models/SequenceModel.cpp \
     controllers/NoteClickHandler.cpp \
     models/EventSelection.cpp \
-    models/actions/NoteChangeAction.cpp
+    models/actions/NoteChangeAction.cpp \
+    controllers/NoteSelector.cpp
 
