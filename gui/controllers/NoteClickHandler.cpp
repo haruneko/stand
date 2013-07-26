@@ -20,7 +20,7 @@
 
 #include "NoteClickHandler.h"
 
-vsq::Event (NoteClickHandler::* const NoteClickHandler::_eventFunctions[])(const QPoint &, QLabel *) = {
+vsq::Event (NoteClickHandler::* const NoteClickHandler::_eventFunctions[])(const QPoint &, const QPair<int, QRect> &) = {
     NULL,
     &NoteClickHandler::_eventMoved,
     &NoteClickHandler::_eventExtendedForward,
@@ -161,18 +161,16 @@ bool NoteClickHandler::_mouseReleased(QLabel *l, QMouseEvent *e)
     return true;
 }
 
-vsq::Event NoteClickHandler::_eventExtendedBackward(const QPoint &diff, QLabel *l)
+vsq::Event NoteClickHandler::_eventExtendedBackward(const QPoint &diff, const QPair<int, QRect> &val)
 {
-    const QPair<int, QRect> &val = _labelLocations[l];
     vsq::Event e = _model->eventAt(_selection->trackId(), val.first)->clone();
     vsq::tick_t tick = _model->snappedTick(_view->tickAt(val.second.right() + diff.x()));
     e.setLength(qMax((vsq::tick_t)0, tick - e.clock));
     return e;
 }
 
-vsq::Event NoteClickHandler::_eventExtendedForward(const QPoint &diff, QLabel *l)
+vsq::Event NoteClickHandler::_eventExtendedForward(const QPoint &diff, const QPair<int, QRect> &val)
 {
-    const QPair<int, QRect> &val = _labelLocations[l];
     vsq::Event e = _model->eventAt(_selection->trackId(), val.first)->clone();
     vsq::tick_t length = e.getLength();
     vsq::tick_t tick = e.clock;
@@ -182,38 +180,55 @@ vsq::Event NoteClickHandler::_eventExtendedForward(const QPoint &diff, QLabel *l
     return e;
 }
 
-vsq::Event NoteClickHandler::_eventMoved(const QPoint &diff, QLabel *l)
+vsq::Event NoteClickHandler::_eventMoved(const QPoint &diff, const QPair<int, QRect> &val)
 {
-    const QPair<int, QRect> &val = _labelLocations[l];
     vsq::Event e = _model->eventAt(_selection->trackId(), val.first)->clone();
     e.clock = _model->snappedTick(_view->tickAt(val.second.x() + diff.x()));
     e.note = _view->noteAt(val.second.y() + diff.y() + _view->noteHeight() / 2);
     return e;
 }
 
-void NoteClickHandler::_updateLabels(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, QLabel *))
+void NoteClickHandler::_updateLabels(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, const QPair<int, QRect> &))
 {
     foreach(QLabel *l, _labelLocations.keys())
     {
-        vsq::Event e = (this->*updateFunction)(diff, l);
+        vsq::Event e = (this->*updateFunction)(diff, _labelLocations[l]);
         int x = _view->xAt(e.clock);
         int width = _view->xAt(e.clock + e.getLength()) - x;
         l->setGeometry(x, _view->yAt(e.note), width, _view->noteHeight());
     }
 }
 
-void NoteClickHandler::_updateNotes(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, QLabel *))
+void NoteClickHandler::_updateNotes(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, const QPair<int, QRect> &))
 {
     QList<vsq::Event> changes;
     int trackId = _selection->trackId();
     foreach(QLabel *l, _labelLocations.keys())
     {
-        changes.append((this->*updateFunction)(diff, l));
+        changes.append((this->*updateFunction)(diff, _labelLocations[l]));
     }
     _model->updateNotes(trackId, changes);
 }
 
 void NoteClickHandler::_selectNotes(QLabel *l, QMouseEvent *e)
 {
+    QList<int> ids;
+    if(e->modifiers() & Qt::ControlModifier)
+    {
+        // コントロール押されていたら今の選択範囲に追加するなど
+        ids = _selection->ids();
+    }
+    int id = _labelLocations[l].first;
 
+    if(!ids.contains(id))
+    {
+        // 選択済みでなければ選択に追加
+        ids.append(id);
+    }
+    else
+    {
+        // 選択済みであれば選択解除
+        ids.removeOne(id);
+    }
+    _selection->setIds(ids);
 }
