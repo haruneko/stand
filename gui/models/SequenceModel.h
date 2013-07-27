@@ -48,6 +48,8 @@ public:
 
     /**
      *  @brief 音符情報を変更します.
+     *  @param [in] trackId トラック番号
+     *  @param [in] changes 変更のあるノートとその情報
      */
     void updateNotes(int trackId, const QList<vsq::Event> &changes);
 
@@ -58,6 +60,7 @@ public slots:
 private slots:
     /**
      *  @brief 実際に値を変更するスロットです. Action クラスの SIGNAL と接続されます.
+     *         undo コマンドから呼び出され実際に値を変更しますが, Action クラス以外から呼び出さないで下さい.
      *  @param [in] trackId トラック番号
      *  @param [in] changes 変更のあるノートとその情報
      */

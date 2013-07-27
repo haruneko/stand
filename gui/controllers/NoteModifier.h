@@ -1,6 +1,6 @@
 /*
  *
- *    NoteClickHandler.h
+ *    NoteModifier.h
  *                                    (c) HAL@shurabaP
  *                                        2013/06/28
  *
@@ -10,8 +10,8 @@
  *
  */
 
-#ifndef NOTECLICKHANDLER_H
-#define NOTECLICKHANDLER_H
+#ifndef NOTEMODIFIER_H
+#define NOTEMODIFIER_H
 
 #include <QObject>
 #include <QHash>
@@ -28,7 +28,7 @@ class EventSelection;
 /**
  *  @brief 音符を表すラベル上で行われたマウスイベントを処理するクラス
  */
-class NoteClickHandler : public QObject
+class NoteModifier : public QObject
 {
     Q_OBJECT
 public:
@@ -38,8 +38,8 @@ public:
      *  @param selection このクラスが影響を与える選択範囲
      *  @param view このクラスが操作するビュー．
      */
-    NoteClickHandler(SequenceModel *model, EventSelection *selection, NoteView *view);
-    virtual ~NoteClickHandler();
+    NoteModifier(SequenceModel *model, EventSelection *selection, NoteView *view);
+    virtual ~NoteModifier();
 
     /**
      *  @brief ビューを交換します．すべての設定はリセットされます．
@@ -73,8 +73,8 @@ private:
 
     // モデルに変更を加えるメソッド
     void _selectNotes(QLabel *l , QMouseEvent *e);
-    void _updateLabels(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, const QPair<int, QRect> &));
-    void _updateNotes(const QPoint &diff, vsq::Event (NoteClickHandler::*updateFunction)(const QPoint &, const QPair<int, QRect> &));
+    void _updateLabels(const QPoint &diff, vsq::Event (NoteModifier::*updateFunction)(const QPoint &, const QPair<int, QRect> &));
+    void _updateNotes(const QPoint &diff, vsq::Event (NoteModifier::*updateFunction)(const QPoint &, const QPair<int, QRect> &));
 
     /** @brief マウスドラッグ判定用 */
     bool _mouseDragged;
@@ -96,7 +96,7 @@ private:
     EventSelection *_selection;
     QHash<QLabel *, QPair<int, QRect> > _labelLocations;
 
-    static vsq::Event (NoteClickHandler::* const _eventFunctions[])(const QPoint &, const QPair<int, QRect> &);
+    static vsq::Event (NoteModifier::* const _eventFunctions[])(const QPoint &, const QPair<int, QRect> &);
 };
 
-#endif // NOTECLICKHANDLER_H
+#endif // NOTEMODIFIER_H

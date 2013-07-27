@@ -42,7 +42,6 @@ private:
     void _onMouseReleased(QMouseEvent *e);
 
     void _updateSelection();
-    static bool _collides(const QRect &a, const QRect &b);
 
     EventSelection *_selection;
     NoteView *_view;
