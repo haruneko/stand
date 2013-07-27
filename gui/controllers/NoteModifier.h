@@ -26,7 +26,7 @@ class SequenceModel;
 class EventSelection;
 
 /**
- *  @brief 音符を表すラベル上で行われたマウスイベントを処理するクラス
+ *  @brief 音符をビュー上で操作し値を変更するクラス.
  */
 class NoteModifier : public QObject
 {
