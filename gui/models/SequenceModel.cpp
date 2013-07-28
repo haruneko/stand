@@ -42,7 +42,7 @@ const vsq::Event *SequenceModel::eventAt(int trackId, int eventId) const
     return track->events()->findFromId(eventId);
 }
 
-void SequenceModel::updateNotes(int trackId, const QList<vsq::Event> &changes)
+void SequenceModel::updateEvents(int trackId, const QList<vsq::Event> &changes)
 {
     QList<vsq::Event> before;
     foreach(const vsq::Event &e, changes)
@@ -56,6 +56,11 @@ void SequenceModel::updateNotes(int trackId, const QList<vsq::Event> &changes)
     NoteChangeAction *action = new NoteChangeAction(trackId, before, changes, this);
     connect(action, SIGNAL(updateSequence(int, QList<vsq::Event>&)), this, SLOT(apply(int, QList<vsq::Event>&)));
     _history.push(new NoteChangeAction(trackId, before, changes, this));
+}
+
+void SequenceModel::appendEvents(int trackId, const QList<vsq::Event> &events)
+{
+    // 実装はよ
 }
 
 void SequenceModel::apply(int trackId, QList<vsq::Event> &changes)

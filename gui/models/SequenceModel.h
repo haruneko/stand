@@ -51,8 +51,9 @@ public:
      *  @param [in] trackId トラック番号
      *  @param [in] changes 変更のあるノートとその情報
      */
-    void updateNotes(int trackId, const QList<vsq::Event> &changes);
+    void updateEvents(int trackId, const QList<vsq::Event> &changes);
 
+    void appendEvents(int trackId, const QList<vsq::Event> &events);
 signals:
     void dataChanged();
 public slots:

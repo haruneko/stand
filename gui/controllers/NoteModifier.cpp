@@ -207,7 +207,7 @@ void NoteModifier::_updateNotes(const QPoint &diff, vsq::Event (NoteModifier::*u
     {
         changes.append((this->*updateFunction)(diff, _labelLocations[l]));
     }
-    _model->updateNotes(trackId, changes);
+    _model->updateEvents(trackId, changes);
 }
 
 void NoteModifier::_selectNotes(QLabel *l, QMouseEvent *e)

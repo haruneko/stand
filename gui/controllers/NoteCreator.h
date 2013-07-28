@@ -13,10 +13,39 @@
 #ifndef NOTECREATOR_H
 #define NOTECREATOR_H
 
-class NoteCreator
+#include <Event.hpp>
+#include <QObject>
+
+class EventSelection;
+class NoteView;
+class SequenceModel;
+
+class QLabel;
+class QMouseEvent;
+
+class NoteCreator : public QObject
 {
+    Q_OBJECT
 public:
-    NoteCreator();
+    explicit NoteCreator(SequenceModel *model, NoteView *view);
+    virtual ~NoteCreator();
+
+public slots:
+    void setView(NoteView *view);
+    void setModel(SequenceModel *model);
+protected:
+    bool eventFilter(QObject *o, QEvent *e);
+private:
+    void _destroy();
+
+    void _onMouseClicked(QMouseEvent *e);
+    void _onMouseDragged(QMouseEvent *e);
+    void _onMouseReleased(QMouseEvent *e);
+    vsq::Event _eventFromTemporaryLabel();
+
+    NoteView *_view;
+    SequenceModel *_model;
+    QLabel *_temporaryNote;
 };
 
 #endif // NOTECREATOR_H
