@@ -82,7 +82,7 @@ void SequenceModel::onEventsAppended(int trackId, QList<vsq::Event> &notes)
 
 void SequenceModel::onEventsRemoved(int trackId, QList<vsq::Event> &notes)
 {
-    for(int i = notes.size() - 1; i >= 0; i--)
+    for(int i = 0; i < notes.size(); i++)
     {
         vsq::Event &e = notes[i];
         e.id = _sequence->track(trackId)->events()->add(e);
@@ -98,18 +98,12 @@ void SequenceModel::onEventsRemoved(int trackId, QList<vsq::Event> &notes)
     }
 }
 
-void SequenceModel::onEventsUpdated(int trackId, QList<vsq::Event> &changes)
+void SequenceModel::onEventsUpdated(int trackId, QList<vsq::Event> &notes)
 {
-    if(trackId < 0 || _sequence->tracks()->size() <= trackId)
+    for(int i = 0; i < notes.size(); i++)
     {
-        qWarning("SequenceModel::apply; tried to apply note changes in invalid track id: %d", trackId);
-        return;
-    }
-
-    vsq::Track *track = _sequence->track(trackId);
-    foreach(const vsq::Event &e, changes)
-    {
-        track->events()->setForId(e.id, e);
+        vsq::Event &e = notes[i];
+        _sequence->track(trackId)->events()->setForId(e.id, e);
     }
     emit dataChanged();
 }

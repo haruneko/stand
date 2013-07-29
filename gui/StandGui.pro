@@ -40,7 +40,8 @@ HEADERS += \
     controllers/NoteSelector.h \
     controllers/NoteCreator.h \
     controllers/NoteModifier.h \
-    models/actions/NoteAppendAction.h
+    models/actions/NoteAppendAction.h \
+    models/actions/NoteRemoveAction.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -67,5 +68,6 @@ SOURCES += \
     controllers/NoteSelector.cpp \
     controllers/NoteCreator.cpp \
     controllers/NoteModifier.cpp \
-    models/actions/NoteAppendAction.cpp
+    models/actions/NoteAppendAction.cpp \
+    models/actions/NoteRemoveAction.cpp
 
