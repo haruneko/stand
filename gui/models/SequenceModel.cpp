@@ -12,6 +12,7 @@
 
 #include "SequenceModel.h"
 
+#include "actions/NoteAppendAction.h"
 #include "actions/NoteChangeAction.h"
 
 SequenceModel::SequenceModel(vsq::Sequence *sequence, QObject *parent) :
@@ -53,17 +54,51 @@ void SequenceModel::updateEvents(int trackId, const QList<vsq::Event> &changes)
             before.append(counterpart->clone());
         }
     }
-    NoteChangeAction *action = new NoteChangeAction(trackId, before, changes, this);
-    connect(action, SIGNAL(updateSequence(int, QList<vsq::Event>&)), this, SLOT(apply(int, QList<vsq::Event>&)));
-    _history.push(new NoteChangeAction(trackId, before, changes, this));
+    NoteChangeAction *action = new NoteChangeAction(trackId, before, changes);
+    connect(action, SIGNAL(notesToUpdate(int, QList<vsq::Event>&)), this, SLOT(onEventsUpdated(int,QList<vsq::Event>&)));
+    _history.push(action);
 }
 
 void SequenceModel::appendEvents(int trackId, const QList<vsq::Event> &events)
 {
-    // 実装はよ
+    if(trackId < 0 || _sequence->tracks()->size() <= trackId)
+    {
+        return;
+    }
+    NoteAppendAction *action = new NoteAppendAction(trackId, events);
+    connect(action, SIGNAL(notesToAppend(int, QList<vsq::Event>&)), this, SLOT(onEventsAppended(int, QList<vsq::Event>&)));
+    connect(action, SIGNAL(notesToRemove(int, QList<vsq::Event>&)), this, SLOT(onEventsRemoved(int, QList<vsq::Event>&)));
+    _history.push(action);
 }
 
-void SequenceModel::apply(int trackId, QList<vsq::Event> &changes)
+void SequenceModel::onEventsAppended(int trackId, QList<vsq::Event> &notes)
+{
+    for(int i = 0; i < notes.size(); i++)
+    {
+        vsq::Event &e = notes[i];
+        e.id = _sequence->track(trackId)->events()->add(e);
+    }
+}
+
+void SequenceModel::onEventsRemoved(int trackId, QList<vsq::Event> &notes)
+{
+    for(int i = notes.size() - 1; i >= 0; i--)
+    {
+        vsq::Event &e = notes[i];
+        e.id = _sequence->track(trackId)->events()->add(e);
+        int index = _sequence->track(trackId)->events()->findIndexFromId(e.id);
+        if(index >= 0)
+        {
+            _sequence->track(trackId)->events()->removeAt(index);
+        }
+        else
+        {
+            qDebug("error in SequenceModel; Remove event @ negative index!");
+        }
+    }
+}
+
+void SequenceModel::onEventsUpdated(int trackId, QList<vsq::Event> &changes)
 {
     if(trackId < 0 || _sequence->tracks()->size() <= trackId)
     {

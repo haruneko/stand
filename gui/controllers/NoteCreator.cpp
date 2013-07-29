@@ -44,6 +44,10 @@ void NoteCreator::setView(NoteView *view)
 {
     _destroy();;
     _view = view;
+    if(!_view)
+    {
+        _view->installEventFilter(this);
+    }
 }
 
 void NoteCreator::setModel(SequenceModel *model)

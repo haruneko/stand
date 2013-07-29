@@ -66,10 +66,13 @@ void NoteModifier::setView(NoteView *view)
         return;
     }
     _destroy();
-    QList<QLabel *> labels = _view->labels();
-    foreach(QLabel *l, labels)
+    if(!_view)
     {
-        l->installEventFilter(this);
+        QList<QLabel *> labels = _view->labels();
+        foreach(QLabel *l, labels)
+        {
+            l->installEventFilter(this);
+        }
     }
 }
 

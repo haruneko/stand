@@ -53,6 +53,12 @@ public:
      */
     void updateEvents(int trackId, const QList<vsq::Event> &changes);
 
+    /**
+     *  @brief イベントを追加します.
+     *  @note 追加時の id の一意性はメソッド内で担保するため設定した値は反映されません.
+     *  @param [in] trackId トラック番号
+     *  @param [in] events 追加するイベント情報
+     */
     void appendEvents(int trackId, const QList<vsq::Event> &events);
 signals:
     void dataChanged();
@@ -65,7 +71,9 @@ private slots:
      *  @param [in] trackId トラック番号
      *  @param [in] changes 変更のあるノートとその情報
      */
-    void apply(int trackId, QList<vsq::Event> &changes);
+    void onEventsUpdated(int trackId, QList<vsq::Event> &changes);
+    void onEventsAppended(int trackId, QList<vsq::Event> &notes);
+    void onEventsRemoved(int trackId, QList<vsq::Event> &notes);
 
 private:
     vsq::Sequence *_sequence;
