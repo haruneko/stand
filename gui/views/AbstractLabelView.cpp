@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QPainter>
 
+#include "../models/SequenceModel.h"
 #include "AbstractLabelView.h"
 
 AbstractLabelView::AbstractLabelView(int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
@@ -96,7 +97,7 @@ void AbstractLabelView::clear()
 void AbstractLabelView::reset()
 {
     clear();
-    setMinimumWidth(xAt(sequence()->getTotalClocks()));
+    setMinimumWidth(xAt(model()->sequence()->getTotalClocks()));
 
     setLabels();
 

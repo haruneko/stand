@@ -14,6 +14,7 @@
 
 #include <Track.hpp>
 
+#include "../models/SequenceModel.h"
 #include "TrackSelectionView.h"
 
 TrackSelectionView::TrackSelectionView(int noteHeight, SequenceModel *model, QWidget *parent) :
@@ -94,7 +95,7 @@ void TrackSelectionView::trackChanged(int id)
 void TrackSelectionView::modelChanged()
 {
     _destroy();
-    const std::vector<vsq::Track> *tracks = sequence()->tracks();
+    const std::vector<vsq::Track> *tracks = model()->sequence()->tracks();
     for(int i = 0; i < tracks->size(); i++)
     {
         QLabel *l = new QLabel(tr((*tracks)[i].getName().data()), this);

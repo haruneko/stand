@@ -14,6 +14,7 @@
 
 #include <MeasureLineIterator.hpp>
 
+#include "../models/SequenceModel.h"
 #include "AbstractGridView.h"
 
 AbstractGridView::AbstractGridView(int divCount, int beatWidth, SequenceModel *model, QWidget *parent) :
@@ -37,13 +38,13 @@ void AbstractGridView::setDivCount(int divCount)
 
 vsq::tick_t AbstractGridView::tickAt(int x) const
 {
-    vsq::tick_t ret = x * sequence()->getTickPerQuarter() / _beatWidth - sequence()->getPreMeasureClocks();
+    vsq::tick_t ret = x * model()->sequence()->getTickPerQuarter() / _beatWidth - model()->sequence()->getPreMeasureClocks();
     return ret;
 }
 
 int AbstractGridView::xAt(vsq::tick_t tick) const
 {
-    int ret = (sequence()->getPreMeasureClocks() + tick) * _beatWidth / sequence()->getTickPerQuarter();
+    int ret = (model()->sequence()->getPreMeasureClocks() + tick) * _beatWidth / model()->sequence()->getTickPerQuarter();
     return ret;
 }
 
@@ -54,7 +55,7 @@ void AbstractGridView::beatWidthChanged(int w)
         return;
     }
     _beatWidth = w;
-    setMinimumWidth(xAt(sequence()->getTotalClocks()));
+    setMinimumWidth(xAt(model()->sequence()->getTotalClocks()));
     update();
 }
 
@@ -68,11 +69,11 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
     QPen old(painter->pen());
     paintBefore(rect, painter);
 
-    vsq::tick_t assistStep = sequence()->getTickPerQuarter() / _divCount;    // 補助線の間隔
+    vsq::tick_t assistStep = model()->sequence()->getTickPerQuarter() / _divCount;    // 補助線の間隔
     vsq::tick_t beginTick = tickAt(rect.left());
     vsq::tick_t endTick = tickAt(rect.right() + 1);
 
-    vsq::MeasureLineIterator it(&(sequence()->timesigList), assistStep);
+    vsq::MeasureLineIterator it(&(model()->sequence()->timesigList), assistStep);
     if(!it.hasNext())
     {
         return;
@@ -82,11 +83,11 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
     vsq::tick_t current = beginTick / assistStep * assistStep;
     while(current < ml.tick)
     {
-        if(current % (sequence()->getTickPerQuarter() * ml.numerator * 4 / ml.denominator) == 0)
+        if(current % (model()->sequence()->getTickPerQuarter() * ml.numerator * 4 / ml.denominator) == 0)
         {
             drawBarLine(current, painter);
         }
-        else if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        else if(current % (model()->sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
         {
             drawBeatLine(current, painter);
         }
@@ -117,11 +118,11 @@ void AbstractGridView::paint(const QRect &rect, QPainter *painter)
 
     while(current < endTick)
     {
-        if(current % (sequence()->getTickPerQuarter() * ml.numerator * 4 / ml.denominator) == 0)
+        if(current % (model()->sequence()->getTickPerQuarter() * ml.numerator * 4 / ml.denominator) == 0)
         {
             drawBarLine(current, painter);
         }
-        else if(current % (sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
+        else if(current % (model()->sequence()->getTickPerQuarter() * ml.numerator / ml.denominator) == 0)
         {
             drawBeatLine(current, painter);
         }

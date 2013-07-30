@@ -21,7 +21,6 @@ AbstractSequenceView::AbstractSequenceView(SequenceModel *model, QWidget *parent
     QWidget(parent)
 {
     _model = model;
-    _sequence = model->sequence();
     _parent = parent;
 }
 
@@ -32,7 +31,6 @@ void AbstractSequenceView::trackChanged(int /*id*/)
 void AbstractSequenceView::setModel(SequenceModel *model)
 {
     _model = model;
-    _sequence = model->sequence();
     modelChanged();
     update();
 }

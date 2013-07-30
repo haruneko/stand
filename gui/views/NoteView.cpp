@@ -16,6 +16,7 @@
 #include <QPalette>
 
 #include "../models/EventSelection.h"
+#include "../models/SequenceModel.h"
 
 #include "NoteView.h"
 
@@ -124,11 +125,11 @@ void NoteView::_reset()
 {
     _destroy();
 
-    _noteLabels.resize(sequence()->tracks()->size());
-    for(int i = 0; i < sequence()->tracks()->size(); i++)
+    _noteLabels.resize(model()->trackSize());
+    for(int i = 0; i < model()->trackSize(); i++)
     {
         QHash<int, QLabel *> &labels = _noteLabels[i];
-        const vsq::Track *track = sequence()->track(i);
+        const vsq::Track *track = model()->track(i);
         vsq::EventListIndexIterator it = track->getIndexIterator(vsq::EventListIndexIteratorKind::NOTE);
         while(it.hasNext())
         {
@@ -137,7 +138,7 @@ void NoteView::_reset()
             labels[e->id] = _labelFromEvent(e);
         }
     }
-    setMinimumWidth(xAt(sequence()->getTotalClocks()));
+    setMinimumWidth(xAt(model()->sequence()->getTotalClocks()));
 }
 
 void NoteView::setNoteLabelProperty(QLabel *l)

@@ -50,14 +50,6 @@ public:
     SequenceModel *model();
     const SequenceModel *model() const;
 
-    /**
-     *  @brief  現在表示しているシーケンスへのポインタを返します．
-     */
-    const vsq::Sequence *sequence() const
-    {
-        return _sequence;
-    }
-
 protected:
     // @Override
     virtual void paintEvent(QPaintEvent *e);
@@ -101,7 +93,6 @@ public slots:
     virtual void noteHeightChanged(int h) = 0;
 private:
     SequenceModel *_model;          //! @brief 現在保持しているモデル
-    const vsq::Sequence *_sequence; //! @brief 現在表示しているシーケンス
 
     QWidget *_parent;               //! @brief 親Widget
 };

@@ -27,6 +27,8 @@ public:
     explicit SequenceModel(vsq::Sequence *sequence, QObject *parent = 0);
 
     const vsq::Sequence *sequence() const;
+    const vsq::Track *track(int trackId) const;
+    int trackSize() const;
 
     /**
      *  @brief スナップされた位置を返します．

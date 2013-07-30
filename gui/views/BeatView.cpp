@@ -14,6 +14,7 @@
 #include <QPainter>
 
 #include "BeatView.h"
+#include "../models/SequenceModel.h"
 
 BeatView::BeatView(int divCount, int noteHeight, int beatWidth, SequenceModel *model, QWidget *parent) :
     AbstractLabelView(divCount, noteHeight, beatWidth, model, parent)
@@ -23,7 +24,7 @@ BeatView::BeatView(int divCount, int noteHeight, int beatWidth, SequenceModel *m
 
 void BeatView::setLabels()
 {
-    const vsq::TimesigList &timesigs = sequence()->timesigList;
+    const vsq::TimesigList &timesigs = model()->sequence()->timesigList;
     for(int i = 0; i < timesigs.size(); i++)
     {
         const vsq::Timesig &t = timesigs.get(i);

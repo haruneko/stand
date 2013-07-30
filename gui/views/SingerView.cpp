@@ -14,6 +14,7 @@
 #include <QLabel>
 
 #include "../models/EventSelection.h"
+#include "../models/SequenceModel.h"
 
 #include "SingerView.h"
 
@@ -26,12 +27,12 @@ SingerView::SingerView(int trackId, int divCount, int noteHeight, int beatWidth,
 
 void SingerView::setLabels()
 {
-    if(_trackId < 0 || sequence()->tracks()->size() <= _trackId)
+    if(_trackId < 0 || model()->trackSize() <= _trackId)
     {
         return;
     }
     _labels.clear();
-    const vsq::Track *track = sequence()->track(_trackId);
+    const vsq::Track *track = model()->track(_trackId);
     vsq::EventListIndexIterator it = track->getIndexIterator(vsq::EventListIndexIteratorKind::SINGER);
     while(it.hasNext())
     {

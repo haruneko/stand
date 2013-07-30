@@ -28,6 +28,20 @@ const vsq::Sequence *SequenceModel::sequence() const
     return _sequence;
 }
 
+const vsq::Track *SequenceModel::track(int trackId) const
+{
+    if(trackId < 0 || _sequence->tracks()->size() <= trackId)
+    {
+        return NULL;
+    }
+    return _sequence->track(trackId);
+}
+
+int SequenceModel::trackSize() const
+{
+    return _sequence->tracks()->size();
+}
+
 int SequenceModel::snappedTick(int tick) const
 {
     return (int)((double)tick / noteSnapTick + 0.5) * noteSnapTick;

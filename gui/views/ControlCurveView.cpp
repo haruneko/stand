@@ -17,6 +17,7 @@
 #include <Track.hpp>
 
 #include "../models/ControlCurveSelection.h"
+#include "../models/SequenceModel.h"
 
 #include "AbstractControlPainter.h"
 #include "ControlCurvePainter.h"
@@ -49,11 +50,11 @@ void ControlCurveView::_destroy()
 void ControlCurveView::_reset()
 {
     _destroy();
-    if(_trackId < 0 || sequence()->tracks()->size() <= _trackId)
+    const vsq::Track *track = model()->track(_trackId);
+    if(!track)
     {
         return;
     }
-    const vsq::Track *track = sequence()->track(_trackId);
     for(QHash<QString, std::string>::iterator it = _controlNames.begin(); it != _controlNames.end(); it++)
     {
         const vsq::BPList *control = track->curve(it.value());
