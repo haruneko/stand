@@ -52,4 +52,9 @@ double NoteAt(double frequency);
  */
 QColor mixColor(const QColor &a, const QColor &b, double r);
 
+/*!
+ *  @brief 矩形同士が衝突しているか判定します.
+ */
+bool collides(const QRect &a, const QRect &b);
+
 #endif // STAND_GUI_UTILITY_H

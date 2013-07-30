@@ -48,9 +48,18 @@ public:
 
     /**
      *  @brief 音符情報を変更します.
+     *  @param [in] trackId トラック番号
+     *  @param [in] changes 変更のあるノートとその情報
      */
-    void updateNotes(int trackId, const QList<vsq::Event> &changes);
+    void updateEvents(int trackId, const QList<vsq::Event> &changes);
 
+    /**
+     *  @brief イベントを追加します.
+     *  @note 追加時の id の一意性はメソッド内で担保するため設定した値は反映されません.
+     *  @param [in] trackId トラック番号
+     *  @param [in] events 追加するイベント情報
+     */
+    void appendEvents(int trackId, const QList<vsq::Event> &events);
 signals:
     void dataChanged();
 public slots:
@@ -58,10 +67,13 @@ public slots:
 private slots:
     /**
      *  @brief 実際に値を変更するスロットです. Action クラスの SIGNAL と接続されます.
+     *         undo コマンドから呼び出され実際に値を変更しますが, Action クラス以外から呼び出さないで下さい.
      *  @param [in] trackId トラック番号
-     *  @param [in] changes 変更のあるノートとその情報
+     *  @param [in] notes 変更のあるノートとその情報
      */
-    void apply(int trackId, QList<vsq::Event> &changes);
+    void onEventsUpdated(int trackId, QList<vsq::Event> &notes);
+    void onEventsAppended(int trackId, QList<vsq::Event> &notes);
+    void onEventsRemoved(int trackId, QList<vsq::Event> &notes);
 
 private:
     vsq::Sequence *_sequence;

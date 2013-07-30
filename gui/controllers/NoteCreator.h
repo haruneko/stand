@@ -1,8 +1,8 @@
 /*
  *
- *    NoteSelector.h
+ *    NoteCreator.h
  *                                    (c) HAL@shurabaP
- *                                        2013/07/26
+ *                                        2013/07/28
  *
  * These files are distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -10,43 +10,42 @@
  *
  */
 
-#ifndef NOTESELECTOR_H
-#define NOTESELECTOR_H
+#ifndef NOTECREATOR_H
+#define NOTECREATOR_H
 
-#include <QLabel>
+#include <Event.hpp>
 #include <QObject>
 
 class EventSelection;
 class NoteView;
+class SequenceModel;
+
+class QLabel;
 class QMouseEvent;
 
-class NoteSelector : public QObject
+class NoteCreator : public QObject
 {
     Q_OBJECT
 public:
-    explicit NoteSelector(EventSelection *selection, NoteView *view);
-    virtual ~NoteSelector();
-
-    QColor SelectAreaColor;
+    explicit NoteCreator(SequenceModel *model, NoteView *view);
+    virtual ~NoteCreator();
 
 public slots:
     void setView(NoteView *view);
-    void setSelection(EventSelection *selection);
+    void setModel(SequenceModel *model);
 protected:
     bool eventFilter(QObject *o, QEvent *e);
 private:
     void _destroy();
 
     void _onMouseClicked(QMouseEvent *e);
-    void _onMouseMoved(QMouseEvent *e);
+    void _onMouseDragged(QMouseEvent *e);
     void _onMouseReleased(QMouseEvent *e);
+    vsq::Event _eventFromTemporaryLabel();
 
-    void _updateSelection();
-
-    EventSelection *_selection;
     NoteView *_view;
-    QLabel *_rect;
-    QList<QPair<int, QLabel *> > _viewData;
+    SequenceModel *_model;
+    QLabel *_temporaryNote;
 };
 
-#endif // NOTESELECTOR_H
+#endif // NOTECREATOR_H

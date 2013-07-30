@@ -26,12 +26,12 @@ class NoteChangeAction : public QObject, public QUndoCommand
 {
     Q_OBJECT
 public:
-    explicit NoteChangeAction(int trackId, const QList<vsq::Event> &before, const QList<vsq::Event> &after, SequenceModel *model, QUndoCommand *parent = 0);
+    explicit NoteChangeAction(int trackId, const QList<vsq::Event> &before, const QList<vsq::Event> &after, QUndoCommand *parent = 0);
 
     void undo();
     void redo();
 signals:
-    void updateSequence(int, QList<vsq::Event> &);
+    void notesToUpdate(int, QList<vsq::Event> &);
 
 private:
     int _trackId;

@@ -14,6 +14,7 @@
 #include <QMouseEvent>
 
 #include "../models/EventSelection.h"
+#include "../utility/Utility.h"
 #include "../views/NoteView.h"
 
 #include "NoteSelector.h"
@@ -111,7 +112,7 @@ void NoteSelector::_updateSelection()
     QList<int> ids;
     foreach(auto val, _viewData)
     {
-        if(_collides(_rect->rect(), val.second->rect()))
+        if(collides(_rect->rect(), val.second->rect()))
         {
             ids.append(val.first);
         }
@@ -120,9 +121,4 @@ void NoteSelector::_updateSelection()
     {
         _selection->setIds(ids);
     }
-}
-
-bool NoteSelector::_collides(const QRect &a, const QRect &b)
-{
-    return a.left() < b.right() && a.top() < b.bottom() && b.left() < a.right() && b.top() < a.bottom();
 }

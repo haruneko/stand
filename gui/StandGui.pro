@@ -35,10 +35,13 @@ HEADERS += \
     controllers/ControlCurveSelector.h \
     views/ControlCurveNameView.h \
     models/SequenceModel.h \
-    controllers/NoteClickHandler.h \
     models/EventSelection.h \
     models/actions/NoteChangeAction.h \
-    controllers/NoteSelector.h
+    controllers/NoteSelector.h \
+    controllers/NoteCreator.h \
+    controllers/NoteModifier.h \
+    models/actions/NoteAppendAction.h \
+    models/actions/NoteRemoveAction.h
 
 SOURCES += \
     views/AbstractSequenceView.cpp \
@@ -60,8 +63,11 @@ SOURCES += \
     controllers/ControlCurveSelector.cpp \
     views/ControlCurveNameView.cpp \
     models/SequenceModel.cpp \
-    controllers/NoteClickHandler.cpp \
     models/EventSelection.cpp \
     models/actions/NoteChangeAction.cpp \
-    controllers/NoteSelector.cpp
+    controllers/NoteSelector.cpp \
+    controllers/NoteCreator.cpp \
+    controllers/NoteModifier.cpp \
+    models/actions/NoteAppendAction.cpp \
+    models/actions/NoteRemoveAction.cpp
 

@@ -140,18 +140,8 @@ void NoteView::_reset()
     setMinimumWidth(xAt(sequence()->getTotalClocks()));
 }
 
-QLabel *NoteView::_labelFromEvent(const vsq::Event *e)
+void NoteView::setNoteLabelProperty(QLabel *l)
 {
-    // ラベルの表示文章計算
-    const vsq::Lyric &lyric = e->lyricHandle.getLyricAt(0);
-    std::string text = lyric.phrase + " [" + lyric.getPhoneticSymbol() + "]";
-    QString qtext(tr(text.data()));
-
-    QLabel *l = new QLabel(qtext, this);
-    int x = xAt(e->clock);
-    int w = xAt(e->clock + e->getLength()) - x;
-    int y = yAt(e->note);
-    l->setGeometry(x, y, w, _noteHeight);
     l->setFrameStyle(QFrame::Box);
     l->setLineWidth(1);
 
@@ -166,6 +156,22 @@ QLabel *NoteView::_labelFromEvent(const vsq::Event *e)
     l->setAutoFillBackground(true);
 
     l->setWordWrap(true);
+}
+
+QLabel *NoteView::_labelFromEvent(const vsq::Event *e)
+{
+    // ラベルの表示文章計算
+    const vsq::Lyric &lyric = e->lyricHandle.getLyricAt(0);
+    std::string text = lyric.phrase + " [" + lyric.getPhoneticSymbol() + "]";
+    QString qtext(tr(text.data()));
+
+    QLabel *l = new QLabel(qtext, this);
+    int x = xAt(e->clock);
+    int w = xAt(e->clock + e->getLength()) - x;
+    int y = yAt(e->note);
+    l->setGeometry(x, y, w, _noteHeight);
+
+    setNoteLabelProperty(l);
 
     return l;
 }
@@ -184,8 +190,14 @@ void NoteView::trackChanged(int id)
     }
     foreach(QLabel *label, _noteLabels[id])
     {
-        label->hide();
+        label->show();
     }
+    _trackId = id;
+}
+
+int NoteView::currentTrackId() const
+{
+    return _trackId;
 }
 
 void NoteView::paintBefore(const QRect &rect, QPainter *painter)

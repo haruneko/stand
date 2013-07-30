@@ -14,23 +14,22 @@
 
 #include "NoteChangeAction.h"
 
-NoteChangeAction::NoteChangeAction(int trackId, const QList<vsq::Event> &before, const QList<vsq::Event> &after, SequenceModel *model, QUndoCommand *parent) :
-    QUndoCommand(parent), QObject(model)
+NoteChangeAction::NoteChangeAction(int trackId, const QList<vsq::Event> &before, const QList<vsq::Event> &after, QUndoCommand *parent) :
+    QUndoCommand(parent)
 {
     _trackId = trackId;
     _before = before;
     _after = after;
-    _model = model;
 }
 
 void NoteChangeAction::undo()
 {
     QUndoCommand::undo();
-    emit updateSequence(_trackId, _before);
+    emit notesToUpdate(_trackId, _before);
 }
 
 void NoteChangeAction::redo()
 {
     QUndoCommand::redo();
-    emit updateSequence(_trackId, _before);
+    emit notesToUpdate(_trackId, _before);
 }

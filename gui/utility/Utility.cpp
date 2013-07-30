@@ -95,3 +95,8 @@ QColor mixColor(const QColor &a, const QColor &b, double r)
     int alpha = a.alpha() * r + b.alpha() * _r;
     return QColor(red, green, blue, alpha);
 }
+
+bool collides(const QRect &a, const QRect &b)
+{
+    return a.left() < b.right() && a.top() < b.bottom() && b.left() < a.right() && b.top() < a.bottom();
+}
