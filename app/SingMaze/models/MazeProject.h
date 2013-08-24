@@ -18,7 +18,7 @@
 #include "TimeMapModel.h"
 
 /**
- * @brief SingMaze 用プロジェクトを表すクラス.
+ * @brief Represents a project of SingMaze.
  */
 class MazeProject
 {

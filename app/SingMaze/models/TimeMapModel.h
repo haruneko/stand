@@ -17,13 +17,32 @@
 #include <QPair>
 
 /**
- *  @brief 声のモーフィング時の時間軸対応を表すクラスです.
+ *  @brief Represents correspondence between voice A and voice B.
+ *         `TimeMapModel` contains ordered pair of time correspondence.
+ *         It supplies the correspondent time of the specific time
+ *         through the function `correspondenceAt(msec)`.
+ *  @author HAL@shurabaP
  */
 class TimeMapModel
 {
 public:
+    /**
+     *  @brief Appends the correspondence between the specific times.
+     *  @param [in] val `val` contains the time of voice A as `val.first`
+     *                  and the one of voice B as `val.second`
+     *  @return Whether `append` succeeds or not.
+     *          `append` fails when the line between `first` and `second`
+     *          crosses any lines that the pair in this class makes.
+     */
     bool append(const QPair<double, double> &val);
 
+    /**
+     *  @brief Calculates the coresspondent time in voice A and voice B.
+     *  @param [in] ratio must be in the range [-1.0, 1.0].
+     *                    The larger, the superior voice A is.
+     *  @return Correspondence times of voice A and voice B.
+     */
+    QPair<double, double> correspondenceAt(double ms, double ratio);
 private:
     QList<QPair<double, double> > _correspondence;
 };
