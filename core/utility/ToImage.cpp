@@ -187,14 +187,20 @@ QImage ToImage::fromWaveform(const double *wave, int length, int width, int heig
     int mid = (height + 1) / 2;
     _drawLine(ret, QPoint(0, mid), QPoint(width, mid), lineColor);
 
-    double previous = height / 2.0 - wave[0] / maxValue * height / 2.0;
-
-    for(int i = 1; i < length; i++)
+    for(int x = 0; x < width; x++)
     {
-        double value = wave[i] / maxValue;
-        double current = height / 2.0 - value * height / 2;
-        _drawLine(ret, QPoint(i - 1, previous), QPoint(i, current), lineColor);
-        previous = current;
+        int t_begin = length * x / width;
+        int t_end = length * (x + 1) / width;
+        double min_value = wave[t_begin];
+        double max_value = wave[t_begin];
+        for(int t = t_begin + 1; t < t_end; t++)
+        {
+            min_value = qMin(min_value, wave[t]);
+            max_value = qMax(max_value, wave[t]);
+        }
+        min_value /= maxValue;
+        max_value /= maxValue;
+        _drawLine(ret, QPoint(x, (height - min_value * height) / 2), QPoint(x, (height - max_value * height) / 2), lineColor);
     }
 
     return ret;
