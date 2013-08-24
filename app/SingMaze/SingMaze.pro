@@ -21,8 +21,12 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp\
-        SingMazeMain.cpp
+        SingMazeMain.cpp \
+    models/MazeProject.cpp \
+    models/TimeMapModel.cpp
 
-HEADERS  += SingMazeMain.h
+HEADERS  += SingMazeMain.h \
+    models/MazeProject.h \
+    models/TimeMapModel.h
 
 FORMS    += SingMazeMain.ui
