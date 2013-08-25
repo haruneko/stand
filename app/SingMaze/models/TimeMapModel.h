@@ -37,6 +37,14 @@ public:
     bool append(const QPair<double, double> &val);
 
     /**
+     *  @brief Removes the correspondence.
+     *         This method will remove if this class has exactly the same data as `val`,
+     *         otherwise do nothing.
+     *  @param [in] val The data to be removed.
+     */
+    void remove(const QPair<double, double> &val);
+
+    /**
      *  @brief Calculates the coresspondent time in voice A and voice B.
      *  @param [in] ratio must be in the range [-1.0, 1.0].
      *                    The larger, the superior voice A is.
@@ -44,6 +52,10 @@ public:
      */
     QPair<double, double> correspondenceAt(double ms, double ratio);
 private:
+    bool _isLeft(double ms, double ratio, const QPair<double, double> &line);
+    bool _isRight(double ms, double ratio, const QPair<double, double> &line);
+    double _msAt(double ratio, const QPair<double, double> &line);
+    QPair<double, double> _correspondenceAt(double ms, double ratio, const QPair<double, double> &left, const QPair<double, double> &right);
     QList<QPair<double, double> > _correspondence;
 };
 

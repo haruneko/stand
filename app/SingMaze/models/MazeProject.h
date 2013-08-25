@@ -13,7 +13,7 @@
 #ifndef MAZEPROJECT_H
 #define MAZEPROJECT_H
 
-#include <QDir>
+#include <QFileInfo>
 #include "dsp/Envelope.h"
 #include "TimeMapModel.h"
 
@@ -26,10 +26,9 @@ public:
     MazeProject();
     ~MazeProject();
 
-    QDir wave1Path;
-    QDir wave2Path;
-    double msFramePeriod;
-    Envelope morphRatio;
+    QFileInfo wave1Path;
+    QFileInfo wave2Path;
+    Envelope morphRatioContour;
     TimeMapModel timeMap;
 
     bool read(const QString &path);

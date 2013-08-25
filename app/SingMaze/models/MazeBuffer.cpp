@@ -12,23 +12,25 @@
 
 #include "MazeBuffer.h"
 
-MazeBuffer::MazeBuffer(const QString &wave1Path, const QString &wave2Path)
-{
-    setWave1(wave1Path);
-    setWave2(wave2Path);
-}
+#include "MazeProject.h"
 
-void MazeBuffer::setWave1(const QString &path)
+MazeBuffer::MazeBuffer(const MazeProject &project)
 {
-    _setWave(_wave1, path);
-}
-
-void MazeBuffer::setWave2(const QString &path)
-{
-    _setWave(_wave2, path);
+    _setWave(_wave1, project.wave1Path.path());
+    _setWave(_wave2, project.wave2Path.path());
 }
 
 void MazeBuffer::_setWave(AudioBuffer &wave, const QString &path)
 {
     wave.read(path);
+}
+
+const AudioBuffer &MazeBuffer::wave1() const
+{
+    return _wave1;
+}
+
+const AudioBuffer &MazeBuffer::wave2() const
+{
+    return _wave2;
 }

@@ -15,13 +15,19 @@
 
 #include "dsp/AudioBuffer.h"
 
+class MazeProject;
+
+/**
+ *  @brief Is a buffer for MazeProject.
+ *         It contains wave buffer.
+ */
 class MazeBuffer
 {
 public:
-    MazeBuffer(const QString &wave1Path, const QString &wave2Path);
+    MazeBuffer(const MazeProject &project);
 
-    void setWave1(const QString &path);
-    void setWave2(const QString &path);
+    const AudioBuffer &wave1() const;
+    const AudioBuffer &wave2() const;
 private:
     static void _setWave(AudioBuffer &wave, const QString &path);
     AudioBuffer _wave1;
