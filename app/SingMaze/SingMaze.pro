@@ -26,13 +26,16 @@ SOURCES += main.cpp\
     models/TimeMapModel.cpp \
     models/MazeBuffer.cpp \
     views/MazeView.cpp \
-    models/ContourModel.cpp
+    models/ContourModel.cpp \
+    views/ProjectDialog.cpp
 
 HEADERS  += SingMazeMain.h \
     models/MazeProject.h \
     models/TimeMapModel.h \
     models/MazeBuffer.h \
     views/MazeView.h \
-    models/ContourModel.h
+    models/ContourModel.h \
+    views/ProjectDialog.h
 
-FORMS    += SingMazeMain.ui
+FORMS    += SingMazeMain.ui \
+    views/ProjectDialog.ui

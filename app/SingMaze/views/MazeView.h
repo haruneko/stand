@@ -18,6 +18,10 @@
 class TimeMapModel;
 class ContourModel;
 
+/**
+ *  Visualizes `TimeMapModel` and `ContourModel`.
+ *  @author HAL@shurabaP
+ */
 class MazeView : public QWidget
 {
     Q_OBJECT
