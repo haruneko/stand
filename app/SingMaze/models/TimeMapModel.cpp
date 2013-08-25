@@ -12,6 +12,12 @@
 
 #include "TimeMapModel.h"
 
+TimeMapModel::TimeMapModel(QObject *parent) :
+    QObject(parent)
+{
+
+}
+
 bool TimeMapModel::append(const QPair<double, double> &val)
 {
     for(int i = 0; i < _correspondence.length() - 1; i++)
@@ -27,11 +33,13 @@ bool TimeMapModel::append(const QPair<double, double> &val)
         }
     }
     _correspondence.append(val);
+    emit dataChanged();
     return true;
 }
 
 void TimeMapModel::remove(const QPair<double, double> &val)
 {
+    emit dataChanged();
     _correspondence.removeOne(val);
 }
 

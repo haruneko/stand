@@ -13,6 +13,7 @@
 #ifndef TIMEMAPMODEL_H
 #define TIMEMAPMODEL_H
 
+#include <QObject>
 #include <QList>
 #include <QPair>
 
@@ -23,9 +24,11 @@
  *         through the function `correspondenceAt(msec)`.
  *  @author HAL@shurabaP
  */
-class TimeMapModel
+class TimeMapModel : public QObject
 {
+    Q_OBJECT
 public:
+    explicit TimeMapModel(QObject *parent = 0);
     /**
      *  @brief Appends the correspondence between the specific times.
      *  @param [in] val `val` contains the time of voice A as `val.first`
@@ -52,7 +55,16 @@ public:
      */
     QPair<double, double> correspondenceAt(double ms, double ratio) const;
 
+    /**
+     *  @brief Returns const map of Correspondences.
+     */
     const QList<QPair<double, double> > &map() const;
+
+signals:
+    /**
+     *  @brief Is emited when inner data has changed.
+     */
+    void dataChanged();
 private:
     static bool _isLeft(double ms, double ratio, const QPair<double, double> &line);
     static bool _isRight(double ms, double ratio, const QPair<double, double> &line);

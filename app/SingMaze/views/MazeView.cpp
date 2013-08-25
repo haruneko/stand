@@ -13,12 +13,13 @@
 #include <QPaintEvent>
 #include <QPainter>
 
-#include "../models/TimeMapModel.h"
 #include "dsp/Envelope.h"
+#include "../models/TimeMapModel.h"
+#include "../models/ContourModel.h"
 
 #include "MazeView.h"
 
-MazeView::MazeView(TimeMapModel *timeMap, Envelope *contour, int secWidth, QWidget *parent) :
+MazeView::MazeView(TimeMapModel *timeMap, ContourModel *contour, int secWidth, QWidget *parent) :
     QWidget(parent)
 {
     _timeMap = NULL;
@@ -30,7 +31,31 @@ MazeView::MazeView(TimeMapModel *timeMap, Envelope *contour, int secWidth, QWidg
 
 void MazeView::setTimeMap(TimeMapModel *timeMap)
 {
+    if(_timeMap)
+    {
+        disconnect(_timeMap, SIGNAL(dataChanged()), this, SLOT(update()));
+    }
     _timeMap = timeMap;
+    if(_timeMap)
+    {
+        connect(_timeMap, SIGNAL(dataChanged()), this, SLOT(update()));
+    }
+    update();
+}
+
+void MazeView::setContour(ContourModel *contour)
+{
+    if(_contour)
+    {
+        disconnect(_contour, SIGNAL(dataChanged(int,int)), this, SLOT(onContourChanged(int,int)));
+    }
+    int w = xAt(contour->data()->msLength());
+    resize(w, height());
+    _contour = contour;
+    if(_contour)
+    {
+       connect(_contour, SIGNAL(dataChanged(int,int)), this, SLOT(onContourChanged(int,int)));
+    }
     update();
 }
 
@@ -54,12 +79,15 @@ double MazeView::ratioAt(int y) const
     return 1.0 - 2.0 * (double)y / (double)height();
 }
 
-void MazeView::setContour(Envelope *contour)
+void MazeView::onContourChanged(int begin, int end)
 {
-    int w = xAt(contour->msLength());
-    resize(w, height());
-    _contour = contour;
-    update();
+    if(begin > end)
+    {
+        qSwap(begin, end);
+    }
+    int xBegin = xAt(_contour->data()->msFramePeriod() * begin);
+    int xEnd = xAt(_contour->data()->msFramePeriod() * end);
+    update(QRect(xBegin, 0, xEnd, height()));
 }
 
 void MazeView::paintEvent(QPaintEvent *e)
@@ -67,10 +95,10 @@ void MazeView::paintEvent(QPaintEvent *e)
     QPainter p(this);
     p.fillRect(e->rect(), this->palette().background());
     p.setBrush(this->palette().foreground());
-    double previousY = yAt(_contour->value(msAt(e->rect().left())));
+    double previousY = yAt(_contour->data()->value(msAt(e->rect().left())));
     for(int x = e->rect().left() + 1; x <= e->rect().right(); x++)
     {
-        double y = yAt(_contour->value(msAt(x)));
+        double y = yAt(_contour->data()->value(msAt(x)));
         p.drawLine(x - 1, previousY, x, y);
         previousY = y;
     }
