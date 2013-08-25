@@ -25,10 +25,12 @@ class MazeProject;
 class MazeBuffer
 {
 public:
-    MazeBuffer(const MazeProject &project);
+    MazeBuffer(const QString &path1, const QString &path2);
 
     const AudioBuffer &wave1() const;
     const AudioBuffer &wave2() const;
+
+    bool isValid() const;
 private:
     static void _setWave(AudioBuffer &wave, const QString &path);
     AudioBuffer _wave1;

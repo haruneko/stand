@@ -22,6 +22,11 @@ namespace Ui {
 class ProjectDialog;
 }
 
+/**
+ *  @brief Receives a project setting from a user.
+ *         This class returns two waves' paths.
+ *  @author HAL@shurabaP
+ */
 class ProjectDialog : public QDialog
 {
     Q_OBJECT
@@ -30,6 +35,9 @@ public:
     explicit ProjectDialog(QWidget *parent = 0);
     ~ProjectDialog();
 
+    /**
+     *  @brief Returns two waves' paths.
+     */
     QPair<QString, QString> value() const;
 protected:
     bool eventFilter(QObject *o, QEvent *e);

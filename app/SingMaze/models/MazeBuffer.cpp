@@ -14,10 +14,10 @@
 
 #include "MazeProject.h"
 
-MazeBuffer::MazeBuffer(const MazeProject &project)
+MazeBuffer::MazeBuffer(const QString &path1, const QString &path2)
 {
-    _setWave(_wave1, project.wave1Path.path());
-    _setWave(_wave2, project.wave2Path.path());
+    _setWave(_wave1, path1);
+    _setWave(_wave2, path2);
 }
 
 void MazeBuffer::_setWave(AudioBuffer &wave, const QString &path)
@@ -33,4 +33,9 @@ const AudioBuffer &MazeBuffer::wave1() const
 const AudioBuffer &MazeBuffer::wave2() const
 {
     return _wave2;
+}
+
+bool MazeBuffer::isValid() const
+{
+    return (!_wave1.isEmpty() && !_wave2.isEmpty());
 }
