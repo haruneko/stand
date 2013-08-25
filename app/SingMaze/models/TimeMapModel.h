@@ -50,12 +50,14 @@ public:
      *                    The larger, the superior voice A is.
      *  @return Correspondence times of voice A and voice B.
      */
-    QPair<double, double> correspondenceAt(double ms, double ratio);
+    QPair<double, double> correspondenceAt(double ms, double ratio) const;
+
+    const QList<QPair<double, double> > &map() const;
 private:
-    bool _isLeft(double ms, double ratio, const QPair<double, double> &line);
-    bool _isRight(double ms, double ratio, const QPair<double, double> &line);
-    double _msAt(double ratio, const QPair<double, double> &line);
-    QPair<double, double> _correspondenceAt(double ms, double ratio, const QPair<double, double> &left, const QPair<double, double> &right);
+    static bool _isLeft(double ms, double ratio, const QPair<double, double> &line);
+    static bool _isRight(double ms, double ratio, const QPair<double, double> &line);
+    static double _msAt(double ratio, const QPair<double, double> &line);
+    static QPair<double, double> _correspondenceAt(double ms, double ratio, const QPair<double, double> &left, const QPair<double, double> &right);
     QList<QPair<double, double> > _correspondence;
 };
 

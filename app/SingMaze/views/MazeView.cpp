@@ -66,9 +66,18 @@ void MazeView::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
     p.fillRect(e->rect(), this->palette().background());
+    p.setBrush(this->palette().foreground());
     double previousY = yAt(_contour->value(msAt(e->rect().left())));
     for(int x = e->rect().left() + 1; x <= e->rect().right(); x++)
     {
-        // TODO: paint algorhythm here.
+        double y = yAt(_contour->value(msAt(x)));
+        p.drawLine(x - 1, previousY, x, y);
+        previousY = y;
+    }
+    // TODO : change brush here
+    for(int i = 0; i < _timeMap->map().size(); i++)
+    {
+        const QPair<double, double> &pair = _timeMap->map().at(i);
+        p.drawLine(xAt(pair.first), 0, xAt(pair.second), height());
     }
 }

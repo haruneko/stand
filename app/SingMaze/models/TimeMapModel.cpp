@@ -30,7 +30,12 @@ bool TimeMapModel::append(const QPair<double, double> &val)
     return true;
 }
 
-QPair<double, double> TimeMapModel::correspondenceAt(double ms, double ratio)
+void TimeMapModel::remove(const QPair<double, double> &val)
+{
+    _correspondence.removeOne(val);
+}
+
+QPair<double, double> TimeMapModel::correspondenceAt(double ms, double ratio) const
 {
     if(_correspondence.empty())
     {
@@ -38,12 +43,17 @@ QPair<double, double> TimeMapModel::correspondenceAt(double ms, double ratio)
     }
     for(int i = 1; i < _correspondence.length(); i++)
     {
-        if(_isRight(ms, ratio, _correspondence[i-1]) && _isLeft(ms, ratio, _correspondence[i]))
+        if(_isRight(ms, ratio, _correspondence.at(i - 1)) && _isLeft(ms, ratio, _correspondence.at(i)))
         {
-            return _correspondenceAt(ms, ratio, _correspondence[i-1], _correspondence[i]);
+            return _correspondenceAt(ms, ratio, _correspondence.at(i - 1), _correspondence.at(i));
         }
     }
     return _correspondenceAt(ms, ratio, _correspondence.last(), _correspondence.last());
+}
+
+const QList<QPair<double, double> > &TimeMapModel::map() const
+{
+    return _correspondence;
 }
 
 bool TimeMapModel::_isLeft(double ms, double ratio, const QPair<double, double> &line)
