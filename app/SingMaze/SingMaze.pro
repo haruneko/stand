@@ -24,11 +24,13 @@ SOURCES += main.cpp\
         SingMazeMain.cpp \
     models/MazeProject.cpp \
     models/TimeMapModel.cpp \
-    models/MazeBuffer.cpp
+    models/MazeBuffer.cpp \
+    views/MazeView.cpp
 
 HEADERS  += SingMazeMain.h \
     models/MazeProject.h \
     models/TimeMapModel.h \
-    models/MazeBuffer.h
+    models/MazeBuffer.h \
+    views/MazeView.h
 
 FORMS    += SingMazeMain.ui

@@ -19,7 +19,8 @@ class MazeProject;
 
 /**
  *  @brief Is a buffer for MazeProject.
- *         It contains wave buffer.
+ *         This buffer is a data that is not saved with a project file,
+ *         but neccessary one for Maze to run, such as wave buffer.
  */
 class MazeBuffer
 {
