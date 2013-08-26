@@ -19,12 +19,12 @@
 
 #include "MazeView.h"
 
-MazeView::MazeView(TimeMapModel *timeMap, ContourModel *contour, int secWidth, QWidget *parent) :
+MazeView::MazeView(TimeMapModel *timeMap, ContourModel *contour, double widthPerSecond, QWidget *parent) :
     QWidget(parent)
 {
     _timeMap = NULL;
     _contour = NULL;
-    _secWidth = secWidth;
+    _widthPerSecond = widthPerSecond;
     setTimeMap(timeMap);
     setContour(contour);
 }
@@ -49,9 +49,8 @@ void MazeView::setContour(ContourModel *contour)
     {
         disconnect(_contour, SIGNAL(dataChanged(int,int)), this, SLOT(onContourChanged(int,int)));
     }
-    int w = xAt(contour->data()->msLength());
-    resize(w, height());
     _contour = contour;
+    _resizeForWidth();
     if(_contour)
     {
        connect(_contour, SIGNAL(dataChanged(int,int)), this, SLOT(onContourChanged(int,int)));
@@ -61,7 +60,7 @@ void MazeView::setContour(ContourModel *contour)
 
 int MazeView::xAt(double ms) const
 {
-    return _secWidth * ms / 1000;
+    return _widthPerSecond * ms / 1000 + 1.0;
 }
 
 int MazeView::yAt(double r) const
@@ -71,12 +70,19 @@ int MazeView::yAt(double r) const
 
 double MazeView::msAt(int x) const
 {
-    return (double)x / (double)_secWidth * 1000.0;
+    return (double)x / _widthPerSecond * 1000.0;
 }
 
 double MazeView::ratioAt(int y) const
 {
     return 1.0 - 2.0 * (double)y / (double)height();
+}
+
+void MazeView::_resizeForWidth()
+{
+    int w = xAt(_contour->data()->msLength());
+    resize(w, height());
+    update();
 }
 
 void MazeView::onContourChanged(int begin, int end)
@@ -88,6 +94,12 @@ void MazeView::onContourChanged(int begin, int end)
     int xBegin = xAt(_contour->data()->msFramePeriod() * begin);
     int xEnd = xAt(_contour->data()->msFramePeriod() * end);
     update(QRect(xBegin, 0, xEnd, height()));
+}
+
+void MazeView::onWidthPerSecondChanged(double w)
+{
+    _widthPerSecond = w;
+    _resizeForWidth();
 }
 
 void MazeView::paintEvent(QPaintEvent *e)

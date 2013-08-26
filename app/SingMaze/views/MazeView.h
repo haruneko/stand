@@ -26,7 +26,7 @@ class MazeView : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MazeView(TimeMapModel *timeMap, ContourModel *contour, int secWidth, QWidget *parent = 0);
+    explicit MazeView(TimeMapModel *timeMap, ContourModel *contour, double widthPerSecond, QWidget *parent = 0);
     void setTimeMap(TimeMapModel *timeMap);
     void setContour(ContourModel *contour);
 
@@ -36,12 +36,14 @@ public:
     double ratioAt(int y) const;
 protected slots:
     void onContourChanged(int begin, int end);
+    void onWidthPerSecondChanged(double w);
 protected:
     void paintEvent(QPaintEvent *e);
 private:
+    void _resizeForWidth();
     TimeMapModel *_timeMap;
     ContourModel *_contour;
-    int _secWidth;
+    double _widthPerSecond;
 };
 
 #endif // MAZEVIEW_H

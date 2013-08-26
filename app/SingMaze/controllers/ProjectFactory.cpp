@@ -18,9 +18,9 @@
 
 #include "ProjectFactory.h"
 
-QPair<MazeProject *, MazeBuffer *> ProjectFactory::create(const QString &path1, const QString &path2, double msFramePeriod)
+QPair<MazeProject *, MazeBuffer *> ProjectFactory::create(const QString &path1, const QString &path2, double pixelPerSecond, int height, double msFramePeriod)
 {
-    MazeBuffer *buffer = new MazeBuffer(path1, path2);
+    MazeBuffer *buffer = new MazeBuffer(path1, path2, pixelPerSecond, height);
     if(!buffer->isValid())
     {
         delete buffer;

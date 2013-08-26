@@ -35,7 +35,7 @@ public:
      *  @return A newly created project and its buffer.
      *  @retval (NULL, NULL) Failed to read wave files.
      */
-    QPair<MazeProject *, MazeBuffer *> create(const QString &path1, const QString &path2, double msFramePeriod = 2.0);
+    QPair<MazeProject *, MazeBuffer *> create(const QString &path1, const QString &path2, double pixelPerSecond, int height, double msFramePeriod = 2.0);
 };
 
 #endif // PROJECTFACTORY_H

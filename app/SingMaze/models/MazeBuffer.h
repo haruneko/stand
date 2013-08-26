@@ -13,6 +13,7 @@
 #ifndef MAZEBUFFER_H
 #define MAZEBUFFER_H
 
+#include <QImage>
 #include "dsp/AudioBuffer.h"
 
 class MazeProject;
@@ -25,16 +26,22 @@ class MazeProject;
 class MazeBuffer
 {
 public:
-    MazeBuffer(const QString &path1, const QString &path2);
+    MazeBuffer(const QString &path1, const QString &path2, double pixelPerSecond, int height);
 
     const AudioBuffer &wave1() const;
     const AudioBuffer &wave2() const;
+    const QImage &wave1Image() const;
+    const QImage &wave2Image() const;
 
     bool isValid() const;
 private:
-    static void _setWave(AudioBuffer &wave, const QString &path);
+    static void _setWave(AudioBuffer &wave, QImage &image, const QString &path, double pixelPerSecond, int height);
     AudioBuffer _wave1;
     AudioBuffer _wave2;
+    QImage _wave1Image;
+    QImage _wave2Image;
+    double _pixelPerSecond;
+    int _height;
 };
 
 #endif // MAZEBUFFER_H
