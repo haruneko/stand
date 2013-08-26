@@ -18,9 +18,7 @@ WaveformView::WaveformView(const QImage &image, double pixelPerSecond, QWidget *
     QLabel(parent)
 {
     setFixedWidth(image.width());
-    _basePixmap = QPixmap::fromImage(image);
-    _basePixelPerSecond = pixelPerSecond;
-    onPixelPerSecondChanged(pixelPerSecond);
+    setImage(image, pixelPerSecond);
 }
 
 void WaveformView::onPixelPerSecondChanged(double w)
@@ -28,10 +26,18 @@ void WaveformView::onPixelPerSecondChanged(double w)
     double r = w / (double)_basePixmap.width();
     setPixmap(_basePixmap.scaled(_basePixmap.width() * r, height()));
     setFixedWidth(_basePixmap.width() * r);
+    _currentPixelPersecond = w;
     update();
 }
 
 void WaveformView::resizeEvent(QResizeEvent *e)
 {
     setPixmap(pixmap()->scaled(pixmap()->width(), e->size().height()));
+}
+
+void WaveformView::setImage(const QImage &image, double pixelPerSecond)
+{
+    _basePixmap = QPixmap::fromImage(image);
+    _basePixelPerSecond = pixelPerSecond;
+    onPixelPerSecondChanged(pixelPerSecond);
 }

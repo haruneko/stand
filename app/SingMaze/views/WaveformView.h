@@ -22,11 +22,13 @@ class WaveformView : public QLabel
 {
 public:
     explicit WaveformView(const QImage &image, double pixelPerSecond, QWidget *parent = 0);
+    void setImage(const QImage &image, double pixelPerSecond);
 protected:
     void resizeEvent(QResizeEvent *e);
 private slots:
     void onPixelPerSecondChanged(double w);
 private:
+    double _currentPixelPersecond;
     double _basePixelPerSecond;
     QPixmap _basePixmap;
 };

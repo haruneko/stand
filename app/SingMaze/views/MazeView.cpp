@@ -80,6 +80,10 @@ double MazeView::ratioAt(int y) const
 
 void MazeView::_resizeForWidth()
 {
+    if(!_contour)
+    {
+        return;
+    }
     int w = xAt(_contour->data()->msLength());
     resize(w, height());
     update();
@@ -104,6 +108,11 @@ void MazeView::onWidthPerSecondChanged(double w)
 
 void MazeView::paintEvent(QPaintEvent *e)
 {
+    QWidget::paintEvent(e);
+    if(!_timeMap || !_contour)
+    {
+        return;
+    }
     QPainter p(this);
     p.fillRect(e->rect(), this->palette().background());
     p.setBrush(this->palette().foreground());

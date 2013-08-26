@@ -16,13 +16,14 @@
 #include "ProjectDialog.h"
 #include "ui_ProjectDialog.h"
 
-ProjectDialog::ProjectDialog(QWidget *parent) :
+ProjectDialog::ProjectDialog(const QString &title, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProjectDialog)
 {
     ui->setupUi(this);
     ui->wave1Line->installEventFilter(this);
     ui->wave2Line->installEventFilter(this);
+    this->setWindowTitle(title);
 }
 
 ProjectDialog::~ProjectDialog()

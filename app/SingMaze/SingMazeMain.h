@@ -26,7 +26,10 @@ class SingMazeMain : public QMainWindow
 public:
     explicit SingMazeMain(QWidget *parent = 0);
     ~SingMazeMain();
-    
+
+private slots:
+    void onProjectNew();
+    void onProjectOpen();
 private:
     Ui::SingMazeMain *ui;
 };

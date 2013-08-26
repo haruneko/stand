@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>865</width>
-    <height>541</height>
+    <height>536</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -73,7 +73,7 @@
          <x>0</x>
          <y>0</y>
          <width>855</width>
-         <height>211</height>
+         <height>196</height>
         </rect>
        </property>
       </widget>
@@ -129,10 +129,11 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
-    <addaction name="action_Opne_Project"/>
-    <addaction name="action_Save_Project"/>
+    <addaction name="actionNewProject"/>
+    <addaction name="actionOpenProject"/>
+    <addaction name="actionSaveProject"/>
     <addaction name="separator"/>
-    <addaction name="actionE_xit"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -145,6 +146,17 @@
    <addaction name="menu_Edit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
   <action name="action_Undo">
    <property name="text">
     <string>&amp;Undo</string>
@@ -155,23 +167,70 @@
     <string>&amp;Redo</string>
    </property>
   </action>
-  <action name="action_Opne_Project">
+  <action name="actionOpenProject">
    <property name="text">
-    <string>&amp;Opne Project</string>
+    <string>&amp;Open Project</string>
    </property>
   </action>
-  <action name="action_Save_Project">
+  <action name="actionSaveProject">
    <property name="text">
     <string>&amp;Save Project</string>
    </property>
   </action>
-  <action name="actionE_xit">
+  <action name="actionExit">
    <property name="text">
     <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="actionNew_Project">
+   <property name="text">
+    <string>New Project</string>
+   </property>
+  </action>
+  <action name="actionNewProject">
+   <property name="text">
+    <string>&amp;New Project</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionOpenProject</sender>
+   <signal>triggered()</signal>
+   <receiver>SingMazeMain</receiver>
+   <slot>onProjectOpen()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>270</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNewProject</sender>
+   <signal>triggered()</signal>
+   <receiver>SingMazeMain</receiver>
+   <slot>onProjectNew()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>432</x>
+     <y>267</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onProjectOpen()</slot>
+  <slot>onProjectNew()</slot>
+ </slots>
 </ui>
