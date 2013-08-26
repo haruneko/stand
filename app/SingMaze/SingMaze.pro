@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     views/MazeView.cpp \
     models/ContourModel.cpp \
     views/ProjectDialog.cpp \
-    controllers/ProjectFactory.cpp
+    controllers/ProjectFactory.cpp \
+    controllers/ContourEditCommand.cpp
 
 HEADERS  += SingMazeMain.h \
     models/MazeProject.h \
@@ -37,7 +38,8 @@ HEADERS  += SingMazeMain.h \
     views/MazeView.h \
     models/ContourModel.h \
     views/ProjectDialog.h \
-    controllers/ProjectFactory.h
+    controllers/ProjectFactory.h \
+    controllers/ContourEditCommand.h
 
 FORMS    += SingMazeMain.ui \
     views/ProjectDialog.ui
