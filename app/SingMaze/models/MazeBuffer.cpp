@@ -30,7 +30,7 @@ void MazeBuffer::_setWave(AudioBuffer &wave, QImage &image, const QString &path,
         return;
     }
     double ms = wave.msLength();
-    int width = ms / 1000.0 / pixelPerSecond;
+    int width = ms / 1000.0 * pixelPerSecond;
     image = ToImage::fromWaveform(wave.data(0), wave.length(), width, height);
 }
 

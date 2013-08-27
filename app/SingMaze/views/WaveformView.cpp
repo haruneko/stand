@@ -23,7 +23,7 @@ WaveformView::WaveformView(const QImage &image, double pixelPerSecond, QWidget *
 
 void WaveformView::onPixelPerSecondChanged(double w)
 {
-    double r = w / (double)_basePixmap.width();
+    double r = w / _basePixelPerSecond;
     setPixmap(_basePixmap.scaled(_basePixmap.width() * r, height()));
     setFixedWidth(_basePixmap.width() * r);
     _currentPixelPersecond = w;

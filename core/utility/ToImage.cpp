@@ -189,8 +189,8 @@ QImage ToImage::fromWaveform(const double *wave, int length, int width, int heig
 
     for(int x = 0; x < width; x++)
     {
-        int t_begin = length * x / width;
-        int t_end = length * (x + 1) / width;
+        int t_begin = (double)length * x / width;
+        int t_end = (double)length * (x + 1) / width;
         double min_value = wave[t_begin];
         double max_value = wave[t_begin];
         for(int t = t_begin + 1; t < t_end; t++)

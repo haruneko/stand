@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     controllers/ProjectFactory.cpp \
     controllers/ContourEditCommand.cpp \
     models/conf/DisplayConf.cpp \
-    views/WaveformView.cpp
+    views/WaveformView.cpp \
+    models/MazeContext.cpp
 
 HEADERS  += SingMazeMain.h \
     models/MazeProject.h \
@@ -43,7 +44,8 @@ HEADERS  += SingMazeMain.h \
     controllers/ProjectFactory.h \
     controllers/ContourEditCommand.h \
     models/conf/DisplayConf.h \
-    views/WaveformView.h
+    views/WaveformView.h \
+    models/MazeContext.h
 
 FORMS    += SingMazeMain.ui \
     views/ProjectDialog.ui

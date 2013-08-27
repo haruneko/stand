@@ -15,6 +15,8 @@
 
 #include <QMainWindow>
 
+class MazeContext;
+
 namespace Ui {
 class SingMazeMain;
 }
@@ -32,6 +34,7 @@ private slots:
     void onProjectOpen();
 private:
     Ui::SingMazeMain *ui;
+    MazeContext *_currentContext;
 };
 
 #endif // SINGMAZEMAIN_H
