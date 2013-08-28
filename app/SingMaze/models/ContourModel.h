@@ -25,10 +25,12 @@ class ContourModel : public QObject
 {
     Q_OBJECT
 public:
-    explicit ContourModel(Envelope *e, QObject *parent = 0);
+    explicit ContourModel(QObject *parent = 0);
+    virtual ~ContourModel();
 
-    void setData(int index, const QList<double> &data);
-    const Envelope *data() const;
+    void setData(int index, const QList<double> &contour);
+    const Envelope *contour() const;
+    void setEnvelope(int length, double msFramePeriod);
 signals:
     /**
      *  @brief Is emited when data has changed.
@@ -37,6 +39,7 @@ signals:
      *  @param end End index of data change.
      */
     void dataChanged(int begin, int end);
+    void onDestroy();
 private:
     Envelope *_contour;
 };

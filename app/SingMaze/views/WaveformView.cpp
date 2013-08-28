@@ -25,7 +25,6 @@ void WaveformView::onPixelPerSecondChanged(double w)
 {
     double r = w / _basePixelPerSecond;
     setPixmap(_basePixmap.scaled(_basePixmap.width() * r, height()));
-    setFixedWidth(_basePixmap.width() * r);
     _currentPixelPersecond = w;
     update();
 }

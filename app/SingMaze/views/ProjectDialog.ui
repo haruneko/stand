@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>189</height>
+    <height>125</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,15 +15,21 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="wave1Label">
-     <property name="text">
-      <string>Wave1</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="wave1Area" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="margin">
+       <number>2</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="wave1Label">
+        <property name="text">
+         <string>Wave1: </string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QLineEdit" name="wave1Line">
         <property name="readOnly">
@@ -61,15 +67,21 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="wave2Label">
-     <property name="text">
-      <string>Wave2</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QWidget" name="wave2Area" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="margin">
+       <number>2</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="wave2Label">
+        <property name="text">
+         <string>Wave2: </string>
+        </property>
+       </widget>
+      </item>
       <item>
        <widget class="QLineEdit" name="wave2Line">
         <property name="readOnly">

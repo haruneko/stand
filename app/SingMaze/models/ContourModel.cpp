@@ -14,9 +14,15 @@
 
 #include "ContourModel.h"
 
-ContourModel::ContourModel(Envelope *e, QObject *parent) :
+ContourModel::ContourModel(QObject *parent) :
     QObject(parent)
 {
+    _contour = NULL;
+}
+
+ContourModel::~ContourModel()
+{
+    delete _contour;
 }
 
 void ContourModel::setData(int index, const QList<double> &data)
@@ -30,7 +36,18 @@ void ContourModel::setData(int index, const QList<double> &data)
     emit dataChanged(index, j);
 }
 
-const Envelope *ContourModel::data() const
+void ContourModel::setEnvelope(int length, double msFramePeriod)
+{
+    delete _contour;
+    double *data = new double[length];
+    for(int i = 0; i < length; i++)
+    {
+        data[i] = 0.0;
+    }
+    _contour = new Envelope(data, length, msFramePeriod, true);
+}
+
+const Envelope *ContourModel::contour() const
 {
     return _contour;
 }

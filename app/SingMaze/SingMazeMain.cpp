@@ -17,6 +17,7 @@
 #include "views/ProjectDialog.h"
 #include "models/MazeContext.h"
 #include "models/MazeBuffer.h"
+#include "models/MazeProject.h"
 
 #include "SingMazeMain.h"
 #include "ui_SingMazeMain.h"
@@ -30,14 +31,38 @@ SingMazeMain::SingMazeMain(QWidget *parent) :
     ui->mazeView->setWidget(new MazeView(NULL, NULL, 1.0, this));
     ui->wave1View->setWidget(new WaveformView(QImage(), 1.0, this));
     ui->wave2View->setWidget(new WaveformView(QImage(), 1.0, this));
-    connect(ui->mazeView->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->wave1View->verticalScrollBar(), SLOT(setValue(int)));
-    connect(ui->mazeView->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->wave2View->verticalScrollBar(), SLOT(setValue(int)));
+    connect(ui->mazeView->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->wave1View->horizontalScrollBar(), SLOT(setValue(int)));
+    connect(ui->mazeView->horizontalScrollBar(), SIGNAL(valueChanged(int)), ui->wave2View->horizontalScrollBar(), SLOT(setValue(int)));
 }
 
 SingMazeMain::~SingMazeMain()
 {
+    MazeView *mv = (MazeView *)ui->mazeView->widget();
+    mv->setTimeMap(NULL);
+    mv->setContour(NULL, 0);
+
     delete ui;
     delete _currentContext;
+}
+
+void SingMazeMain::_setContext(MazeContext *c)
+{
+    if(!c || !c->isValid())
+    {
+        return;
+    }
+    MazeView *mv = (MazeView *)ui->mazeView->widget();
+    mv->setTimeMap(&c->project->timeMap);
+    mv->setContour(&c->project->morphRatioContour, c->pixelPerSecond());
+    WaveformView *wv1 = (WaveformView *)ui->wave1View->widget();
+    WaveformView *wv2 = (WaveformView *)ui->wave2View->widget();
+    wv1->setImage(c->buffer->wave1Image(), c->pixelPerSecond());
+    wv2->setImage(c->buffer->wave2Image(), c->pixelPerSecond());
+    wv1->setFixedWidth(mv->width());
+    wv2->setFixedWidth(mv->width());
+
+    delete _currentContext;
+    _currentContext = c;
 }
 
 void SingMazeMain::onProjectNew()
@@ -52,16 +77,7 @@ void SingMazeMain::onProjectNew()
     QPair<QString, QString> value = dialog->value();
     delete dialog;
 
-    MazeContext *c = new MazeContext(value.first, value.second, 100.0, ui->wave1View->height(), 2.0);
-    if(c)
-    {
-        delete _currentContext;
-        _currentContext = c;
-        WaveformView *wv1 = (WaveformView *)ui->wave1View->widget();
-        WaveformView *wv2 = (WaveformView *)ui->wave2View->widget();
-        wv1->setImage(c->buffer->wave1Image(), c->pixelPerSecond());
-        wv2->setImage(c->buffer->wave2Image(), c->pixelPerSecond());
-    }
+    _setContext(new MazeContext(value.first, value.second, 100.0, ui->wave1View->height(), 2.0));
 }
 
 void SingMazeMain::onProjectOpen()

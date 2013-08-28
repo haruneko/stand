@@ -21,10 +21,10 @@ ContourEditCommand::ContourEditCommand(ContourModel *target, int beginIndex, con
     _beginIndex = beginIndex;
     _newData = newData;
     _target = target;
-    int endIndex = qMin(beginIndex + newData.size(), target->data()->size());
+    int endIndex = qMin(beginIndex + newData.size(), target->contour()->size());
     for(int i = beginIndex; i < endIndex; i++)
     {
-        _oldData.append(target->data()->value(i));
+        _oldData.append(target->contour()->value(i));
     }
 }
 

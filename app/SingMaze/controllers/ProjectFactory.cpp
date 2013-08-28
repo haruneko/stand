@@ -26,18 +26,13 @@ QPair<MazeProject *, MazeBuffer *> ProjectFactory::create(const QString &path1, 
         delete buffer;
         return QPair<MazeProject *, MazeBuffer *>(NULL, NULL);
     }
+    int size = qMax(buffer->wave1().msLength(), buffer->wave2().msLength()) / msFramePeriod;
+
     MazeProject *project = new MazeProject;
     project->wave1Path = QFileInfo(path1);
     project->wave2Path = QFileInfo(path2);
 
-    int size = qMax(buffer->wave1().msLength(), buffer->wave2().msLength()) / msFramePeriod;
-
-    double *data = new double[size];
-    for(int i = 0; i < size; i++)
-    {
-        data[i] = 0.0;
-    }
-    project->morphRatioContour.set(data, size, msFramePeriod, true);
+    project->morphRatioContour.setEnvelope(size, msFramePeriod);
     project->timeMap.append(QPair<double, double>(0.0, 0.0));
     project->timeMap.append(QPair<double, double>(buffer->wave1().msLength(), buffer->wave2().msLength()));
     return QPair<MazeProject *, MazeBuffer *>(project, buffer);

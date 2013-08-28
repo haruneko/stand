@@ -12,6 +12,7 @@
 
 #include "MazeProject.h"
 
-MazeProject::MazeProject()
+MazeProject::MazeProject() :
+    timeMap(), morphRatioContour()
 {
 }

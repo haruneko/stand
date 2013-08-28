@@ -33,6 +33,7 @@ private slots:
     void onProjectNew();
     void onProjectOpen();
 private:
+    void _setContext(MazeContext *c);
     Ui::SingMazeMain *ui;
     MazeContext *_currentContext;
 };

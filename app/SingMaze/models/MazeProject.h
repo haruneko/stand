@@ -14,7 +14,7 @@
 #define MAZEPROJECT_H
 
 #include <QFileInfo>
-#include "dsp/Envelope.h"
+#include "ContourModel.h"
 #include "TimeMapModel.h"
 
 /**
@@ -28,7 +28,7 @@ public:
 
     QFileInfo wave1Path;
     QFileInfo wave2Path;
-    Envelope morphRatioContour;
+    ContourModel morphRatioContour;
     TimeMapModel timeMap;
 
     bool read(const QString &path);

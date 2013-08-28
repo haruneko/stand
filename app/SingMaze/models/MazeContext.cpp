@@ -11,6 +11,7 @@
  */
 
 #include "../controllers/ProjectFactory.h"
+#include "MazeBuffer.h"
 
 #include "MazeContext.h"
 
@@ -31,4 +32,9 @@ MazeContext::~MazeContext()
 double MazeContext::pixelPerSecond() const
 {
     return _pixelPerSecond;
+}
+
+bool MazeContext::isValid() const
+{
+    return project && buffer && buffer->isValid();
 }

@@ -27,6 +27,7 @@ public:
     MazeBuffer *buffer;
     MazeProject *project;
     double pixelPerSecond() const;
+    bool isValid() const;
 private:
     double _pixelPerSecond;
 };
