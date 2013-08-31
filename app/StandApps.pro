@@ -5,6 +5,3 @@ SUBDIRS += \
     SimpleSpecgram \
     SimpleSequenceView \
     SingMaze
-
-Release:PRE_TARGETDEPS += ../lib/stand.lib
-Debug:PRE_TARGETDEPS += ../lib/standd.lib

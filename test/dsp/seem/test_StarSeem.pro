@@ -1,24 +1,11 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-05-11T01:51:30
-#
-#-------------------------------------------------
-
-QT       += multimedia testlib
+QT      += multimedia testlib
+TEMPLATE = app
+TARGET   = test_StarSeem
+CONFIG  += console
+CONFIG  -= app_bundle
 
 INCLUDEPATH += ../../../core/
-DEPENDPATH += ../../../lib/
-
-Release:LIBS += ../../../lib/stand.lib
-Release:PRE_TARGETDEPS += ../../../lib/stand.lib
-Debug:LIBS += ../../../lib/standd.lib
-Debug:PRE_TARGETDEPS += ../../../lib/standd.lib
-
-TARGET = test_StarSeem
-CONFIG   += console
-CONFIG   -= app_bundle
-
-TEMPLATE = app
-
 
 SOURCES += test_StarSeem.cpp
+
+include(../../StandTest.pri)
