@@ -105,7 +105,7 @@ bool NoteModifier::_mousePressed(QLabel *l, QMouseEvent *e)
     _mouseDragged = false;
     _labelLocations.clear();
     // 選択されたラベルの現在位置取得
-    QList<QPair<int, QLabel *> > &labels = _view->labels(_selection->trackId(), _selection->ids());
+    const QList<QPair<int, QLabel *> > &labels = _view->labels(_selection->trackId(), _selection->ids());
     for(int i = 0; i < labels.size(); i++)
     {
         _labelLocations.insert(labels[i].second, QPair<int, QRect>(labels[i].first, labels[i].second->rect()));

@@ -46,7 +46,8 @@ void AbstractSequenceView::paint(const QRegion &region, QPainter *painter)
 
 void AbstractSequenceView::paintEvent(QPaintEvent *e)
 {
-    paint(e->region(), &(QPainter(this)));
+    QPainter p(this);
+    paint(e->region(), &p);
 }
 
 SequenceModel *AbstractSequenceView::model()

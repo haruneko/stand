@@ -110,7 +110,8 @@ void NoteSelector::_onMouseReleased(QMouseEvent *e)
 void NoteSelector::_updateSelection()
 {
     QList<int> ids;
-    foreach(auto val, _viewData)
+    QPair<int, QLabel *> &val = _viewData.first();
+    foreach(val, _viewData)
     {
         if(collides(_rect->rect(), val.second->rect()))
         {

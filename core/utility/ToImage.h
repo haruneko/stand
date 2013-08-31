@@ -29,7 +29,15 @@ class QPoint;
 class ToImage
 {
 public:
-    enum ScaleType;
+    /*!
+     *  @brief  波形の値をどの軸で扱うかの列挙子．
+     */
+    enum ScaleType
+    {
+        UnknownScale = -1,      //! @brief  不明な軸
+        LinearScale = 0,        //! @brief  線形な軸
+        LogScale = 1            //! @brief  対数軸
+    };
 
     /*!
      *  @brief スペクトログラムを画像に変換します。
@@ -72,17 +80,6 @@ public:
      *  @attention メソッド内部で NULL チェックは行われません。
      */
     static QImage fromWaveform(const double *wave, int length, int width, int height, uint lineColor = 0xff000000, uint bgColor = 0xffffffff);
-
-public:
-    /*!
-     *  @brief  波形の値をどの軸で扱うかの列挙子．
-     */
-    enum ScaleType
-    {
-        UnknownScale = -1,      //! @brief  不明な軸
-        LinearScale = 0,        //! @brief  線形な軸
-        LogScale = 1            //! @brief  対数軸
-    };
 
 private:
     static double _maxValue(const double *const *specgram, int frameLength, int frequencyLength);
