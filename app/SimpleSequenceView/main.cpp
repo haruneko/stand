@@ -10,7 +10,7 @@
  *
  */
 
-#include <QtGui/QApplication>
+#include <QApplication>
 #include "SequenceWindow.h"
 
 int main(int argc, char *argv[])

@@ -4,15 +4,10 @@
 #
 #-------------------------------------------------
 
-QT       += core gui multimedia
-
-Release:TARGET = Stand
-Debug:TARGET = Standd
-
-DESTDIR = ../lib/
-
+QT      += core gui multimedia
+TARGET   = Stand
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG  += staticlib
 
 SOURCES +=\
     utility/ToImage.cpp \
@@ -101,3 +96,5 @@ HEADERS  += \
     dsp/synthesis/GeneratorSpecgram.h \
     dsp/synthesis/GeneratorEnvelope.h
 
+STAND_RISEUP = /..
+include(../Stand.pri)

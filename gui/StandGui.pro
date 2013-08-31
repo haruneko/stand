@@ -1,19 +1,9 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2013-03-20T01:23:00
-#
-#-------------------------------------------------
-
-QT       += core gui multimedia
-
-Release:TARGET = StandGui
-Debug:TARGET = StandGuid
-
-DESTDIR = ../lib/
-INCLUDEPATH += ../libvsq/
-
+QT      += core widgets multimedia
+TARGET   = StandGui
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG  += staticlib
+
+INCLUDEPATH += ../libvsq/
 
 HEADERS += \
     views/AbstractSequenceView.h \
@@ -71,3 +61,5 @@ SOURCES += \
     models/actions/NoteAppendAction.cpp \
     models/actions/NoteRemoveAction.cpp
 
+STAND_RISEUP = /..
+include(../Stand.pri)

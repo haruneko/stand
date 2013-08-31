@@ -76,7 +76,8 @@ void VocoderRendererTest::compareToWorld()
     }
 
     Synthesis(f0.data(), f0.size(), specgram.data(), residual.data(), fftLength, msFramePeriod, c.format().sampleRate(), c.length(), expected);
-    QVERIFY(VocoderRenderer().render(&dst, c.format().sampleRate(), 0, c.msLength(), fftLength, &(WorldSynthesis(fftLength)), &f0, &specgram, &residual));
+    WorldSynthesis ws(fftLength);
+    QVERIFY(VocoderRenderer().render(&dst, c.format().sampleRate(), 0, c.msLength(), fftLength, &ws, &f0, &specgram, &residual));
 
     //=================================================== 比較開始
     // 実用上問題のない音だけど微妙に時間がずれるせいで後半がおかしい。
